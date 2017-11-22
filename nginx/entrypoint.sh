@@ -53,4 +53,5 @@ mkdir -p ver11.pgsql.phpunit
 mkdir -p ver11.pgsql.behat
 chown -R www-data:www-data ver11.pgsql.behat
 
-
+# fire up nginx
+nginx -g 'daemon off;'
