@@ -68,4 +68,20 @@ __without docker-sync__
 docker-compose up
 ```
 
-Open one of the hosts, i.e. http://totara.56.local in your browser. You should see the installation page for Totara.
+##### Config & Database
+
+Modify your Totara __config.php__ and create the databases. You can connect to the databases from your host using any tools you prefer.
+
+To use the command line clients provided by the containers you can use the following commands:
+
+```bash
+docker exec -ti docker_pgsql_1 psql -U postgres
+docker exec -ti docker_mariadb_1 mysql -u root -p"root"
+docker exec -ti docker_php-7.1_1 /opt/mssql-tools/bin/sqlcmd -S mssql -U SA -P "Totara.Mssql1"
+```
+
+#### Run unit tests
+
+
+#### Run behat tests
+
