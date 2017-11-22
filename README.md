@@ -1,6 +1,3 @@
-# totara-docker-dev
-A docker setup to create a development environment for Totara LMS
-
 This project aims to provide a easy way to start developing for Totara by providing a Docker setup.
 
 This setup was created and tested on a MAC. It should work on Windows and Linux as well but it still needs to be tested.
