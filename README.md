@@ -68,6 +68,8 @@ __without docker-sync__
 docker-compose up
 ```
 
+Now make sure you have configured Totara and created the databases you need.
+
 ##### Config & Database
 
 Modify your Totara __config.php__ and create the databases. You can connect to the databases from your host using any tools you prefer.
@@ -79,6 +81,8 @@ docker exec -ti docker_pgsql_1 psql -U postgres
 docker exec -ti docker_mariadb_1 mysql -u root -p"root"
 docker exec -ti docker_php-7.1_1 /opt/mssql-tools/bin/sqlcmd -S mssql -U SA -P "Totara.Mssql1"
 ```
+
+Create a database schema for each Totara version you would like to develop on.
 
 #### Run unit tests
 
