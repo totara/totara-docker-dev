@@ -2,11 +2,15 @@ version: "3"
 services:
 
   nginx:
-    build: nginx
+    build:
+      context: nginx
+      args:
+        - REMOTE_DATA
     ports:
       - "80:80"
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
     links:
       - php-5.6
       - php-7.0
