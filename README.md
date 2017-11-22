@@ -1,3 +1,5 @@
+## A Docker setup for local Totara LMS development
+
 This project aims to provide a easy way to start developing for Totara by providing a Docker setup.
 
 This setup was created and tested on a MAC. It should work on Windows and Linux as well but it still needs to be tested.
@@ -16,9 +18,10 @@ This setup was created and tested on a MAC. It should work on Windows and Linux 
 
 #### Installation:
  1. Clone the Totara source code (see requirements) 
- 2. Clone this project
- 3. Install docker-sync
- 4. In your totara-docker-env folder run:
+ 1. Clone this project
+ 1. Install docker-sync
+ 1. Copy the file __.env.dist__ to __.env__ and change at least the path to your local Totara source folder (LOCAL_SRC)
+ 1. In your totara-docker-env folder run:
 
 __with docker-sync__
 ```bash
@@ -35,7 +38,7 @@ docker-compose build
 ```
 
 ##### /etc/hosts
-Make sure you have all the hosts needed in your /etc/hosts file to be able to access them via the browser.
+Make sure you have all the hosts in your /etc/hosts file to be able to access them via the browser.
 
 __Example:__
 ```bash
@@ -65,4 +68,4 @@ __without docker-sync__
 docker-compose up
 ```
 
-Open one of the hosts provided, i.e. http://totara.56.local and you should see the installation page for Totara.
+Open one of the hosts, i.e. http://totara.56.local in your browser. You should see the installation page for Totara.
