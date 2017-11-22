@@ -70,7 +70,7 @@ docker-compose up
 
 Now make sure you have configured Totara and created the databases you need.
 
-##### Config & Database
+#### Config & Database
 
 Modify your Totara __config.php__ and create the databases. You can connect to the databases from your host using any tools you prefer.
 
