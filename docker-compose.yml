@@ -1,0 +1,153 @@
+version: "3"
+services:
+
+  nginx:
+    build: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+    links:
+      - php-5.6
+      - php-7.0
+      - php-7.1
+      - php-7.2
+    networks:
+      totara:
+        aliases:
+            - totara.71.local.behat
+
+  php-5.6:
+    build:
+      context: php
+      dockerfile: Dockerfile-56
+    ports:
+      - "9000"
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+    links:
+      - pgsql
+      - mariadb
+      - mssql
+    networks:
+      - totara
+
+  php-7.0:
+    build:
+      context: php
+      dockerfile: Dockerfile-70
+    ports:
+      - "9000"
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+    links:
+      - pgsql
+      - mariadb
+      - mssql
+    networks:
+      - totara
+
+  php-7.1:
+    build:
+      context: php
+      dockerfile: Dockerfile-71
+    ports:
+      - "9000"
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+    links:
+      - pgsql
+      - mariadb
+      - mssql
+    networks:
+      - totara
+
+  php-7.1-test:
+    build:
+      context: php
+      dockerfile: Dockerfile-71-test
+      args:
+        - REMOTE_SRC
+        - REMOTE_DATA
+    ports:
+      - "9000"
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+    links:
+      - pgsql
+      - mariadb
+      - mssql
+      - nginx
+    networks:
+      - totara
+
+  php-7.2:
+    build:
+      context: php
+      dockerfile: Dockerfile-72
+    ports:
+      - "9000"
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+    links:
+      - pgsql
+      - mariadb
+      - mssql
+    networks:
+      - totara
+
+  pgsql:
+    image: postgres:9.4
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgsql-data:/var/lib/postgresql/data
+    networks:
+      - totara
+
+  mariadb:
+    image: mariadb
+    ports:
+      - "3306:3306"
+    environment:
+        MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PW}
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - totara
+
+  mssql:
+    image: microsoft/mssql-server-linux
+    ports:
+      - "1433:1433"
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: ${MSSQL_SA_PW}
+      MSSQL_PID: Developer
+    volumes:
+      - mssql-data:/var/opt/mssql
+    networks:
+      - totara
+
+  selenium-chrome:
+    image: selenium/standalone-chrome
+    ports:
+      - "4444:4444"
+    links:
+      - nginx
+    networks:
+      - totara
+
+volumes:
+    pgsql-data:
+    mssql-data:
+    mysql-data:
+    totara-data:
+
+networks:
+  totara:

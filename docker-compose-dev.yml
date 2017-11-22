@@ -1,0 +1,31 @@
+version: "3"
+services:
+
+  nginx:
+    volumes:
+      - totara-www-sync:${REMOTE_SRC}:nocopy
+
+  php-5.6:
+    volumes:
+      - totara-www-sync:${REMOTE_SRC}:nocopy
+
+  php-7.0:
+    volumes:
+      - totara-www-sync:${REMOTE_SRC}:nocopy
+
+  php-7.1:
+    volumes:
+      - totara-www-sync:${REMOTE_SRC}:nocopy
+
+  php-7.1-test:
+    volumes:
+      - totara-www-sync:${REMOTE_SRC}:nocopy
+
+  php-7.2:
+    volumes:
+      - totara-www-sync:${REMOTE_SRC}:nocopy
+
+volumes:
+    totara-data:
+    totara-www-sync:
+        external: true
