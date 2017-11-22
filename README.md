@@ -7,7 +7,7 @@ This setup was created and tested on a MAC. It should work on Windows and Linux 
 #### What you get:
  * NGINX as a webserver
  * PHP 5.6, 7.0, 7.1, 7.2RC to test for different versions
- * PostgreSQL, MySQL, MSSQL support
+ * PostgreSQL, MariaDB (MySQL), Microsoft SQL Server support
  * A PHPUnit and Behat setup to run tests (including Selenium)
 
 #### Requirements:
@@ -74,11 +74,16 @@ Now make sure you have configured Totara and created the databases you need.
 
 Modify your Totara __config.php__ and create the databases. You can connect to the databases from your host using any tools you prefer.
 
+The host will be always __localhost__ and the ports are the default ports of the database systems.
+
 To use the command line clients provided by the containers you can use the following commands:
 
 ```bash
+# PostgreSQL
 docker exec -ti docker_pgsql_1 psql -U postgres
+# MySQL / MariaDB
 docker exec -ti docker_mariadb_1 mysql -u root -p"root"
+# Microsoft SQL Server
 docker exec -ti docker_php-7.1_1 /opt/mssql-tools/bin/sqlcmd -S mssql -U SA -P "Totara.Mssql1"
 ```
 
