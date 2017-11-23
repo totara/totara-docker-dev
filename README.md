@@ -91,6 +91,12 @@ Create a database schema for each Totara version you would like to develop on.
 
 #### Run unit tests
 
+wip
 
 #### Run behat tests
 
+wip
+
+#### Switch between different versions
+
+wip
