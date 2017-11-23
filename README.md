@@ -15,6 +15,12 @@ This setup was created and tested on a MAC. It should work on Windows and Linux 
  * Docker: https://www.docker.com
  * Docker-compose: https://docs.docker.com/compose/install (included in Docker for Mac/Windows)
  * Docker-sync: http://docker-sync.io/ (optional, for more speed on Mac and Windows)
+ * At least 3.25GB of RAM for MSSQL
+
+### Todo
+
+ * Get mssql working with PHP 5.6 (driver is installed but throws error on connect)
+ * Get mssql working with PHP 7.2RC (dependency problem in mssql extension)
 
 ### Installation:
  1. Clone the Totara source code (see requirements) 
