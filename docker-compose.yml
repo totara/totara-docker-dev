@@ -19,8 +19,8 @@ services:
     networks:
       totara:
         aliases:
-            - totara.71.local.behat
-            - totara.56.local.behat
+            - totara71.behat
+            - totara56.behat
 
   php-5.6:
     build:
