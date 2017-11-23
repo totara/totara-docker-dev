@@ -57,6 +57,5 @@ RUN pear config-set php_ini `php --ini | grep "Loaded Configuration" | sed -e "s
     && pecl install pdo_sqlsrv
 
 RUN echo "alias behatinit=\"cd ${REMOTE_SRC} && php admin/tool/behat/cli/init.php\"" >> ~/.bashrc
-RUN echo "alias behatall=\"cd ${REMOTE_SRC} && vendor/bin/behat --config $REMOTE_DATA/ver10.pgsql.behat/behatrun/behat/behat.yml\"" >> ~/.bashrc
-RUN echo "function behat9() { cd ${REMOTE_SRC} && vendor/bin/behat --config $REMOTE_DATA/ver10.pgsql.behat/behatrun/behat/behat.yml \$@; }" >> ~/.bashrc
-RUN echo "function behat10() { cd ${REMOTE_SRC} && vendor/bin/behat \$@; }" >> ~/.bashrc
+RUN echo "alias behatall=\"cd ${REMOTE_SRC} && vendor/bin/behat \"" >> ~/.bashrc
+RUN echo "function behat() { cd ${REMOTE_SRC} && vendor/bin/behat \$@; }" >> ~/.bashrc
