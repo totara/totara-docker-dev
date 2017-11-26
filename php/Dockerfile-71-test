@@ -14,7 +14,6 @@ RUN apt-get update && apt-get install -y \
 		libxml2-dev \
 		libicu-dev \
 		libpq-dev \
-		locales \
 	&& docker-php-ext-install -j$(nproc) xmlrpc \
 	    zip \
 	    intl \

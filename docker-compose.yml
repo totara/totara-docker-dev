@@ -28,6 +28,8 @@ services:
       dockerfile: Dockerfile-56
     ports:
       - "9000"
+    environment:
+        XDEBUG_CONFIG: remote_host=${HOST_IP}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -64,6 +66,8 @@ services:
       dockerfile: Dockerfile-70
     ports:
       - "9000"
+    environment:
+        XDEBUG_CONFIG: remote_host=${HOST_IP}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -80,6 +84,8 @@ services:
       dockerfile: Dockerfile-71
     ports:
       - "9000"
+    environment:
+        XDEBUG_CONFIG: remote_host=${HOST_IP}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -116,6 +122,8 @@ services:
       dockerfile: Dockerfile-72
     ports:
       - "9000"
+    environment:
+        XDEBUG_CONFIG: remote_host=${HOST_IP}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}

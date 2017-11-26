@@ -37,3 +37,8 @@ RUN apt-get update && apt-get install -y \
 RUN cd /usr/lib && ln -s /usr/lib/x86_64-linux-gnu/libsybdb.a
 
 RUN docker-php-ext-install -j$(nproc) mssql
+
+RUN yes | pecl install xdebug \
+    && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini
