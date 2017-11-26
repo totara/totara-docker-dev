@@ -29,6 +29,13 @@ RUN apt-get update && apt-get install -y \
 	&& docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
 	&& docker-php-ext-install -j$(nproc) gd
 
+# we need en_AU locales for behat to work
+
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y locales
+
+RUN sed -i -e 's/# en_AU.UTF-8 UTF-8/en_AU.UTF-8 UTF-8/' /etc/locale.gen && \
+    dpkg-reconfigure --frontend=noninteractive locales
+
 RUN apt-get update && apt-get install -y \
     libsybdb5 \
     freetds-common \
@@ -42,5 +49,5 @@ RUN cd /usr/lib && ln -s /usr/lib/x86_64-linux-gnu/libsybdb.a
 RUN docker-php-ext-install -j$(nproc) mssql
 
 RUN echo "alias behatinit=\"cd ${REMOTE_SRC} && php admin/tool/behat/cli/init.php\"" >> ~/.bashrc
-RUN echo "alias behatall=\"cd ${REMOTE_SRC} && vendor/bin/behat --config $REMOTE_DATA/ver9.pgsql.behat/behatrun/behat/behat.yml\"" >> ~/.bashrc
-RUN echo "function behat() { cd ${REMOTE_SRC} && vendor/bin/behat --config $REMOTE_DATA/ver9.pgsql.behat/behatrun/behat/behat.yml \$@; }" >> ~/.bashrc
+RUN echo "alias behatall=\"cd ${REMOTE_SRC} && vendor/bin/behat --config $REMOTE_DATA/ver9.pgsql.behat/behat/behat.yml\"" >> ~/.bashrc
+RUN echo "function behat() { cd ${REMOTE_SRC} && vendor/bin/behat --config $REMOTE_DATA/ver9.pgsql.behat/behat/behat.yml \$@; }" >> ~/.bashrc
