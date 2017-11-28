@@ -222,7 +222,6 @@ services:
     image: tophfr/mailcatcher
     ports:
       - "8080:80"
-      - "2525:25"
     networks:
       - totara
 
