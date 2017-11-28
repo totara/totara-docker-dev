@@ -176,6 +176,42 @@ services:
     networks:
       - totara
 
+  selenium-chrome1:
+    image: selenium/standalone-chrome
+    ports:
+      - "4445:4444"
+    links:
+      - nginx
+    networks:
+      - totara
+
+  selenium-chrome2:
+    image: selenium/standalone-chrome
+    ports:
+      - "4446:4444"
+    links:
+      - nginx
+    networks:
+      - totara
+
+  selenium-chrome3:
+    image: selenium/standalone-chrome
+    ports:
+      - "4447:4444"
+    links:
+      - nginx
+    networks:
+      - totara
+
+  selenium-chrome4:
+    image: selenium/standalone-chrome
+    ports:
+      - "4448:4444"
+    links:
+      - nginx
+    networks:
+      - totara
+
 volumes:
     pgsql-data:
     mssql-data:
