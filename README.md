@@ -1,6 +1,6 @@
 ## A Docker setup for local Totara LMS development
 
-This project aims to provide a easy way to start developing for Totara by providing a Docker setup.
+This project aims to provide an easy way to start developing for Totara by providing a Docker setup.
 
 This setup was created and tested on a MAC. It should work on Windows and Linux as well but it still needs to be tested.
 
@@ -48,7 +48,7 @@ Make sure you have all the hosts in your /etc/hosts file to be able to access th
 
 __Example:__
 ```bash
-127.0.0.1   localhost totara.71.local totara.56.local totara.70.local totara.72.local totara.71.local.behat
+127.0.0.1   localhost totara71 totara56 totara70 totara72 totara71.behat totara56.behat
 ```
 
 You can change the hostnames in the nginx configuration file (/nginx/config/totara.conf) to your needs.
