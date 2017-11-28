@@ -37,6 +37,7 @@ services:
       - pgsql
       - mariadb
       - mssql
+      - mailcatcher
     networks:
       - totara
 
@@ -57,6 +58,7 @@ services:
       - mariadb
       - mssql
       - nginx
+      - mailcatcher
     networks:
       - totara
 
@@ -75,6 +77,7 @@ services:
       - pgsql
       - mariadb
       - mssql
+      - mailcatcher
     networks:
       - totara
 
@@ -93,6 +96,7 @@ services:
       - pgsql
       - mariadb
       - mssql
+      - mailcatcher
     networks:
       - totara
 
@@ -113,6 +117,7 @@ services:
       - mariadb
       - mssql
       - nginx
+      - mailcatcher
     networks:
       - totara
 
@@ -131,6 +136,7 @@ services:
       - pgsql
       - mariadb
       - mssql
+      - mailcatcher
     networks:
       - totara
 
@@ -209,6 +215,14 @@ services:
       - "4448:4444"
     links:
       - nginx
+    networks:
+      - totara
+
+  mailcatcher:
+    image: tophfr/mailcatcher
+    ports:
+      - "8080:80"
+      - "2525:25"
     networks:
       - totara
 
