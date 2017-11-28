@@ -2,6 +2,16 @@
 
 cd ${REMOTE_DATA}
 
+# version 2.7
+
+mkdir -p ver27.mssql ver27.mysql ver27.pgsql
+chown -R www-data:www-data ver27.mssql ver27.mysql ver27.pgsql
+chmod g+s ver27.mssql ver27.mysql ver27.pgsql
+
+mkdir -p ver27.mssql.phpunit ver27.mysql.phpunit ver27.pgsql.phpunit ver27.pgsql.behat
+chown -R www-data:www-data ver27.pgsql.behat
+chmod g+s ver27.pgsql.behat
+
 # version 2.9
 
 mkdir -p ver29.mssql ver29.mysql ver29.pgsql
