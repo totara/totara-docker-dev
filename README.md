@@ -9,6 +9,8 @@ This setup was created and tested on a MAC. It should work on Windows and Linux 
  * PHP 5.6, 7.0, 7.1, 7.2RC to test for different versions
  * PostgreSQL, MariaDB (MySQL), Microsoft SQL Server support
  * A PHPUnit and Behat setup to run tests (including Selenium)
+ * A [mailcatcher](https://mailcatcher.me/) instance to inspect mails
+ * [XDebug](https://xdebug.org/) installed, ready for debugging with your favorite IDE
 
 ### Requirements:
  * Totara source code: https://help.totaralearning.com/display/DEV/Getting+the+code
