@@ -138,3 +138,15 @@ wip
 ### Switch between different versions
 
 wip
+
+# Mailcatcher
+
+The setup comes with mailcatcher support. Just add the following to your config and all mails will be sent to it:
+
+```php
+$CFG->smtphosts = 'mailcatcher:25';
+```
+
+Open __http://localhost:8080__ to open the mailcatcher GUI.
+
+If needed modify the local port in the docker-compose.yml file.
