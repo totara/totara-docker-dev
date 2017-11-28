@@ -56,12 +56,15 @@ You can change the hostnames in the nginx configuration file (/nginx/config/tota
 ### Run
 
 __with docker-sync__
+
 ```bash
-# fire up docker-sync as a daemon in the background
+# 1. fire up docker-sync as a daemon in the background
 docker-sync start
 # or alternatively once in the foreground
 docker-sync-stack start
+```
 
+```bash
 # use helper file provided
 ./totara-docker.sh up
 # run in background
@@ -101,7 +104,32 @@ Create a database schema for each Totara version you would like to develop on.
 
 ### Run unit tests
 
-wip
+Make sure your config file contains the PHPUnit configuration needed and the database is ready.
+
+Log into one of the test containers
+```bash
+./totara-docker.sh run php-5.6-test bash
+./totara-docker.sh run php-7.1-test bash
+```
+
+Go to the project folder
+```bash
+# replace version
+cd /var/www/totara/src/[version]
+```
+
+First time run the init script to initiate the unit tests
+```bash
+# in the project folder
+php composer.phar install
+# initiate the test environment
+php admin/tool/phpunit/cli/init.php
+```
+
+To start running
+```bash
+vendor/bin/phpunit
+```
 
 ### Run behat tests
 
