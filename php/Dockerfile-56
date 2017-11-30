@@ -1,5 +1,8 @@
 FROM php:5.6-fpm
 
+ARG REMOTE_SRC
+ARG REMOTE_DATA
+
 COPY config/php-56.ini /usr/local/etc/php/php.ini
 
 RUN apt-get update && apt-get install -y \
@@ -14,6 +17,8 @@ RUN apt-get update && apt-get install -y \
 		freetds-bin \
         freetds-common \
         freetds-dev \
+        nano \
+        git \
 	&& docker-php-ext-install -j$(nproc) xmlrpc \
 	    zip \
 	    intl \
@@ -25,6 +30,13 @@ RUN apt-get update && apt-get install -y \
 	    mysqli \
 	&& docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
 	&& docker-php-ext-install -j$(nproc) gd
+
+# we need en_AU locales for behat to work
+
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y locales
+
+RUN sed -i -e 's/# en_AU.UTF-8 UTF-8/en_AU.UTF-8 UTF-8/' /etc/locale.gen && \
+    dpkg-reconfigure --frontend=noninteractive locales
 
 RUN apt-get update && apt-get install -y \
     libsybdb5 \
@@ -42,3 +54,10 @@ RUN yes | pecl install xdebug \
     && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
     && echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
     && echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini
+
+RUN echo "alias behatinit=\"cd ${REMOTE_SRC} && php admin/tool/behat/cli/init.php\"" >> ~/.bashrc
+RUN echo "alias behatall=\"cd ${REMOTE_SRC} && vendor/bin/behat --config $REMOTE_DATA/ver9.pgsql.behat/behat/behat.yml\"" >> ~/.bashrc
+RUN echo "function behat() { cd ${REMOTE_SRC} && vendor/bin/behat --config $REMOTE_DATA/ver9.pgsql.behat/behat/behat.yml \$@; }" >> ~/.bashrc
+
+RUN cd / && git clone https://github.com/wolfcw/libfaketime.git \
+    && cd /libfaketime/src && make install

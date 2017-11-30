@@ -1,5 +1,9 @@
 FROM php:7.1-fpm
 
+ARG XDEBUG_ENABLE
+ARG REMOTE_SRC
+ARG REMOTE_DATA
+
 COPY config/php.ini /usr/local/etc/php/
 
 RUN apt-get update && apt-get install -y \
@@ -12,6 +16,7 @@ RUN apt-get update && apt-get install -y \
 		libicu-dev \
 		libpq-dev \
 		locales \
+		nano \
 	&& docker-php-ext-install -j$(nproc) xmlrpc \
 	    zip \
 	    intl \
@@ -24,16 +29,24 @@ RUN apt-get update && apt-get install -y \
 	&& docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
 	&& docker-php-ext-install -j$(nproc) gd
 
-RUN yes | pecl install xdebug \
-    && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
-    && echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
-    && echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini
+RUN [ "$XDEBUG_ENABLE" = "1" ] && yes | pecl install xdebug || echo Skipping xdebug installation
+RUN [ "$XDEBUG_ENABLE" = "1" ] && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
+                                      && echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
+                                      && echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini \
+                                      || echo Skipping xdebug activation
+
+#RUN yes | pecl install xdebug \
+#    && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
+#    && echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
+#    && echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini
 
 # we need en_US locales for MSSQL connection to work
+# we need en_AU locales for behat to work
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y locales
 
 RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+    sed -i -e 's/# en_AU.UTF-8 UTF-8/en_AU.UTF-8 UTF-8/' /etc/locale.gen && \
     dpkg-reconfigure --frontend=noninteractive locales && \
     update-locale LANG=en_US.UTF-8
 
@@ -55,3 +68,7 @@ RUN echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile \
 RUN pear config-set php_ini `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"` system \
     && pecl install sqlsrv \
     && pecl install pdo_sqlsrv
+
+RUN echo "alias behatinit=\"cd ${REMOTE_SRC} && php admin/tool/behat/cli/init.php\"" >> ~/.bashrc
+RUN echo "alias behatall=\"cd ${REMOTE_SRC} && vendor/bin/behat \"" >> ~/.bashrc
+RUN echo "function behat() { cd ${REMOTE_SRC} && vendor/bin/behat \$@; }" >> ~/.bashrc

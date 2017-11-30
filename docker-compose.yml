@@ -15,6 +15,7 @@ services:
       - php-5.6
       - php-7.0
       - php-7.1
+      - php-7.1-behat
       - php-7.2
     networks:
       totara:
@@ -26,6 +27,10 @@ services:
     build:
       context: php
       dockerfile: Dockerfile-56
+      args:
+        - REMOTE_SRC
+        - REMOTE_DATA
+    working_dir: ${REMOTE_SRC}
     ports:
       - "9000"
     environment:
@@ -37,27 +42,6 @@ services:
       - pgsql
       - mariadb
       - mssql
-      - mailcatcher
-    networks:
-      - totara
-
-  php-5.6-test:
-    build:
-      context: php
-      dockerfile: Dockerfile-56-test
-      args:
-        - REMOTE_SRC
-        - REMOTE_DATA
-    ports:
-      - "9000"
-    volumes:
-      - ${LOCAL_SRC}:${REMOTE_SRC}
-      - totara-data:${REMOTE_DATA}
-    links:
-      - pgsql
-      - mariadb
-      - mssql
-      - nginx
       - mailcatcher
     networks:
       - totara
@@ -85,8 +69,13 @@ services:
     build:
       context: php
       dockerfile: Dockerfile-71
+      args:
+        - XDEBUG_ENABLE=1
+        - REMOTE_SRC
+        - REMOTE_DATA
     ports:
       - "9000"
+    working_dir: ${REMOTE_SRC}
     environment:
         XDEBUG_CONFIG: remote_host=${HOST_IP}
     volumes:
@@ -100,13 +89,12 @@ services:
     networks:
       - totara
 
-  php-7.1-test:
+  php-7.1-behat:
     build:
       context: php
-      dockerfile: Dockerfile-71-test
+      dockerfile: Dockerfile-71
       args:
-        - REMOTE_SRC
-        - REMOTE_DATA
+        - XDEBUG_ENABLE=0
     ports:
       - "9000"
     volumes:
@@ -116,7 +104,6 @@ services:
       - pgsql
       - mariadb
       - mssql
-      - nginx
       - mailcatcher
     networks:
       - totara
@@ -144,6 +131,8 @@ services:
     image: postgres:9.4
     ports:
       - "5432:5432"
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
       - pgsql-data:/var/lib/postgresql/data
     networks:
@@ -173,48 +162,24 @@ services:
     networks:
       - totara
 
-  selenium-chrome:
-    image: selenium/standalone-chrome
+  selenium-hub:
+    image: selenium/hub
+    container_name: selenium-hub
     ports:
       - "4444:4444"
-    links:
-      - nginx
     networks:
       - totara
 
-  selenium-chrome1:
-    image: selenium/standalone-chrome
-    ports:
-      - "4445:4444"
+  selenium-chrome:
+    image: selenium/node-chrome
     links:
+      - selenium-hub
       - nginx
-    networks:
-      - totara
-
-  selenium-chrome2:
-    image: selenium/standalone-chrome
-    ports:
-      - "4446:4444"
-    links:
-      - nginx
-    networks:
-      - totara
-
-  selenium-chrome3:
-    image: selenium/standalone-chrome
-    ports:
-      - "4447:4444"
-    links:
-      - nginx
-    networks:
-      - totara
-
-  selenium-chrome4:
-    image: selenium/standalone-chrome
-    ports:
-      - "4448:4444"
-    links:
-      - nginx
+    depends_on:
+      - selenium-hub
+    environment:
+      - HUB_PORT_4444_TCP_ADDR=selenium-hub
+      - HUB_PORT_4444_TCP_PORT=4444
     networks:
       - totara
 
