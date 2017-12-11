@@ -152,3 +152,15 @@ $CFG->smtphosts = 'mailcatcher:25';
 Open __http://localhost:8080__ to open the mailcatcher GUI.
 
 If needed modify the local port in the docker-compose.yml file.
+
+# NodeJS, NPM and grunt 
+
+If you want to use grunt or npm you can log into the nodejs container and issue the commands there:
+
+```bash
+./totara-docker.sh run nodejs bash
+# go to your source directory and
+npm install
+npm install grunt-cli
+./node_modules/.bin/grunt
+```
