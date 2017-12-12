@@ -108,6 +108,23 @@ services:
     networks:
       - totara
 
+  php-7.1-tests:
+    build:
+      context: php
+      dockerfile: Dockerfile-71
+      args:
+        - XDEBUG_ENABLE=0
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+    links:
+      - pgsql
+      - mariadb
+      - mssql
+      - mailcatcher
+    networks:
+      - totara
+
   php-7.2:
     build:
       context: php
