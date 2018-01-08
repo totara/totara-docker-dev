@@ -56,3 +56,9 @@ RUN echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile \
 RUN pear config-set php_ini `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"` system \
     && pecl install sqlsrv \
     && pecl install pdo_sqlsrv
+
+RUN apt-get update && apt-get install -y tzdata
+
+ENV TZ "Pacific/Auckland"
+RUN echo "${TZ}" > /etc/timezone \
+    && dpkg-reconfigure --frontend noninteractive tzdata

@@ -11,12 +11,6 @@ services:
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
-    links:
-      - php-5.6
-      - php-7.0
-      - php-7.1
-      - php-7.1-behat
-      - php-7.2
     networks:
       totara:
         aliases:
@@ -28,21 +22,33 @@ services:
       context: php
       dockerfile: Dockerfile-56
       args:
+        - XDEBUG_ENABLE=1
         - REMOTE_SRC
         - REMOTE_DATA
     working_dir: ${REMOTE_SRC}
-    ports:
-      - "9000"
     environment:
-        XDEBUG_CONFIG: remote_host=${HOST_IP}
+      XDEBUG_CONFIG: remote_host=${HOST_IP}
+      PHP_IDE_CONFIG: serverName=totara56
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
-    links:
-      - pgsql
-      - mariadb
-      - mssql
-      - mailcatcher
+    networks:
+      - totara
+
+  php-5.6-noxdebug:
+    build:
+      context: php
+      dockerfile: Dockerfile-56
+      args:
+        - XDEBUG_ENABLE=0
+        - REMOTE_SRC
+        - REMOTE_DATA
+    working_dir: ${REMOTE_SRC}
+    environment:
+      XDEBUG_CONFIG: remote_host=${HOST_IP}
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
     networks:
       - totara
 
@@ -50,18 +56,33 @@ services:
     build:
       context: php
       dockerfile: Dockerfile-70
-    ports:
-      - "9000"
+      args:
+        - XDEBUG_ENABLE=1
+        - REMOTE_SRC
+        - REMOTE_DATA
+    working_dir: ${REMOTE_SRC}
     environment:
-        XDEBUG_CONFIG: remote_host=${HOST_IP}
+      XDEBUG_CONFIG: remote_host=${HOST_IP}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
-    links:
-      - pgsql
-      - mariadb
-      - mssql
-      - mailcatcher
+    networks:
+      - totara
+
+  php-7.0-noxdebug:
+    build:
+      context: php
+      dockerfile: Dockerfile-70
+      args:
+        - XDEBUG_ENABLE=0
+        - REMOTE_SRC
+        - REMOTE_DATA
+    working_dir: ${REMOTE_SRC}
+    environment:
+      XDEBUG_CONFIG: remote_host=${HOST_IP}
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
     networks:
       - totara
 
@@ -73,55 +94,31 @@ services:
         - XDEBUG_ENABLE=1
         - REMOTE_SRC
         - REMOTE_DATA
-    ports:
-      - "9000"
     working_dir: ${REMOTE_SRC}
     environment:
-        XDEBUG_CONFIG: remote_host=${HOST_IP}
+      XDEBUG_CONFIG: remote_host=${HOST_IP}
+      PHP_IDE_CONFIG: serverName=totara71
+      HIST_FILE: /root/.bash_history
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
-    links:
-      - pgsql
-      - mariadb
-      - mssql
-      - mailcatcher
+      - ~/.bash_history:/root/.bash_history
     networks:
       - totara
 
-  php-7.1-behat:
+  php-7.1-noxdebug:
     build:
       context: php
       dockerfile: Dockerfile-71
       args:
         - XDEBUG_ENABLE=0
-    ports:
-      - "9000"
+    working_dir: ${REMOTE_SRC}
+    environment:
+      HIST_FILE: /root/.bash_history
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
-    links:
-      - pgsql
-      - mariadb
-      - mssql
-      - mailcatcher
-    networks:
-      - totara
-
-  php-7.1-tests:
-    build:
-      context: php
-      dockerfile: Dockerfile-71
-      args:
-        - XDEBUG_ENABLE=0
-    volumes:
-      - ${LOCAL_SRC}:${REMOTE_SRC}
-      - totara-data:${REMOTE_DATA}
-    links:
-      - pgsql
-      - mariadb
-      - mssql
-      - mailcatcher
+      - ~/.bash_history:/root/.bash_history
     networks:
       - totara
 
@@ -129,18 +126,12 @@ services:
     build:
       context: php
       dockerfile: Dockerfile-72
-    ports:
-      - "9000"
+    working_dir: ${REMOTE_SRC}
     environment:
-        XDEBUG_CONFIG: remote_host=${HOST_IP}
+      XDEBUG_CONFIG: remote_host=${HOST_IP}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
-    links:
-      - pgsql
-      - mariadb
-      - mssql
-      - mailcatcher
     networks:
       - totara
 
@@ -151,7 +142,7 @@ services:
     working_dir: ${REMOTE_SRC}
 
   pgsql:
-    image: postgres:9.4
+    image: postgres:9.6
     ports:
       - "5432:5432"
     environment:
@@ -166,7 +157,7 @@ services:
     ports:
       - "3306:3306"
     environment:
-        MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PW}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PW}
     volumes:
       - mysql-data:/var/lib/mysql
     networks:
@@ -186,23 +177,30 @@ services:
       - totara
 
   selenium-hub:
-    image: selenium/hub
-    container_name: selenium-hub
+    image: selenium/hub:3.7.1
     ports:
       - "4444:4444"
     networks:
       - totara
+    environment:
+      - GRID_MAX_SESSION=8
+      - GRID_TIMEOUT=7200
+      - GRID_CLEAN_UP_CYCLE=120000
 
   selenium-chrome:
-    image: selenium/node-chrome
-    links:
-      - selenium-hub
-      - nginx
+    image: selenium/node-chrome:3.7.1
     depends_on:
       - selenium-hub
     environment:
       - HUB_PORT_4444_TCP_ADDR=selenium-hub
       - HUB_PORT_4444_TCP_PORT=4444
+      - NODE_MAX_INSTANCES=8
+      - NODE_MAX_SESSION=8
+    networks:
+      - totara
+
+  selenium-chrome-standalone:
+    image: selenium/standalone-chrome:3.7.1
     networks:
       - totara
 
