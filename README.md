@@ -165,7 +165,7 @@ npm install grunt-cli
 ./node_modules/.bin/grunt
 ```
 
-If npm and grunt-cli is already installed you can use the shortcut bash script:
+Or you use the shortcut bash script:
 
 ```bash
 ./totara-grunt.sh
