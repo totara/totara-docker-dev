@@ -164,3 +164,11 @@ npm install
 npm install grunt-cli
 ./node_modules/.bin/grunt
 ```
+
+If npm and grunt-cli is already installed you can use the shortcut bash script:
+
+```bash
+./totara-grunt.sh
+# if you have your version in REMOTE_SRC/subfolder then add the subfolder as parameter
+./totara-grunt.sh subfolder
+``` 
