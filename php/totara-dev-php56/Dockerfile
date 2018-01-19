@@ -1,10 +1,4 @@
-FROM php:5.6-fpm
-
-ARG XDEBUG_ENABLE
-ARG REMOTE_SRC
-ARG REMOTE_DATA
-
-COPY config/php-56.ini /usr/local/etc/php/php.ini
+FROM php:5.6-fpm AS totara-dev-php56
 
 RUN apt-get update && apt-get install -y \
         apt-transport-https \
@@ -51,24 +45,13 @@ RUN cd /usr/lib && ln -s /usr/lib/x86_64-linux-gnu/libsybdb.a
 
 RUN docker-php-ext-install -j$(nproc) mssql
 
-RUN [ "$XDEBUG_ENABLE" = "1" ] && yes | pecl install xdebug || echo Skipping xdebug installation
-
-RUN [ "$XDEBUG_ENABLE" = "1" ] \
-    && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
-    && echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
-    && echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini \
-    || echo Skipping xdebug activation
-
-RUN echo "alias behatinit=\"cd ${REMOTE_SRC} && php admin/tool/behat/cli/init.php\"" >> ~/.bashrc
-RUN echo "alias behatall=\"cd ${REMOTE_SRC} && vendor/bin/behat --config $REMOTE_DATA/ver9.pgsql.behat/behat/behat.yml\"" >> ~/.bashrc
-RUN echo "function behat() { cd ${REMOTE_SRC} && vendor/bin/behat --config $REMOTE_DATA/ver9.pgsql.behat/behat/behat.yml \$@; }" >> ~/.bashrc
-
 RUN cd / && git clone https://github.com/wolfcw/libfaketime.git \
     && cd /libfaketime/src && make install
-
 
 RUN apt-get update && apt-get install -y tzdata
 
 ENV TZ "Pacific/Auckland"
 RUN echo "${TZ}" > /etc/timezone \
     && dpkg-reconfigure --frontend noninteractive tzdata
+
+COPY config/php.ini /usr/local/etc/php/php.ini

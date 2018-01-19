@@ -9,7 +9,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - ${LOCAL_SRC}:${REMOTE_SRC}:cached
       - totara-data:${REMOTE_DATA}
     networks:
       totara:
@@ -17,120 +17,84 @@ services:
             - totara71.behat
             - totara56.behat
 
-  php-5.6:
-    build:
-      context: php
-      dockerfile: Dockerfile-56
-      args:
-        - XDEBUG_ENABLE=1
-        - REMOTE_SRC
-        - REMOTE_DATA
+  php-5.6-debug:
+    image: derschatta/totara-dev-php56-debug
     working_dir: ${REMOTE_SRC}
     environment:
       XDEBUG_CONFIG: remote_host=${HOST_IP}
       PHP_IDE_CONFIG: serverName=totara56
     volumes:
-      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - ${LOCAL_SRC}:${REMOTE_SRC}:cached
       - totara-data:${REMOTE_DATA}
     networks:
       - totara
 
-  php-5.6-noxdebug:
-    build:
-      context: php
-      dockerfile: Dockerfile-56
-      args:
-        - XDEBUG_ENABLE=0
-        - REMOTE_SRC
-        - REMOTE_DATA
+  php-5.6:
+    image: derschatta/totara-dev-php56
     working_dir: ${REMOTE_SRC}
     environment:
       XDEBUG_CONFIG: remote_host=${HOST_IP}
     volumes:
-      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - ${LOCAL_SRC}:${REMOTE_SRC}:cached
+      - totara-data:${REMOTE_DATA}
+    networks:
+      - totara
+
+  php-7.0-debug:
+    image: derschatta/totara-dev-php70-debug
+    working_dir: ${REMOTE_SRC}
+    environment:
+      XDEBUG_CONFIG: remote_host=${HOST_IP}
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}:cached
       - totara-data:${REMOTE_DATA}
     networks:
       - totara
 
   php-7.0:
-    build:
-      context: php
-      dockerfile: Dockerfile-70
-      args:
-        - XDEBUG_ENABLE=1
-        - REMOTE_SRC
-        - REMOTE_DATA
+    image: derschatta/totara-dev-php70
     working_dir: ${REMOTE_SRC}
     environment:
       XDEBUG_CONFIG: remote_host=${HOST_IP}
     volumes:
-      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - ${LOCAL_SRC}:${REMOTE_SRC}:cached
       - totara-data:${REMOTE_DATA}
     networks:
       - totara
 
-  php-7.0-noxdebug:
-    build:
-      context: php
-      dockerfile: Dockerfile-70
-      args:
-        - XDEBUG_ENABLE=0
-        - REMOTE_SRC
-        - REMOTE_DATA
-    working_dir: ${REMOTE_SRC}
-    environment:
-      XDEBUG_CONFIG: remote_host=${HOST_IP}
-    volumes:
-      - ${LOCAL_SRC}:${REMOTE_SRC}
-      - totara-data:${REMOTE_DATA}
-    networks:
-      - totara
-
-  php-7.1:
-    build:
-      context: php
-      dockerfile: Dockerfile-71
-      args:
-        - XDEBUG_ENABLE=1
-        - REMOTE_SRC
-        - REMOTE_DATA
+  php-7.1-debug:
+    image: derschatta/totara-dev-php71-debug
     working_dir: ${REMOTE_SRC}
     environment:
       XDEBUG_CONFIG: remote_host=${HOST_IP}
       PHP_IDE_CONFIG: serverName=totara71
       HIST_FILE: /root/.bash_history
     volumes:
-      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - ${LOCAL_SRC}:${REMOTE_SRC}:cached
       - totara-data:${REMOTE_DATA}
       - ~/.bash_history:/root/.bash_history
     networks:
       - totara
 
-  php-7.1-noxdebug:
-    build:
-      context: php
-      dockerfile: Dockerfile-71
-      args:
-        - XDEBUG_ENABLE=0
+  php-7.1:
+    image: derschatta/totara-dev-php71
     working_dir: ${REMOTE_SRC}
     environment:
       HIST_FILE: /root/.bash_history
     volumes:
-      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - ${LOCAL_SRC}:${REMOTE_SRC}:cached
       - totara-data:${REMOTE_DATA}
       - ~/.bash_history:/root/.bash_history
     networks:
       - totara
 
   php-7.2:
-    build:
-      context: php
-      dockerfile: Dockerfile-72
+    image: derschatta/totara-dev-php72
     working_dir: ${REMOTE_SRC}
     environment:
       XDEBUG_CONFIG: remote_host=${HOST_IP}
     volumes:
-      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - ${LOCAL_SRC}:${REMOTE_SRC}:cached
       - totara-data:${REMOTE_DATA}
     networks:
       - totara
@@ -138,7 +102,7 @@ services:
   nodejs:
     image: node:4.8.7
     volumes:
-      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - ${LOCAL_SRC}:${REMOTE_SRC}:cached
     working_dir: ${REMOTE_SRC}
 
   pgsql:

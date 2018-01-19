@@ -1,11 +1,5 @@
 FROM php:7.0-fpm
 
-ARG XDEBUG_ENABLE
-ARG REMOTE_SRC
-ARG REMOTE_DATA
-
-COPY config/php.ini /usr/local/etc/php/
-
 RUN apt-get update && apt-get install -y \
         apt-transport-https \
 		libfreetype6-dev \
@@ -28,13 +22,6 @@ RUN apt-get update && apt-get install -y \
 	    mysqli \
 	&& docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
 	&& docker-php-ext-install -j$(nproc) gd
-
-RUN [ "$XDEBUG_ENABLE" = "1" ] && yes | pecl install xdebug || echo Skipping xdebug installation
-RUN [ "$XDEBUG_ENABLE" = "1" ] \
-    && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
-    && echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
-    && echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini \
-    || echo Skipping xdebug activation
 
 # we need en_US locales for MSSQL connection to work
 # we need en_AU locales for behat to work
@@ -65,12 +52,10 @@ RUN pear config-set php_ini `php --ini | grep "Loaded Configuration" | sed -e "s
     && pecl install sqlsrv \
     && pecl install pdo_sqlsrv
 
-RUN echo "alias behatinit=\"cd ${REMOTE_SRC} && php admin/tool/behat/cli/init.php\"" >> ~/.bashrc
-RUN echo "alias behatall=\"cd ${REMOTE_SRC} && vendor/bin/behat \"" >> ~/.bashrc
-RUN echo "function behat() { cd ${REMOTE_SRC} && vendor/bin/behat \$@; }" >> ~/.bashrc
-
 RUN apt-get update && apt-get install -y tzdata
 
 ENV TZ "Pacific/Auckland"
 RUN echo "${TZ}" > /etc/timezone \
     && dpkg-reconfigure --frontend noninteractive tzdata
+
+COPY config/php.ini /usr/local/etc/php/

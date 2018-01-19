@@ -5,11 +5,15 @@ services:
     volumes:
       - totara-www-sync:${REMOTE_SRC}:nocopy
 
+  php-5.6-debug:
+    volumes:
+      - totara-www-sync:${REMOTE_SRC}:nocopy
+
   php-5.6:
     volumes:
       - totara-www-sync:${REMOTE_SRC}:nocopy
 
-  php-5.6-noxdebug:
+  php-7.0-debug:
     volumes:
       - totara-www-sync:${REMOTE_SRC}:nocopy
 
@@ -17,15 +21,11 @@ services:
     volumes:
       - totara-www-sync:${REMOTE_SRC}:nocopy
 
-  php-7.0-noxdebug:
+  php-7.1-debug:
     volumes:
       - totara-www-sync:${REMOTE_SRC}:nocopy
 
   php-7.1:
-    volumes:
-      - totara-www-sync:${REMOTE_SRC}:nocopy
-
-  php-7.1-noxdebug:
     volumes:
       - totara-www-sync:${REMOTE_SRC}:nocopy
 
