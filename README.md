@@ -19,6 +19,9 @@ This setup was created and tested on a MAC. It should work on Windows and Linux 
  * Docker-sync: http://docker-sync.io/ (optional, for more speed on Mac and Windows)
  * At least 3.25GB of RAM for MSSQL
 
+## Warning
+Please note that there's a current [issue with docker-sync](https://github.com/EugenMayer/docker-sync/issues/517) opn Mac and Docker versions newer than [17.09.1-ce-mac42](https://docs.docker.com/docker-for-mac/release-notes/#docker-community-edition-17091-ce-mac42-2017-12-11-stable). To be on the safe side I recommend download and installing this version.
+
 ### Todo
 
  * Get mssql working with PHP 5.6 (driver is installed but throws error on connect)
@@ -110,8 +113,11 @@ Make sure your config file contains the PHPUnit configuration needed and the dat
 
 Log into one of the test containers
 ```bash
-./totara-docker.sh run php-5.6-test bash
-./totara-docker.sh run php-7.1-test bash
+./totara-docker.sh exec php-5.6 bash
+./totara-docker.sh exec php-7.1 bash
+# or if you need xdebug support
+./totara-docker.sh exec php-5.6-debug bash
+./totara-docker.sh exec php-7.1-debug bash
 ```
 
 Go to the project folder
