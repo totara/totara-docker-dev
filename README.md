@@ -6,7 +6,7 @@ This setup was created and tested on a MAC. It should work on Windows and Linux 
 
 ### What you get:
  * NGINX as a webserver
- * PHP 5.6, 7.0, 7.1, 7.2RC to test for different versions
+ * PHP 5.6, 7.0, 7.1, 7.2 to test for different versions
  * PostgreSQL, MariaDB (MySQL), Microsoft SQL Server support
  * A PHPUnit and Behat setup to run tests (including Selenium)
  * A [mailcatcher](https://mailcatcher.me/) instance to inspect mails
@@ -14,7 +14,7 @@ This setup was created and tested on a MAC. It should work on Windows and Linux 
 
 ### Requirements:
  * Totara source code: https://help.totaralearning.com/display/DEV/Getting+the+code
- * Docker: https://www.docker.com
+ * Docker: https://www.docker.com (recommend 17.09.1-ce-mac42, see warning below)
  * Docker-compose: https://docs.docker.com/compose/install (included in Docker for Mac/Windows)
  * Docker-sync: http://docker-sync.io/ (optional, for more speed on Mac and Windows)
  * At least 3.25GB of RAM for MSSQL
@@ -25,7 +25,7 @@ Please note that there's a current [issue with docker-sync](https://github.com/E
 ### Todo
 
  * Get mssql working with PHP 5.6 (driver is installed but throws error on connect)
- * Get mssql working with PHP 7.2RC (dependency problem in mssql extension)
+ * Get xdebug working with PHP 7.2
 
 ### Installation:
  1. Clone the Totara source code (see requirements) 
@@ -38,9 +38,6 @@ __with docker-sync__
 ```bash
 # use helper file provided
 ./totara-docker.sh build
-
-# or call it directly
-docker-compose -f docker-compose.yml -f docker-compose-dev.yml build
 ```
 
 __without docker-sync__
@@ -56,34 +53,27 @@ __Example:__
 127.0.0.1   localhost totara71 totara56 totara70 totara72 totara71.behat totara56.behat
 ```
 
-You can change the hostnames in the nginx configuration file (/nginx/config/totara.conf) to your needs.
-
 ### Run
 
 __with docker-sync__
 
 ```bash
-# 1. fire up docker-sync as a daemon in the background
+# fire up docker-sync as a daemon in the background
 docker-sync start
-# or alternatively once in the foreground
-docker-sync-stack start
 ```
 
 ```bash
-# use helper file provided
+# run in foreground (to directly see log output)
 ./totara-docker.sh up
 # run in background
-./totara-docker.sh up -d 
-
-# or call it directly
-docker-compose -f docker-compose.yml -f docker-compose-dev.yml up
-# run in background
-docker-compose -f docker-compose.yml -f docker-compose-dev.yml up -d 
+./totara-docker.sh up -d  
 ```
 
 __without docker-sync__
 ```bash
 docker-compose up
+# or run in background
+docker-compose up -d
 ```
 
 Now make sure you have configured Totara and created the databases you need.
@@ -98,11 +88,19 @@ To use the command line clients provided by the containers you can use the follo
 
 ```bash
 # PostgreSQL
-docker exec -ti docker_pgsql_1 psql -U postgres
+./totara-docker.sh exec pgsql psql -U postgres
+# or without docker-sync
+docker-compose exec pgsql psql -U postgres
+
 # MySQL / MariaDB
-docker exec -ti docker_mariadb_1 mysql -u root -p"root"
+./totara-docker.sh exec mariadb mysql -u root -p"root"
+# or without docker-sync
+docker-compose exec mariadb mysql -u root -p"root"
+
 # Microsoft SQL Server
-docker exec -ti docker_php-7.1_1 /opt/mssql-tools/bin/sqlcmd -S mssql -U SA -P "Totara.Mssql1"
+./totara-docker.sh exec php-7.1 /opt/mssql-tools/bin/sqlcmd -S mssql -U SA -P "Totara.Mssql1"
+# or without docker-sync
+docker-compose exec mariadb mysql -u root -p"root"
 ```
 
 Create a database schema for each Totara version you would like to develop on.
@@ -141,11 +139,42 @@ vendor/bin/phpunit
 
 ### Run behat tests
 
-wip
+Make sure your config file contains the Behat configuration needed and the database is ready.
+
+Log into one of the test containers
+```bash
+./totara-docker.sh exec php-5.6 bash
+./totara-docker.sh exec php-7.1 bash
+# or if you need xdebug support
+./totara-docker.sh exec php-5.6-debug bash
+./totara-docker.sh exec php-7.1-debug bash
+```
+
+Go to the project folder
+```bash
+# replace version
+cd /var/www/totara/src/[version]
+```
+
+First time run the init script to initiate the unit tests
+```bash
+# in the project folder
+php composer.phar install
+# initiate the test environment (use --parallel=x if needed)
+php admin/tool/behat/cli/init.php
+```
+
+To start running
+```bash
+# for t11
+vendor/bin/behat
+# for others use the command prompted after init, for example:
+vendor/bin/behat --config /var/www/totara/data/ver9.pgsql.behat/behatrun/behat/behat.yml
+```
 
 ### Switch between different versions
 
-wip
+I recommend to check out each Totara Learn version in a different subfolder below the folder LOCAL_SRC defined in .env. This is just a suggestion which worked fine for me. There are different ways to handle this and at the end you need to decide yourself how to do it.
 
 # Mailcatcher
 
@@ -157,7 +186,7 @@ $CFG->smtphosts = 'mailcatcher:25';
 
 Open __http://localhost:8080__ to open the mailcatcher GUI.
 
-If needed modify the local port in the docker-compose.yml file.
+If needed, modify the local port in the docker-compose.yml file.
 
 # NodeJS, NPM and grunt 
 
@@ -175,6 +204,5 @@ Or you use the shortcut bash script:
 
 ```bash
 ./totara-grunt.sh
-# if you have your version in REMOTE_SRC/subfolder then add the subfolder as parameter
-./totara-grunt.sh subfolder
+./totara-grunt.sh 11
 ``` 
