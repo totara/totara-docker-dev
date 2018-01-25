@@ -1,9 +1,9 @@
 ###### Build status:
- * Nginx: ![Build status Nginx](https://img.shields.io/docker/build/derschatta/totara-dev-nginx.svg) 
- * PHP 5.6: ![Build status PHP 5.6](https://img.shields.io/docker/build/derschatta/totara-dev-php56.svg)
- * PHP 7.0: ![Build status PHP 7.0](https://img.shields.io/docker/build/derschatta/totara-dev-php70.svg)
- * PHP 7.1: ![Build status PHP 7.1](https://img.shields.io/docker/build/derschatta/totara-dev-php71.svg)
- * PHP 7.2: ![Build status PHP 7.2](https://img.shields.io/docker/build/derschatta/totara-dev-php72.svg)
+ * Nginx: [![Build status Nginx](https://img.shields.io/docker/build/derschatta/totara-dev-nginx.svg)](https://hub.docker.com/r/derschatta/totara-dev-nginx/)
+ * PHP 5.6: [![Build status PHP 5.6](https://img.shields.io/docker/build/derschatta/totara-dev-php56.svg)](https://hub.docker.com/r/derschatta/totara-dev-php56/)
+ * PHP 7.0: [![Build status PHP 7.0](https://img.shields.io/docker/build/derschatta/totara-dev-php70.svg)](https://hub.docker.com/r/derschatta/totara-dev-php70/)
+ * PHP 7.1: [![Build status PHP 7.1](https://img.shields.io/docker/build/derschatta/totara-dev-php71.svg)](https://hub.docker.com/r/derschatta/totara-dev-php71/)
+ * PHP 7.2: [![Build status PHP 7.2](https://img.shields.io/docker/build/derschatta/totara-dev-php72.svg)](https://hub.docker.com/r/derschatta/totara-dev-php72/)
 
 ## A Docker setup for local Totara LMS development
 
