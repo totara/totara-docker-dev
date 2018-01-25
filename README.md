@@ -1,3 +1,10 @@
+###### Build status:
+ * Nginx: ![Build status Nginx](https://img.shields.io/docker/build/derschatta/totara-dev-nginx.svg) 
+ * PHP 5.6: ![Build status PHP 5.6](https://img.shields.io/docker/build/derschatta/totara-dev-php56.svg)
+ * PHP 7.0: ![Build status PHP 7.0](https://img.shields.io/docker/build/derschatta/totara-dev-php70.svg)
+ * PHP 7.1: ![Build status PHP 7.1](https://img.shields.io/docker/build/derschatta/totara-dev-php71.svg)
+ * PHP 7.2: ![Build status PHP 7.2](https://img.shields.io/docker/build/derschatta/totara-dev-php72.svg)
+
 ## A Docker setup for local Totara LMS development
 
 This project aims to provide an easy way to start developing for Totara by providing a Docker setup.
