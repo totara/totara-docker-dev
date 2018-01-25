@@ -1,4 +1,4 @@
-FROM php:5.6-fpm AS totara-dev-php56
+FROM php:5.6-fpm
 
 RUN apt-get update && apt-get install -y \
         apt-transport-https \
