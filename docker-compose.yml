@@ -8,7 +8,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ${LOCAL_SRC}:${REMOTE_SRC}:cached
+      - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
     networks:
       totara:
@@ -22,9 +22,11 @@ services:
     environment:
       XDEBUG_CONFIG: remote_host=${HOST_IP}
       PHP_IDE_CONFIG: serverName=totara56
+      HIST_FILE: /root/.bash_history
     volumes:
-      - ${LOCAL_SRC}:${REMOTE_SRC}:cached
+      - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
+      - $HOME/.bash_history:/root/.bash_history
     networks:
       - totara
 
@@ -32,10 +34,11 @@ services:
     image: derschatta/totara-dev-php56
     working_dir: ${REMOTE_SRC}
     environment:
-      XDEBUG_CONFIG: remote_host=${HOST_IP}
+      HIST_FILE: /root/.bash_history
     volumes:
-      - ${LOCAL_SRC}:${REMOTE_SRC}:cached
+      - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
+      - $HOME/.bash_history:/root/.bash_history
     networks:
       - totara
 
@@ -44,9 +47,12 @@ services:
     working_dir: ${REMOTE_SRC}
     environment:
       XDEBUG_CONFIG: remote_host=${HOST_IP}
+      PHP_IDE_CONFIG: serverName=totara70
+      HIST_FILE: /root/.bash_history
     volumes:
-      - ${LOCAL_SRC}:${REMOTE_SRC}:cached
+      - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
+      - $HOME/.bash_history:/root/.bash_history
     networks:
       - totara
 
@@ -54,10 +60,11 @@ services:
     image: derschatta/totara-dev-php70
     working_dir: ${REMOTE_SRC}
     environment:
-      XDEBUG_CONFIG: remote_host=${HOST_IP}
+      HIST_FILE: /root/.bash_history
     volumes:
-      - ${LOCAL_SRC}:${REMOTE_SRC}:cached
+      - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
+      - $HOME/.bash_history:/root/.bash_history
     networks:
       - totara
 
@@ -69,9 +76,9 @@ services:
       PHP_IDE_CONFIG: serverName=totara71
       HIST_FILE: /root/.bash_history
     volumes:
-      - ${LOCAL_SRC}:${REMOTE_SRC}:cached
+      - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
-      - ~/.bash_history:/root/.bash_history
+      - $HOME/.bash_history:/root/.bash_history
     networks:
       - totara
 
@@ -81,9 +88,9 @@ services:
     environment:
       HIST_FILE: /root/.bash_history
     volumes:
-      - ${LOCAL_SRC}:${REMOTE_SRC}:cached
+      - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
-      - ~/.bash_history:/root/.bash_history
+      - $HOME/.bash_history:/root/.bash_history
     networks:
       - totara
 
@@ -91,17 +98,32 @@ services:
     image: derschatta/totara-dev-php72
     working_dir: ${REMOTE_SRC}
     environment:
-      XDEBUG_CONFIG: remote_host=${HOST_IP}
+      HIST_FILE: /root/.bash_history
     volumes:
-      - ${LOCAL_SRC}:${REMOTE_SRC}:cached
+      - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
+      - $HOME/.bash_history:/root/.bash_history
+    networks:
+      - totara
+
+  php-7.2-debug:
+    image: derschatta/totara-dev-php72-debug
+    working_dir: ${REMOTE_SRC}
+    environment:
+      XDEBUG_CONFIG: remote_host=${HOST_IP}
+      PHP_IDE_CONFIG: serverName=totara72
+      HIST_FILE: /root/.bash_history
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+      - $HOME/.bash_history:/root/.bash_history
     networks:
       - totara
 
   nodejs:
     image: node:4.8.7
     volumes:
-      - ${LOCAL_SRC}:${REMOTE_SRC}:cached
+      - ${LOCAL_SRC}:${REMOTE_SRC}
     working_dir: ${REMOTE_SRC}
 
   pgsql:
