@@ -2,9 +2,8 @@ version: "3"
 services:
 
   nginx:
-    build:
-      context: nginx
-      args:
+    image: totara-dev-nginx
+    environment:
         - REMOTE_DATA
     ports:
       - "80:80"

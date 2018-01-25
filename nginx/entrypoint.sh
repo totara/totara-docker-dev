@@ -1,6 +1,10 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
-cd ${REMOTE_DATA}
+echo "Using data folder: $REMOTE_DATA"
+
+cd $REMOTE_DATA
+
+echo "Creating data folders..."
 
 # version 2.7
 
@@ -51,6 +55,8 @@ chmod g+s ver11.mssql ver11.mysql ver11.pgsql
 mkdir -p ver11.mssql.phpunit ver11.mysql.phpunit ver11.pgsql.phpunit ver11.pgsql.behat
 chown -R www-data:www-data ver11.pgsql.behat
 chmod g+s ver11.mssql ver11.pgsql.behat
+
+echo "done"
 
 # fire up nginx
 nginx -g 'daemon off;'
