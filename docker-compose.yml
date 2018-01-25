@@ -2,7 +2,7 @@ version: "3"
 services:
 
   nginx:
-    image: totara-dev-nginx
+    image: derschatta/totara-dev-nginx
     environment:
         - REMOTE_DATA
     ports:
