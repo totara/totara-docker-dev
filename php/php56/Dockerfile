@@ -45,6 +45,8 @@ RUN cd /usr/lib && ln -s /usr/lib/x86_64-linux-gnu/libsybdb.a
 
 RUN docker-php-ext-install -j$(nproc) mssql
 
+COPY config/freetds.conf /etc/freetds/freetds.conf
+
 RUN cd / && git clone https://github.com/wolfcw/libfaketime.git \
     && cd /libfaketime/src && make install
 
