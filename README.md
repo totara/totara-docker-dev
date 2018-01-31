@@ -39,18 +39,6 @@ Please note that there's a current [issue with docker-sync](https://github.com/E
  1. Clone this project
  1. Install docker-sync
  1. Copy the file __.env.dist__ to __.env__ and change at least the path to your local Totara source folder (LOCAL_SRC)
- 1. In your totara-docker-env folder run:
-
-__with docker-sync__
-```bash
-# use helper file provided
-./totara-docker.sh build
-```
-
-__without docker-sync__
-```bash
-docker-compose build
-```
 
 #### /etc/hosts
 Make sure you have all the hosts in your /etc/hosts file to be able to access them via the browser.
@@ -71,21 +59,29 @@ docker-sync start
 
 ```bash
 # run in foreground (to directly see log output)
-./totara-docker.sh up
+./totara-docker-sync.sh up
 # run in background
-./totara-docker.sh up -d  
+./totara-docker-sync.sh up -d  
 ```
 
 __without docker-sync__
 ```bash
-docker-compose up
+./totara-docker.sh up 
 # or run in background
-docker-compose up -d
+./totara-docker.sh up -d 
 ```
 
-Now make sure you have configured Totara and created the databases you need.
+### Build
+
+By default prebuilt images from docker hub (https://hub.docker.com/u/derschatta/) will be used. If you want to modify any of the containers to your needs then you can rebuild them locally with the following command:
+
+```bash
+./totara-build.sh
+```
 
 ### Config & Database
+
+Make sure you have configured Totara and created the databases you need.
 
 Modify your Totara __config.php__ and create the databases. You can connect to the databases from your host using any tools you prefer.
 
@@ -95,19 +91,19 @@ To use the command line clients provided by the containers you can use the follo
 
 ```bash
 # PostgreSQL
-./totara-docker.sh exec pgsql psql -U postgres
+./totara-docker-sync.sh exec pgsql psql -U postgres
 # or without docker-sync
-docker-compose exec pgsql psql -U postgres
+./totara-docker.sh exec pgsql psql -U postgres
 
 # MySQL / MariaDB
-./totara-docker.sh exec mariadb mysql -u root -p"root"
+./totara-docker-sync.sh exec mariadb mysql -u root -p"root"
 # or without docker-sync
-docker-compose exec mariadb mysql -u root -p"root"
+./totara-docker.sh exec mariadb mysql -u root -p"root"
 
 # Microsoft SQL Server
-./totara-docker.sh exec php-7.1 /opt/mssql-tools/bin/sqlcmd -S mssql -U SA -P "Totara.Mssql1"
+./totara-docker-sync.sh exec php-7.1 /opt/mssql-tools/bin/sqlcmd -S mssql -U SA -P "Totara.Mssql1"
 # or without docker-sync
-docker-compose exec mariadb mysql -u root -p"root"
+./totara-docker.sh exec mariadb mysql -u root -p"root"
 ```
 
 Create a database schema for each Totara version you would like to develop on.
@@ -118,11 +114,11 @@ Make sure your config file contains the PHPUnit configuration needed and the dat
 
 Log into one of the test containers
 ```bash
-./totara-docker.sh exec php-5.6 bash
-./totara-docker.sh exec php-7.1 bash
+./totara-docker-sync.sh exec php-5.6 bash
+./totara-docker-sync.sh exec php-7.1 bash
 # or if you need xdebug support
-./totara-docker.sh exec php-5.6-debug bash
-./totara-docker.sh exec php-7.1-debug bash
+./totara-docker-sync.sh exec php-5.6-debug bash
+./totara-docker-sync.sh exec php-7.1-debug bash
 ```
 
 Go to the project folder
@@ -150,11 +146,11 @@ Make sure your config file contains the Behat configuration needed and the datab
 
 Log into one of the test containers
 ```bash
-./totara-docker.sh exec php-5.6 bash
-./totara-docker.sh exec php-7.1 bash
+./totara-docker-sync.sh exec php-5.6 bash
+./totara-docker-sync.sh exec php-7.1 bash
 # or if you need xdebug support
-./totara-docker.sh exec php-5.6-debug bash
-./totara-docker.sh exec php-7.1-debug bash
+./totara-docker-sync.sh exec php-5.6-debug bash
+./totara-docker-sync.sh exec php-7.1-debug bash
 ```
 
 Go to the project folder
