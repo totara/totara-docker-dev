@@ -39,11 +39,14 @@ ENV LC_ALL en_US.UTF-8
 
 # install mssql extension
 
-RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add -
-RUN curl https://packages.microsoft.com/config/debian/8/prod.list | tee /etc/apt/sources.list.d/mssql-tools.list
-RUN apt-get update && ACCEPT_EULA=Y apt-get install -y \
-    mssql-tools \
-    unixodbc-dev
+RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
+    && curl https://packages.microsoft.com/config/debian/8/prod.list | tee /etc/apt/sources.list.d/mssql-tools.list \
+    && apt-get update && ACCEPT_EULA=Y apt-get install -y \
+    unixodbc \
+    libgss3 \
+    unixodbc-dev \
+    msodbcsql=13.1.9.2-1 \
+    mssql-tools=14.0.7.0-1
 
 RUN echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile \
     && echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
