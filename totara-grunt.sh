@@ -6,7 +6,7 @@ export $(egrep -v '^#' .env | xargs)
 MYPATH=$REMOTE_SRC/$1
 
 echo "Starting grunt tasks..."
-./totara-docker.sh run --rm nodejs sh -c "\
+totara-docker-sync.sh run --rm nodejs sh -c "\
     cd $MYPATH \
     && npm install \
     && npm install grunt-cli \

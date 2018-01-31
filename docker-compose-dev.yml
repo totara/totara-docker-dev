@@ -2,46 +2,28 @@ version: "3"
 services:
 
   nginx:
-    volumes:
-      - totara-www-sync:${REMOTE_SRC}:nocopy
+    build: ./nginx
 
   php-5.6-debug:
-    volumes:
-      - totara-www-sync:${REMOTE_SRC}:nocopy
+    build: ./php/php56-debug
 
   php-5.6:
-    volumes:
-      - totara-www-sync:${REMOTE_SRC}:nocopy
+    build: ./php/php56
 
   php-7.0-debug:
-    volumes:
-      - totara-www-sync:${REMOTE_SRC}:nocopy
+    build: ./php/php70-debug
 
   php-7.0:
-    volumes:
-      - totara-www-sync:${REMOTE_SRC}:nocopy
+    build: ./php/php70
 
   php-7.1-debug:
-    volumes:
-      - totara-www-sync:${REMOTE_SRC}:nocopy
+    build: ./php/php71-debug
 
   php-7.1:
-    volumes:
-      - totara-www-sync:${REMOTE_SRC}:nocopy
+    build: ./php/php71
 
   php-7.2-debug:
-    volumes:
-      - totara-www-sync:${REMOTE_SRC}:nocopy
+    build: ./php/php72-debug
 
   php-7.2:
-    volumes:
-      - totara-www-sync:${REMOTE_SRC}:nocopy
-
-  nodejs:
-    volumes:
-      - totara-www-sync:${REMOTE_SRC}:nocopy
-
-volumes:
-    totara-data:
-    totara-www-sync:
-        external: true
+    build: ./php/php72

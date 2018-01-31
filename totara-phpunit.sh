@@ -12,8 +12,8 @@ SETUP=$3
 if [ $SETUP = "init" ]
 then
     echo "Init unit tests..."
-    ./totara-docker.sh exec $PHPCONTAINER sh -c "cd $MYPATH && php admin/tool/phpunit/cli/init.php"
+    totara-docker-sync.sh exec $PHPCONTAINER sh -c "cd $MYPATH && php admin/tool/phpunit/cli/init.php"
 else
     echo "Running unit tests..."
-    ./totara-docker.sh exec $PHPCONTAINER sh -c "cd $MYPATH && vendor/bin/phpunit $3"
+    totara-docker-sync.sh exec $PHPCONTAINER sh -c "cd $MYPATH && vendor/bin/phpunit $3"
 fi
