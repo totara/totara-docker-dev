@@ -87,6 +87,26 @@ Modify your Totara __config.php__ and create the databases. You can connect to t
 
 The host will be always __localhost__ and the ports are the default ports of the database systems.
 
+#### Credentials
+
+__PostgreSQL__
+
+__host:__ pgsql
+__user:__ postgresql
+__pw:__ (none)
+
+__Mysql__
+
+__host:__ mysql
+__user:__ root
+__pw:__ root
+
+__Mssql__
+
+__host:__ mssql
+__user:__ SA
+__pw:__ Totara.Mssql1
+
 To use the command line clients provided by the containers you can use the following commands:
 
 ```bash
@@ -107,6 +127,36 @@ To use the command line clients provided by the containers you can use the follo
 ```
 
 Create a database schema for each Totara version you would like to develop on.
+
+#### data directories
+
+The nginx container automatically creates all required data folders.
+
+They are located:
+
+```bash
+/var/www/totara/data/ver22.pgsql
+/var/www/totara/data/ver22.pgsql.phpunit
+/var/www/totara/data/ver22.pgsql.behat
+/var/www/totara/data/ver22.mssql
+/var/www/totara/data/ver22.mssql.phpunit
+/var/www/totara/data/ver22.mssql.behat
+/var/www/totara/data/ver22.mysql
+/var/www/totara/data/ver22.mysql.phpunit
+/var/www/totara/data/ver22.mysql.behat
+...
+/var/www/totara/data/ver11.pgsql
+/var/www/totara/data/ver11.pgsql.phpunit
+/var/www/totara/data/ver11.pgsql.behat
+/var/www/totara/data/ver11.mssql
+/var/www/totara/data/ver11.mssql.phpunit
+/var/www/totara/data/ver11.mssql.behat
+/var/www/totara/data/ver11.mysql
+/var/www/totara/data/ver11.mysql.phpunit
+/var/www/totara/data/ver11.mysql.behat
+```
+
+
 
 ### Run unit tests
 
