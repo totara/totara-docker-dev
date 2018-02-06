@@ -137,8 +137,8 @@ services:
     networks:
       - totara
 
-  mariadb:
-    image: mariadb
+  mysql:
+    image: mysql
     ports:
       - "3306:3306"
     environment:
