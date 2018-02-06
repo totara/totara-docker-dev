@@ -1,5 +1,7 @@
 FROM php:5.6-fpm
 
+COPY config/php.ini /usr/local/etc/php/php.ini
+
 RUN apt-get update && apt-get install -y \
         apt-transport-https \
 		libfreetype6-dev \
@@ -55,5 +57,3 @@ RUN apt-get update && apt-get install -y tzdata
 ENV TZ "Pacific/Auckland"
 RUN echo "${TZ}" > /etc/timezone \
     && dpkg-reconfigure --frontend noninteractive tzdata
-
-COPY config/php.ini /usr/local/etc/php/php.ini
