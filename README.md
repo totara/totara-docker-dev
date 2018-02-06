@@ -9,7 +9,7 @@
 
 This project aims to provide an easy way to start developing for Totara by providing a Docker setup.
 
-This setup was created and tested on a MAC. It should work on Windows and Linux as well but it still needs to be tested.
+This setup was created and tested intensively on a MAC. It should work the same on Linux and Windows.
 
 ### What you get:
  * NGINX as a webserver
@@ -21,18 +21,13 @@ This setup was created and tested on a MAC. It should work on Windows and Linux 
 
 ### Requirements:
  * Totara source code: https://help.totaralearning.com/display/DEV/Getting+the+code
- * Docker: https://www.docker.com (recommend 17.09.1-ce-mac42, see warning below)
+ * Docker: https://www.docker.com (use [17.09.1-ce-mac42](https://docs.docker.com/docker-for-mac/release-notes/#docker-community-edition-17091-ce-mac42-2017-12-11-stable), see warning below)
  * Docker-compose: https://docs.docker.com/compose/install (included in Docker for Mac/Windows)
- * Docker-sync: http://docker-sync.io/ (optional, for more speed on Mac and Windows)
+ * Docker-sync: http://docker-sync.io/ (optional, for more speed on Mac)
  * At least 3.25GB of RAM for MSSQL
 
 ## Warning
 Please note that there's a current [issue with docker-sync](https://github.com/EugenMayer/docker-sync/issues/517) opn Mac and Docker versions newer than [17.09.1-ce-mac42](https://docs.docker.com/docker-for-mac/release-notes/#docker-community-edition-17091-ce-mac42-2017-12-11-stable). To be on the safe side I recommend download and installing this version.
-
-### Todo
-
- * Get mssql working with PHP 5.6 (driver is installed but throws error on connect)
- * Get xdebug working with PHP 7.2
 
 ### Installation:
  1. Clone the Totara source code (see requirements) 
@@ -77,15 +72,13 @@ By default prebuilt images from docker hub (https://hub.docker.com/u/derschatta/
 
 ```bash
 ./totara-build.sh
+# or for individual images
+./totara-build.sh php-7.1
 ```
 
 ### Config & Database
 
-Make sure you have configured Totara and created the databases you need.
-
-Modify your Totara __config.php__ and create the databases. You can connect to the databases from your host using any tools you prefer.
-
-The host will be always __localhost__ and the ports are the default ports of the database systems.
+Make sure you have configured Totara and created the databases you need. You can connect to the databases from your host using any tools you prefer (host = _localhost_, use defautls ports).
 
 #### Credentials
 
@@ -111,19 +104,13 @@ To use the command line clients provided by the containers you can use the follo
 
 ```bash
 # PostgreSQL
-./totara-docker-sync.sh exec pgsql psql -U postgres
-# or without docker-sync
-./totara-docker.sh exec pgsql psql -U postgres
+docker exec -ti docker_pgsql_1 psql -U postgres
 
 # MySQL / MariaDB
-./totara-docker-sync.sh exec mariadb mysql -u root -p"root"
-# or without docker-sync
-./totara-docker.sh exec mariadb mysql -u root -p"root"
+docker exec -ti docker_mysql_1 mysql -u root -p"root"
 
 # Microsoft SQL Server
-./totara-docker-sync.sh exec php-7.1 /opt/mssql-tools/bin/sqlcmd -S mssql -U SA -P "Totara.Mssql1"
-# or without docker-sync
-./totara-docker.sh exec mariadb mysql -u root -p"root"
+docker exec -ti docker_php-7.1_1 /opt/mssql-tools/bin/sqlcmd -S mssql -U SA -P "Totara.Mssql1"
 ```
 
 Create a database schema for each Totara version you would like to develop on.
@@ -132,30 +119,76 @@ Create a database schema for each Totara version you would like to develop on.
 
 The nginx container automatically creates all required data folders.
 
-They are located:
-
 ```bash
-/var/www/totara/data/ver22.pgsql
-/var/www/totara/data/ver22.pgsql.phpunit
-/var/www/totara/data/ver22.pgsql.behat
-/var/www/totara/data/ver22.mssql
-/var/www/totara/data/ver22.mssql.phpunit
-/var/www/totara/data/ver22.mssql.behat
-/var/www/totara/data/ver22.mysql
-/var/www/totara/data/ver22.mysql.phpunit
-/var/www/totara/data/ver22.mysql.behat
-...
+/var/www/totara/data/ver[versionnumber].[database]
+/var/www/totara/data/ver[versionnumber].[database].phpunit
+/var/www/totara/data/ver[versionnumber].[database].behat
+# example
 /var/www/totara/data/ver11.pgsql
 /var/www/totara/data/ver11.pgsql.phpunit
 /var/www/totara/data/ver11.pgsql.behat
-/var/www/totara/data/ver11.mssql
-/var/www/totara/data/ver11.mssql.phpunit
-/var/www/totara/data/ver11.mssql.behat
-/var/www/totara/data/ver11.mysql
-/var/www/totara/data/ver11.mysql.phpunit
-/var/www/totara/data/ver11.mysql.behat
 ```
 
+versionnumber = 22, 24, 25, 26, 27, 29, 9, 10, 11
+database = pgsql, mysql, mssql
+
+#### Config example
+
+This is an example for the t11 branch with the 3 different databases and the correct data directories. Please note: You will need additional configuration parameters for PHPUnit and Behat. Please refer to Totara docs and have a look at config-dist.php for examples.
+
+```php
+//=========================================================================
+// 1. DATABASE SETUP
+//=========================================================================
+// First, you need to configure the database where all Moodle data       //
+// will be stored.  This database must already have been created         //
+// and a username/password created to access it.                         //
+
+
+//$CFG->dbtype    = 'mysqli';
+//$CFG->dbhost    = 'mysql';  // eg 'localhost' or 'db.isp.com' or IP
+//$CFG->dbuser    = 'root';   // your database username
+//$CFG->dbpass    = 'root';   // your database password
+//$CFG->dataroot  = '/var/www/totara/data/ver11.mysql';
+//$CFG->behat_dataroot = '/var/www/totara/data/ver11.mysql.behat';
+//$CFG->phpunit_dataroot = '/var/www/totara/data/ver11.mysql.phpunit';
+
+//$CFG->dbtype    = 'sqlsrv';
+//$CFG->dbhost    = 'mssql';  // eg 'localhost' or 'db.isp.com' or IP
+//$CFG->dbuser    = 'SA';   // your database username
+//$CFG->dbpass    = 'Totara.Mssql1';   // your database password
+//$CFG->dataroot  = '/var/www/totara/data/ver11.mssql';
+//$CFG->behat_dataroot = '/var/www/totara/data/ver11.mssql.behat';
+//$CFG->phpunit_dataroot = '/var/www/totara/data/ver11.mssql.phpunit';
+
+$CFG->dbtype    = 'pgsql';      // 'pgsql', 'mariadb', 'mysqli', 'mssql', 'sqlsrv'
+$CFG->dbhost    = 'pgsql';  // eg 'localhost' or 'db.isp.com' or IP
+$CFG->dbuser    = 'postgres';   // your database username
+$CFG->dbpass    = '';   // your database password
+$CFG->dataroot  = '/var/www/totara/data/ver11.pgsql';
+$CFG->behat_dataroot = '/var/www/totara/data/ver11.pgsql.behat';
+$CFG->phpunit_dataroot = '/var/www/totara/data/ver11.pgsql.phpunit';
+
+
+$CFG->dblibrary = 'native';     // 'native' only at the moment
+$CFG->dbname    = 'totara_11';     // database name, eg moodle
+$CFG->prefix    = 'mdl_';       // prefix to use for all table names
+$CFG->dboptions = array(
+    'dbpersist' => false,       // should persistent database connections be
+                                //  used? set to 'false' for the most stable
+                                //  setting, 'true' can improve performance
+                                //  sometimes
+    'dbsocket'  => false,       // should connection via UNIX socket be used?
+                                //  if you set it to 'true' or custom path
+                                //  here set dbhost to 'localhost',
+                                //  (please note mysql is always using socket
+                                //  if dbhost is 'localhost' - if you need
+                                //  local port connection use '127.0.0.1')
+    'dbport'    => '',          // the TCP port number to use when connecting
+                                //  to the server. keep empty string for the
+                                //  default port
+);
+```
 
 
 ### Run unit tests
@@ -164,11 +197,11 @@ Make sure your config file contains the PHPUnit configuration needed and the dat
 
 Log into one of the test containers
 ```bash
-./totara-docker-sync.sh exec php-5.6 bash
-./totara-docker-sync.sh exec php-7.1 bash
+docker exec -ti docker_php-5.6_1 bash
+docker exec -ti docker_php-7.1_1 bash
 # or if you need xdebug support
-./totara-docker-sync.sh exec php-5.6-debug bash
-./totara-docker-sync.sh exec php-7.1-debug bash
+docker exec -ti docker_php-5.6-debug_1 bash
+docker exec -ti docker_php-7.1-debug_1 bash
 ```
 
 Go to the project folder
@@ -194,22 +227,9 @@ vendor/bin/phpunit
 
 Make sure your config file contains the Behat configuration needed and the database is ready.
 
-Log into one of the test containers
-```bash
-./totara-docker-sync.sh exec php-5.6 bash
-./totara-docker-sync.sh exec php-7.1 bash
-# or if you need xdebug support
-./totara-docker-sync.sh exec php-5.6-debug bash
-./totara-docker-sync.sh exec php-7.1-debug bash
-```
+Same first steps as for PHPUnit to log into the container and change the directory.
 
-Go to the project folder
-```bash
-# replace version
-cd /var/www/totara/src/[version]
-```
-
-First time run the init script to initiate the unit tests
+If needed run the init script to initiate the behat tests
 ```bash
 # in the project folder
 php composer.phar install
