@@ -84,7 +84,7 @@ Make sure you have configured Totara and created the databases you need. You can
 
 DB | Host | User | Password
 --- | --- | --- | ---
-**PostresSQL** | pgsql | postresql | -blank-
+**PostresSQL** | pgsql | postresql | 
 **Mysql** | mysql | root | root
 **Mssql** | mssql | SA | Totara.Mssql1
 
