@@ -104,13 +104,13 @@ To use the command line clients provided by the containers you can use the follo
 
 ```bash
 # PostgreSQL
-docker exec -ti docker_pgsql_1 psql -U postgres
+docker-compose exec pgsql psql -U postgres
 
 # MySQL / MariaDB
-docker exec -ti docker_mysql_1 mysql -u root -p"root"
+docker-compose exec mysql` mysql -u root -p"root"
 
 # Microsoft SQL Server
-docker exec -ti docker_php-7.1_1 /opt/mssql-tools/bin/sqlcmd -S mssql -U SA -P "Totara.Mssql1"
+docker-compose exec php-7.1 /opt/mssql-tools/bin/sqlcmd -S mssql -U SA -P "Totara.Mssql1"
 ```
 
 Create a database schema for each Totara version you would like to develop on.
@@ -197,11 +197,11 @@ Make sure your config file contains the PHPUnit configuration needed and the dat
 
 Log into one of the test containers
 ```bash
-docker exec -ti docker_php-5.6_1 bash
-docker exec -ti docker_php-7.1_1 bash
+docker-compose exec php-5.6 bash
+docker-compose exec php-7.1 bash
 # or if you need xdebug support
-docker exec -ti docker_php-5.6-debug_1 bash
-docker exec -ti docker_php-7.1-debug_1 bash
+docker-compose exec php-5.6-debug bash
+docker-compose exec php-7.1-debug bash
 ```
 
 Go to the project folder
