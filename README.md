@@ -82,23 +82,11 @@ Make sure you have configured Totara and created the databases you need. You can
 
 #### Credentials
 
-__PostgreSQL__
-
-__host:__ pgsql
-__user:__ postgresql
-__pw:__ (none)
-
-__Mysql__
-
-__host:__ mysql
-__user:__ root
-__pw:__ root
-
-__Mssql__
-
-__host:__ mssql
-__user:__ SA
-__pw:__ Totara.Mssql1
+DB | Host | User | Password
+--- | --- | --- | ---
+**PostresSQL** | pgsql | postresql | -blank-
+**Mysql** | mysql | root | root
+**Mssql** | mssql | SA | Totara.Mssql1
 
 To use the command line clients provided by the containers you can use the following commands:
 
