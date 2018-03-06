@@ -1,0 +1,3 @@
+#!/bin/bash
+
+./tdocker exec "$1" bash

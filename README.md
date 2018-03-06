@@ -43,27 +43,38 @@ __Example:__
 127.0.0.1   localhost totara71 totara56 totara70 totara72 totara71.behat totara56.behat
 ```
 
-### Run
+### Shortcut commands
 
-__with docker-sync__
+This project comes with a few bash scripts to simplify usage accross platforms.
 
 ```bash
-# fire up docker-sync as a daemon in the background
+./tdocker              # shortcut to general docker-compose ... command
+./tup [container]      # start (all) container(s)            
+./tbash [container]    # log into a container, i.e. php-7.2
+./tstop [container]    # stop (all) container(s)
+./trestart [container] # restart (all) container(s)
+./tdown                # shutdown all containers
+./tstats               # show docker stats including container names
+./tbuild [container]   # build (all) container(s)
+./tgrunt               # run grunt scripts in container
+./tscale [container]=6 # scale up the number of containers, i.e. selenium-chrome
+./tunit [init]         # run or init unit tests
+```
+
+### Run
+
+```bash
+# if you use docker-sync, fire up docker-sync as a daemon in the background
 docker-sync start
 ```
 
 ```bash
-# run in foreground (to directly see log output)
-./totara-docker-sync.sh up
 # run in background
-./totara-docker-sync.sh up -d  
-```
-
-__without docker-sync__
-```bash
-./totara-docker.sh up 
-# or run in background
-./totara-docker.sh up -d 
+./tup
+# to limit the amount of containers fired up
+# you can just up the db container which automatically
+# starts all dependent containers
+./tup pgsql
 ```
 
 ### Build
@@ -71,9 +82,9 @@ __without docker-sync__
 By default prebuilt images from docker hub (https://hub.docker.com/u/derschatta/) will be used. If you want to modify any of the containers to your needs then you can rebuild them locally with the following command:
 
 ```bash
-./totara-build.sh
+./tbuild
 # or for individual images
-./totara-build.sh php-7.1
+./tbuild php-7.1
 ```
 
 ### Config & Database
@@ -92,13 +103,13 @@ To use the command line clients provided by the containers you can use the follo
 
 ```bash
 # PostgreSQL
-docker-compose exec pgsql psql -U postgres
+./tdocker exec pgsql psql -U postgres
 
 # MySQL / MariaDB
-docker-compose exec mysql` mysql -u root -p"root"
+./tdocker exec mysql` mysql -u root -p"root"
 
 # Microsoft SQL Server
-docker-compose exec php-7.1 /opt/mssql-tools/bin/sqlcmd -S mssql -U SA -P "Totara.Mssql1"
+./tdocker exec php-7.1 /opt/mssql-tools/bin/sqlcmd -S mssql -U SA -P "Totara.Mssql1"
 ```
 
 Create a database schema for each Totara version you would like to develop on.
@@ -185,11 +196,11 @@ Make sure your config file contains the PHPUnit configuration needed and the dat
 
 Log into one of the test containers
 ```bash
-docker-compose exec php-5.6 bash
-docker-compose exec php-7.1 bash
+./tbash php-5.6
+./tbash php-7.1
 # or if you need xdebug support
-docker-compose exec php-5.6-debug bash
-docker-compose exec php-7.1-debug bash
+./tbash php-5.6-debug
+./tbash php-7.1-debug
 ```
 
 Go to the project folder
@@ -254,7 +265,7 @@ If needed, modify the local port in the docker-compose.yml file.
 If you want to use grunt or npm you can log into the nodejs container and issue the commands there:
 
 ```bash
-./totara-docker.sh run nodejs bash
+./tdocker run nodejs bash
 # go to your source directory and
 npm install
 npm install grunt-cli
@@ -264,6 +275,6 @@ npm install grunt-cli
 Or you use the shortcut bash script:
 
 ```bash
-./totara-grunt.sh
-./totara-grunt.sh 11
+./tgrunt
+./tgrunt 11
 ``` 
