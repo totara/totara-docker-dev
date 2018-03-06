@@ -10,10 +10,21 @@ services:
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
+    depends_on:
+      - php-5.6
+      - php-5.6-debug
+      - php-7.0
+      - php-7.0-debug
+      - php-7.1
+      - php-7.1-debug
+      - php-7.2
+      - php-7.2-debug
+      - mailcatcher
     networks:
       totara:
         aliases:
             - totara71.behat
+            - totara72.behat
             - totara56.behat
 
   php-5.6-debug:
@@ -127,13 +138,15 @@ services:
     working_dir: ${REMOTE_SRC}
 
   pgsql:
-    image: postgres:9.6
+    image: postgres
     ports:
       - "5432:5432"
     environment:
       PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
       - pgsql-data:/var/lib/postgresql/data
+    depends_on:
+     - nginx
     networks:
       - totara
 
@@ -143,8 +156,25 @@ services:
       - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PW}
+    depends_on:
+      - nginx
     volumes:
       - mysql-data:/var/lib/mysql
+    networks:
+      - totara
+
+  mariadb:
+    image: mariadb
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PW}
+    volumes:
+      - mariadb-data:/var/lib/mysql
+      - ./mariadb:/etc/mysql/conf.d
+    depends_on:
+      - nginx
+    mem_swappiness: 1
     networks:
       - totara
 
@@ -158,6 +188,8 @@ services:
       MSSQL_PID: Developer
     volumes:
       - mssql-data:/var/opt/mssql
+    depends_on:
+      - nginx
     networks:
       - totara
 
@@ -171,21 +203,30 @@ services:
       - GRID_MAX_SESSION=8
       - GRID_TIMEOUT=7200
       - GRID_CLEAN_UP_CYCLE=120000
+    depends_on:
+      - selenium-chrome
 
   selenium-chrome:
-    image: selenium/node-chrome:3.7.1
-    depends_on:
-      - selenium-hub
+    image: selenium/node-chrome
     environment:
-      - HUB_PORT_4444_TCP_ADDR=selenium-hub
+      - HUB_PORT_4444_TCP_ADDR=selenium
       - HUB_PORT_4444_TCP_PORT=4444
       - NODE_MAX_INSTANCES=8
       - NODE_MAX_SESSION=8
     networks:
       - totara
 
+  selenium-chrome-debug:
+    image: selenium/standalone-chrome-debug
+    ports:
+      - "5900:5900"
+    networks:
+      - totara
+
   selenium-chrome-standalone:
-    image: selenium/standalone-chrome:3.7.1
+    image: selenium/standalone-chrome
+    ports:
+      - "4445:4444"
     networks:
       - totara
 
@@ -201,6 +242,7 @@ volumes:
     mssql-data:
     mysql-data:
     totara-data:
+    mariadb-data:
 
 networks:
   totara:

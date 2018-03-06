@@ -42,6 +42,5 @@ services:
       - totara-www-sync:${REMOTE_SRC}:nocopy
 
 volumes:
-    totara-data:
     totara-www-sync:
         external: true

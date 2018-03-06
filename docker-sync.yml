@@ -5,3 +5,5 @@ options:
 syncs:
   totara-www-sync: # tip: add -sync and you keep consistent names as a convention
     src: ${LOCAL_SRC}
+    notify_terminal: true
+    sync_excludes: ['.idea', 'node_modules', '.gitignore', '.git', '.DS_Store']
