@@ -5,7 +5,7 @@
  * PHP 7.1: [![Build status PHP 7.1](https://img.shields.io/docker/build/derschatta/totara-dev-php71.svg)](https://hub.docker.com/r/derschatta/totara-dev-php71/)
  * PHP 7.2: [![Build status PHP 7.2](https://img.shields.io/docker/build/derschatta/totara-dev-php72.svg)](https://hub.docker.com/r/derschatta/totara-dev-php72/)
 
-## A Docker setup for local Totara LMS development
+## A Docker setup for local Totara Learn development
 
 This project aims to provide an easy way to start developing for Totara by providing a Docker setup.
 
