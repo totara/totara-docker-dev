@@ -45,20 +45,20 @@ __Example:__
 
 ### Shortcut commands
 
-This project comes with a few bash scripts to simplify usage accross platforms.
+This project comes with a few bash scripts to simplify usage accross platforms. The scripts are located in the **bin/** folder. Ideally you add the bin folder to your PATH environment variable so you can run the commands from anywhere.
 
 ```bash
-./tdocker                           # shortcut to general docker-compose ... command
-./tup [container]                   # start (all) container(s)            
-./tbash [container]                 # log into a container, i.e. php-7.2
-./tstop [container]                 # stop (all) container(s)
-./trestart [container]              # restart (all) container(s)
-./tdown                             # shutdown all containers
-./tstats                            # show docker stats including container names
-./tbuild [container]                # build (all) container(s)
-./tgrunt                            # run grunt scripts in container
-./tscale [container]=6              # scale up the number of containers, i.e. selenium-chrome
-./tunit [container] [folder] [init] # run or init unit tests in given container for given version
+tdocker                           # shortcut to general docker-compose ... command
+tup [container]                   # start (all) container(s)            
+tbash [container]                 # log into a container, i.e. php-7.2
+tstop [container]                 # stop (all) container(s)
+trestart [container]              # restart (all) container(s)
+tdown                             # shutdown all containers
+tstats                            # show docker stats including container names
+tbuild [container]                # build (all) container(s)
+tgrunt                            # run grunt scripts in container
+tscale [container]=6              # scale up the number of containers, i.e. selenium-chrome
+tunit [container] [folder] [init] # run or init unit tests in given container for given version
 ```
 
 ### Run
@@ -70,11 +70,11 @@ docker-sync start
 
 ```bash
 # run in background
-./tup
+tup
 # to limit the amount of containers fired up
 # you can just up the db container which automatically
 # starts all dependent containers
-./tup pgsql
+tup pgsql
 ```
 
 ### Build
@@ -82,9 +82,9 @@ docker-sync start
 By default prebuilt images from docker hub (https://hub.docker.com/u/derschatta/) will be used. If you want to modify any of the containers to your needs then you can rebuild them locally with the following command:
 
 ```bash
-./tbuild
+tbuild
 # or for individual images
-./tbuild php-7.1
+tbuild php-7.1
 ```
 
 ### Config & Database
@@ -103,13 +103,13 @@ To use the command line clients provided by the containers you can use the follo
 
 ```bash
 # PostgreSQL
-./tdocker exec pgsql psql -U postgres
+tdocker exec pgsql psql -U postgres
 
 # MySQL / MariaDB
-./tdocker exec mysql` mysql -u root -p"root"
+tdocker exec mysql` mysql -u root -p"root"
 
 # Microsoft SQL Server
-./tdocker exec php-7.1 /opt/mssql-tools/bin/sqlcmd -S mssql -U SA -P "Totara.Mssql1"
+tdocker exec php-7.1 /opt/mssql-tools/bin/sqlcmd -S mssql -U SA -P "Totara.Mssql1"
 ```
 
 Create a database schema for each Totara version you would like to develop on.
@@ -198,14 +198,14 @@ Make sure your config file contains the PHPUnit configuration needed and the dat
 ```bash
 # assuming you have a subfolder called 11 then you can call
 # to initiate the unit tests
-./tunit php-7.1 11 init
+tunit php-7.1 11 init
 ```
 **Run:**
 ```bash
 # run all unit tests in given container for version
-./tunit php-7.1 11
+tunit php-7.1 11
 # or add more phpunit params
-./tunit php-7.1 11 --test-suffix=_test.php relative/path/to/tests/
+tunit php-7.1 11 --test-suffix=_test.php relative/path/to/tests/
 ```
 
 ### Run behat tests
@@ -214,11 +214,11 @@ Make sure your config file contains the Behat configuration needed and the datab
 
 Log into one of the test containers
 ```bash
-./tbash php-5.6
-./tbash php-7.1
+tbash php-5.6
+tbash php-7.1
 # or if you need xdebug support
-./tbash php-5.6-debug
-./tbash php-7.1-debug
+tbash php-5.6-debug
+tbash php-7.1-debug
 ```
 
 Go to the project folder
@@ -264,7 +264,7 @@ If needed, modify the local port in the docker-compose.yml file.
 If you want to use grunt or npm you can log into the nodejs container and issue the commands there:
 
 ```bash
-./tdocker run nodejs bash
+tdocker run nodejs bash
 # go to your source directory and
 npm install
 npm install grunt-cli
@@ -274,6 +274,6 @@ npm install grunt-cli
 Or you use the shortcut bash script:
 
 ```bash
-./tgrunt
-./tgrunt 11
+tgrunt
+tgrunt 11
 ``` 

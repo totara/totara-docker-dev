@@ -1,8 +1,9 @@
 #!/bin/bash
 
 SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+PROJECTPATH="$( cd $SCRIPTPATH && cd ..; pwd -P )"
 
-export $(egrep -v '^#' $SCRIPTPATH/.env | xargs)
+export $(egrep -v '^#' $PROJECTPATH/.env | xargs)
 
 # You can specify a subdirectory as first parameter to this script if needed
 MYPATH=$REMOTE_SRC/$1

@@ -1,12 +1,13 @@
 #!/bin/bash
 
 SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+PROJECTPATH="$( cd $SCRIPTPATH && cd ..; pwd -P )"
 
 # if there's a docker-sync folder we assume that
 # the docker-sync configuration should be used
 if [ -d ".docker-sync" ]
 then
-    cd $SCRIPTPATH && docker-compose -f docker-compose.yml -f docker-compose-sync.yml "$@"
+    cd $PROJECTPATH && docker-compose -f docker-compose.yml -f docker-compose-sync.yml "$@"
 else
-    cd $SCRIPTPATH && docker-compose "$@"
+    cd $PROJECTPATH && docker-compose "$@"
 fi
