@@ -150,6 +150,19 @@ services:
     networks:
       - totara
 
+  pgsql93:
+    image: postgres:9.3
+    ports:
+      - "5493:5432"
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - pgsql93-data:/var/lib/postgresql/data
+    depends_on:
+     - nginx
+    networks:
+      - totara
+
   mysql:
     image: mysql
     ports:
@@ -239,6 +252,7 @@ services:
 
 volumes:
     pgsql-data:
+    pgsql93-data:
     mssql-data:
     mysql-data:
     totara-data:
