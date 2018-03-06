@@ -1,3 +1,5 @@
 #!/bin/bash
 
-./tdocker up -d "$@"
+SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+
+$SCRIPTPATH/tdocker up -d "$@"

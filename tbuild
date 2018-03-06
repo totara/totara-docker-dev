@@ -1,3 +1,5 @@
 #!/bin/bash
 
-docker-compose -f docker-compose.yml -f docker-compose-dev.yml build $@
+SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+
+cd $SCRIPTPATH && docker-compose -f docker-compose.yml -f docker-compose-dev.yml build $@

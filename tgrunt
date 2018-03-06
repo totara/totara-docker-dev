@@ -1,12 +1,14 @@
 #!/bin/bash
 
-export $(egrep -v '^#' .env | xargs)
+SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+
+export $(egrep -v '^#' $SCRIPTPATH/.env | xargs)
 
 # You can specify a subdirectory as first parameter to this script if needed
 MYPATH=$REMOTE_SRC/$1
 
 echo "Starting grunt tasks..."
-./tdocker run --rm nodejs sh -c "\
+$SCRIPTPATH/tdocker run --rm nodejs sh -c "\
     cd $MYPATH \
     && npm install \
     && npm install grunt-cli \

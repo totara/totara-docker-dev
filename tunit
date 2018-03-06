@@ -1,19 +1,27 @@
 #!/bin/bash
 
-export $(egrep -v '^#' .env | xargs)
+SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+
+export $(egrep -v '^#' $SCRIPTPATH/.env | xargs)
+
+# This script accepts the following parameters
+# 1. container, i.e. php-7.2
+# 2. subfolder (or version), i.e. 11
+# 3. additional phpunit params
+#
+# Example:
+#   ./tunit php-7.2 11 path/to/test.php
 
 PHPCONTAINER=$1
-
-# You can specify a subdirectory as first parameter to this script if needed
 MYPATH=$REMOTE_SRC/$2
-
 SETUP=$3
 
-if [ $SETUP = "init" ]
+
+if [[ $SETUP = "init" ]]
 then
     echo "Init unit tests..."
-    ./tdocker exec $PHPCONTAINER sh -c "cd $MYPATH && php admin/tool/phpunit/cli/init.php"
+    $SCRIPTPATH/tdocker exec $PHPCONTAINER sh -c "cd $MYPATH && php admin/tool/phpunit/cli/init.php"
 else
     echo "Running unit tests..."
-    ./tdocker exec $PHPCONTAINER sh -c "cd $MYPATH && vendor/bin/phpunit $3"
+    $SCRIPTPATH/tdocker exec $PHPCONTAINER sh -c "cd $MYPATH && vendor/bin/phpunit $3"
 fi

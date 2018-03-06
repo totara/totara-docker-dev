@@ -48,17 +48,17 @@ __Example:__
 This project comes with a few bash scripts to simplify usage accross platforms.
 
 ```bash
-./tdocker              # shortcut to general docker-compose ... command
-./tup [container]      # start (all) container(s)            
-./tbash [container]    # log into a container, i.e. php-7.2
-./tstop [container]    # stop (all) container(s)
-./trestart [container] # restart (all) container(s)
-./tdown                # shutdown all containers
-./tstats               # show docker stats including container names
-./tbuild [container]   # build (all) container(s)
-./tgrunt               # run grunt scripts in container
-./tscale [container]=6 # scale up the number of containers, i.e. selenium-chrome
-./tunit [init]         # run or init unit tests
+./tdocker                           # shortcut to general docker-compose ... command
+./tup [container]                   # start (all) container(s)            
+./tbash [container]                 # log into a container, i.e. php-7.2
+./tstop [container]                 # stop (all) container(s)
+./trestart [container]              # restart (all) container(s)
+./tdown                             # shutdown all containers
+./tstats                            # show docker stats including container names
+./tbuild [container]                # build (all) container(s)
+./tgrunt                            # run grunt scripts in container
+./tscale [container]=6              # scale up the number of containers, i.e. selenium-chrome
+./tunit [container] [folder] [init] # run or init unit tests in given container for given version
 ```
 
 ### Run
@@ -194,6 +194,24 @@ $CFG->dboptions = array(
 
 Make sure your config file contains the PHPUnit configuration needed and the database is ready.
 
+**Initiate:**
+```bash
+# assuming you have a subfolder called 11 then you can call
+# to initiate the unit tests
+./tunit php-7.1 11 init
+```
+**Run:**
+```bash
+# run all unit tests in given container for version
+./tunit php-7.1 11
+# or add more phpunit params
+./tunit php-7.1 11 --test-suffix=_test.php relative/path/to/tests/
+```
+
+### Run behat tests
+
+Make sure your config file contains the Behat configuration needed and the database is ready.
+
 Log into one of the test containers
 ```bash
 ./tbash php-5.6
@@ -208,25 +226,6 @@ Go to the project folder
 # replace version
 cd /var/www/totara/src/[version]
 ```
-
-First time run the init script to initiate the unit tests
-```bash
-# in the project folder
-php composer.phar install
-# initiate the test environment
-php admin/tool/phpunit/cli/init.php
-```
-
-To start running
-```bash
-vendor/bin/phpunit
-```
-
-### Run behat tests
-
-Make sure your config file contains the Behat configuration needed and the database is ready.
-
-Same first steps as for PHPUnit to log into the container and change the directory.
 
 If needed run the init script to initiate the behat tests
 ```bash

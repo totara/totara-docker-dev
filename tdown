@@ -1,3 +1,5 @@
 #!/bin/bash
 
-./tdocker down
+SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+
+$SCRIPTPATH/tdocker down

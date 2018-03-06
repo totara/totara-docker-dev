@@ -1,3 +1,5 @@
 #!/bin/bash
 
-./tdocker restart "$@"
+SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+
+$SCRIPTPATH/tdocker restart "$@"

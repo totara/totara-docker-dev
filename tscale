@@ -1,3 +1,5 @@
 #!/bin/bash
 
-./tdocker scale "$@"
+SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+
+$SCRIPTPATH/tdocker scale "$@"
