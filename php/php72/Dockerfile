@@ -45,13 +45,16 @@ ENV LC_ALL en_US.UTF-8
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
     && curl https://packages.microsoft.com/config/debian/8/prod.list | tee /etc/apt/sources.list.d/mssql-tools.list \
     && apt-get update && ACCEPT_EULA=Y apt-get install -y \
-    libssl1.0-dev \
-    libssl1.0.2 \
     openssl \
-    unixodbc \
+    msodbcsql \
+    mssql-tools \
     unixodbc-dev \
-    msodbcsql=13.1.9.2-1 \
-    mssql-tools=14.0.7.0-1
+    wget
+
+# Workaround to get MSSQL connection working on Debian 9 (stretch)
+# https://emacstragic.net/2017/11/06/mssql-odbc-client-on-debian-9-stretch/
+RUN wget "http://security.debian.org/debian-security/pool/updates/main/o/openssl/libssl1.0.0_1.0.1t-1+deb8u7_amd64.deb" \
+    && apt install ./libssl1.0.0_1.0.1t-1+deb8u7_amd64.deb
 
 RUN echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile \
     && echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
