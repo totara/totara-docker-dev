@@ -13,6 +13,7 @@ RUN apt-get update && apt-get install -y \
 		libpq-dev \
 		locales \
 		gnupg2 \
+		nano \
 	&& docker-php-ext-install -j$(nproc) xmlrpc \
 	    zip \
 	    intl \
@@ -26,6 +27,7 @@ RUN apt-get update && apt-get install -y \
 	&& docker-php-ext-install -j$(nproc) gd
 
 # we need en_US locales for MSSQL connection to work
+# we need en_AU locales for behat to work
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y locales
 
