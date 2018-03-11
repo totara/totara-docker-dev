@@ -14,7 +14,7 @@ This setup was created and tested intensively on a MAC. It should work the same 
 ### What you get:
  * NGINX as a webserver
  * PHP 5.6, 7.0, 7.1, 7.2 to test for different versions
- * PostgreSQL, MariaDB (MySQL), Microsoft SQL Server support
+ * PostgreSQL (9.3.x and 10.x), MariaDB (10.2.x) and MySQL (5.7.x), and Microsoft SQL Server (2017) support
  * A PHPUnit and Behat setup to run tests (including Selenium)
  * A [mailcatcher](https://mailcatcher.me/) instance to inspect mails
  * [XDebug](https://xdebug.org/) installed, ready for debugging with your favorite IDE
@@ -27,12 +27,12 @@ This setup was created and tested intensively on a MAC. It should work the same 
  * At least 3.25GB of RAM for MSSQL
 
 ## Warning
-Please note that there's a current [issue with docker-sync](https://github.com/EugenMayer/docker-sync/issues/517) opn Mac and Docker versions newer than [17.09.1-ce-mac42](https://docs.docker.com/docker-for-mac/release-notes/#docker-community-edition-17091-ce-mac42-2017-12-11-stable). To be on the safe side I recommend download and installing this version.
+Please note that there's a current [issue with docker-sync](https://github.com/EugenMayer/docker-sync/issues/517) on Mac and Docker versions newer than [17.09.1-ce-mac42](https://docs.docker.com/docker-for-mac/release-notes/#docker-community-edition-17091-ce-mac42-2017-12-11-stable). To be on the safe side I recommend download and installing this version.
 
 ### Installation:
  1. Clone the Totara source code (see requirements) 
  1. Clone this project
- 1. Install docker-sync
+ 1. Install docker-sync (optionally, recommended for MAC)
  1. Copy the file __.env.dist__ to __.env__ and change at least the path to your local Totara source folder (LOCAL_SRC)
 
 #### /etc/hosts
@@ -95,8 +95,10 @@ Make sure you have configured Totara and created the databases you need. You can
 
 DB | Host | User | Password
 --- | --- | --- | ---
-**PostresSQL** | pgsql | postresql | 
+**PostresSQL 10.x** | pgsql | postresql | 
+**PostresSQL 9.3.x** | pgsql93 | postresql | 
 **Mysql** | mysql | root | root
+**MariaDB** | mariadb | root | root
 **Mssql** | mssql | SA | Totara.Mssql1
 
 To use the command line clients provided by the containers you can use the following commands:
