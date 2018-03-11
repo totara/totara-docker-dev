@@ -138,7 +138,7 @@ services:
     working_dir: ${REMOTE_SRC}
 
   pgsql:
-    image: postgres
+    image: postgres:10.3
     ports:
       - "5432:5432"
     environment:
@@ -164,7 +164,7 @@ services:
       - totara
 
   mysql:
-    image: mysql
+    image: mysql:5.7
     ports:
       - "3306:3306"
     environment:
@@ -177,7 +177,7 @@ services:
       - totara
 
   mariadb:
-    image: mariadb
+    image: mariadb:10.2
     ports:
       - "3307:3306"
     environment:
