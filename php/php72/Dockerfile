@@ -65,6 +65,5 @@ RUN pear config-set php_ini `php --ini | grep "Loaded Configuration" | sed -e "s
 
 RUN apt-get update && apt-get install -y tzdata
 
-ENV TZ "Pacific/Auckland"
-RUN echo "${TZ}" > /etc/timezone \
+RUN echo ${TIME_ZONE} > /etc/timezone \
     && dpkg-reconfigure --frontend noninteractive tzdata
