@@ -108,7 +108,8 @@ To use the command line clients provided by the containers you can use the follo
 tdocker exec pgsql psql -U postgres
 
 # MySQL / MariaDB
-tdocker exec mysql` mysql -u root -p"root"
+tdocker exec mysql mysql -u root -p"root"
+tdocker exec mariadb mysql -u root -p"root"
 
 # Microsoft SQL Server
 tdocker exec php-7.1 /opt/mssql-tools/bin/sqlcmd -S mssql -U SA -P "Totara.Mssql1"
