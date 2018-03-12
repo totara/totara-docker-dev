@@ -1,9 +1,10 @@
 ###### Build status:
- * Nginx: [![Build status Nginx](https://img.shields.io/docker/build/derschatta/totara-dev-nginx.svg)](https://hub.docker.com/r/derschatta/totara-dev-nginx/)
- * PHP 5.6: [![Build status PHP 5.6](https://img.shields.io/docker/build/derschatta/totara-dev-php56.svg)](https://hub.docker.com/r/derschatta/totara-dev-php56/)
- * PHP 7.0: [![Build status PHP 7.0](https://img.shields.io/docker/build/derschatta/totara-dev-php70.svg)](https://hub.docker.com/r/derschatta/totara-dev-php70/)
- * PHP 7.1: [![Build status PHP 7.1](https://img.shields.io/docker/build/derschatta/totara-dev-php71.svg)](https://hub.docker.com/r/derschatta/totara-dev-php71/)
- * PHP 7.2: [![Build status PHP 7.2](https://img.shields.io/docker/build/derschatta/totara-dev-php72.svg)](https://hub.docker.com/r/derschatta/totara-dev-php72/)
+Name | Status | Name | Status
+--- | --- | --- | ---
+PHP 5.4 | [![Build status PHP 5.4](https://img.shields.io/docker/build/derschatta/totara-dev-php54.svg)](https://hub.docker.com/r/derschatta/totara-dev-php54/) | PHP 7.0 | [![Build status PHP 7.0](https://img.shields.io/docker/build/derschatta/totara-dev-php70.svg)](https://hub.docker.com/r/derschatta/totara-dev-php70/)
+PHP 5.5 | [![Build status PHP 5.5](https://img.shields.io/docker/build/derschatta/totara-dev-php55.svg)](https://hub.docker.com/r/derschatta/totara-dev-php55/) | PHP 7.1 | [![Build status PHP 7.1](https://img.shields.io/docker/build/derschatta/totara-dev-php71.svg)](https://hub.docker.com/r/derschatta/totara-dev-php71/)
+PHP 5.6 | [![Build status PHP 5.6](https://img.shields.io/docker/build/derschatta/totara-dev-php56.svg)](https://hub.docker.com/r/derschatta/totara-dev-php56/) | PHP 7.2 | [![Build status PHP 7.2](https://img.shields.io/docker/build/derschatta/totara-dev-php72.svg)](https://hub.docker.com/r/derschatta/totara-dev-php72/)
+Nginx | [![Build status Nginx](https://img.shields.io/docker/build/derschatta/totara-dev-nginx.svg)](https://hub.docker.com/r/derschatta/totara-dev-nginx/) |  | 
 
 ## A Docker setup for local Totara Learn development
 
@@ -13,7 +14,7 @@ This setup was created and tested intensively on a MAC. It should work the same 
 
 ### What you get:
  * NGINX as a webserver
- * PHP 5.6, 7.0, 7.1, 7.2 to test for different versions
+ * PHP 5.4, 5.5, 5.6, 7.0, 7.1, 7.2 to test for different versions
  * PostgreSQL (9.3.x and 10.x), MariaDB (10.2.x) and MySQL (5.7.x), and Microsoft SQL Server (2017) support
  * A PHPUnit and Behat setup to run tests (including Selenium)
  * A [mailcatcher](https://mailcatcher.me/) instance to inspect mails
