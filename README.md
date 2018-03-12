@@ -131,7 +131,7 @@ The nginx container automatically creates all required data folders.
 /var/www/totara/data/ver11.pgsql.behat
 ```
 
-versionnumber = 22, 24, 25, 26, 27, 29, 9, 10, 11
+versionnumber = 22, 24, 25, 26, 27, 29, 9, 10, 11, 12
 database = pgsql, mysql, mssql
 
 #### Config example
