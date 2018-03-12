@@ -4,26 +4,38 @@ services:
   nginx:
     build: ./nginx
 
-  php-5.6-debug:
-    build: ./php/php56-debug
+  php-5.4:
+    build: ./php/php54
+
+  php-5.4-debug:
+    build: ./php/php54-debug
+
+  php-5.5:
+    build: ./php/php55
+
+  php-5.5-debug:
+    build: ./php/php55-debug
 
   php-5.6:
     build: ./php/php56
 
-  php-7.0-debug:
-    build: ./php/php70-debug
+  php-5.6-debug:
+    build: ./php/php56-debug
 
   php-7.0:
     build: ./php/php70
 
-  php-7.1-debug:
-    build: ./php/php71-debug
+  php-7.0-debug:
+    build: ./php/php70-debug
 
   php-7.1:
     build: ./php/php71
 
-  php-7.2-debug:
-    build: ./php/php72-debug
+  php-7.1-debug:
+    build: ./php/php71-debug
 
   php-7.2:
     build: ./php/php72
+
+  php-7.2-debug:
+    build: ./php/php72-debug
