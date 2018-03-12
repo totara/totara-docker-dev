@@ -207,7 +207,7 @@ services:
       - totara
 
   selenium-hub:
-    image: selenium/hub:3.7.1
+    image: selenium/hub
     ports:
       - "4444:4444"
     networks:
@@ -222,7 +222,7 @@ services:
   selenium-chrome:
     image: selenium/node-chrome
     environment:
-      - HUB_PORT_4444_TCP_ADDR=selenium
+      - HUB_PORT_4444_TCP_ADDR=selenium-hub
       - HUB_PORT_4444_TCP_PORT=4444
       - NODE_MAX_INSTANCES=8
       - NODE_MAX_SESSION=8
