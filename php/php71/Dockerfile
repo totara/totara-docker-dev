@@ -1,5 +1,7 @@
 FROM php:7.1-fpm
 
+ARG TIME_ZONE=Pacific/Auckland
+
 COPY config/php.ini /usr/local/etc/php/
 
 RUN apt-get update && apt-get install -y \
@@ -13,6 +15,7 @@ RUN apt-get update && apt-get install -y \
 		libpq-dev \
 		locales \
 		nano \
+		tzdata \
 	&& docker-php-ext-install -j$(nproc) xmlrpc \
 	    zip \
 	    intl \
@@ -28,8 +31,6 @@ RUN apt-get update && apt-get install -y \
 # we need en_US locales for MSSQL connection to work
 # we need en_AU locales for behat to work
 
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y locales
-
 RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
     sed -i -e 's/# en_AU.UTF-8 UTF-8/en_AU.UTF-8 UTF-8/' /etc/locale.gen && \
     dpkg-reconfigure --frontend=noninteractive locales && \
@@ -40,7 +41,6 @@ ENV LANGUAGE en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
 
 # install mssql extension
-
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
     && curl https://packages.microsoft.com/config/debian/8/prod.list | tee /etc/apt/sources.list.d/mssql-tools.list \
     && apt-get update && ACCEPT_EULA=Y apt-get install -y \
@@ -57,8 +57,6 @@ RUN pear config-set php_ini `php --ini | grep "Loaded Configuration" | sed -e "s
     && pecl install sqlsrv \
     && pecl install pdo_sqlsrv
 
-RUN apt-get update && apt-get install -y tzdata
-
-RUN echo ${TIME_ZONE} > /etc/timezone \
+RUN ln -fs /usr/share/zoneinfo/${TIME_ZONE} /etc/localtime \
     && dpkg-reconfigure --frontend noninteractive tzdata
 

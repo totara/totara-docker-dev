@@ -1,5 +1,7 @@
 FROM php:5.6-fpm
 
+ARG TIME_ZONE=Pacific/Auckland
+
 COPY config/php.ini /usr/local/etc/php/php.ini
 
 RUN apt-get update && apt-get install -y \
@@ -16,6 +18,8 @@ RUN apt-get update && apt-get install -y \
         freetds-dev \
         nano \
         git \
+        locales \
+        tzdata \
 	&& docker-php-ext-install -j$(nproc) xmlrpc \
 	    zip \
 	    intl \
@@ -29,8 +33,6 @@ RUN apt-get update && apt-get install -y \
 	&& docker-php-ext-install -j$(nproc) gd
 
 # we need en_AU locales for behat to work
-
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y locales
 
 RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
     sed -i -e 's/# en_AU.UTF-8 UTF-8/en_AU.UTF-8 UTF-8/' /etc/locale.gen && \
@@ -58,7 +60,5 @@ COPY config/freetds.conf /etc/freetds/freetds.conf
 RUN cd / && git clone https://github.com/wolfcw/libfaketime.git \
     && cd /libfaketime/src && make install
 
-RUN apt-get update && apt-get install -y tzdata
-
-RUN echo ${TIME_ZONE} > /etc/timezone \
+RUN ln -fs /usr/share/zoneinfo/${TIME_ZONE} /etc/localtime \
     && dpkg-reconfigure --frontend noninteractive tzdata

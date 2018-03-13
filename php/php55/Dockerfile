@@ -1,5 +1,7 @@
 FROM debian:wheezy
 
+ARG TIME_ZONE=Pacific/Auckland
+
 ENV DEBIAN_FRONTEND noninteractive
 
 COPY config/php.ini /etc/php5/conf.d/99-php.ini
