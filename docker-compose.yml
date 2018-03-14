@@ -15,9 +15,12 @@ services:
     networks:
       totara:
         aliases:
+            - totara54.behat
+            - totara55.behat
+            - totara56.behat
+            - totara70.behat
             - totara71.behat
             - totara72.behat
-            - totara56.behat
 
   php-5.4:
     image: derschatta/totara-dev-php54
