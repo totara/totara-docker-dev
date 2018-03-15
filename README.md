@@ -1,10 +1,10 @@
-###### Container versions and build status:
+### Container versions and build status:
 Name | Description | Version | Dockerfile | Build
 --- | --- | --- | --- | ---
 nginx | webserver | 1.13.x | [Dockerfile](https://github.com/derschatta/totara-docker-dev/blob/master/nginx/Dockerfile) | [![Build status Nginx](https://img.shields.io/docker/build/derschatta/totara-dev-nginx.svg)](https://hub.docker.com/r/derschatta/totara-dev-nginx/)
-php54 | PHP | 5.4 |  [Dockerfile](https://github.com/derschatta/totara-docker-dev/blob/master/php/php56/Dockerfile) | [![Build status PHP 5.4](https://img.shields.io/docker/build/derschatta/totara-dev-php54.svg)](https://hub.docker.com/r/derschatta/totara-dev-php54/)
+php54 | PHP | 5.4 |  [Dockerfile](https://github.com/derschatta/totara-docker-dev/blob/master/php/php54/Dockerfile) | [![Build status PHP 5.4](https://img.shields.io/docker/build/derschatta/totara-dev-php54.svg)](https://hub.docker.com/r/derschatta/totara-dev-php54/)
 php54-debug | PHP with xdebug support | 5.4 |  [Dockerfile](https://github.com/derschatta/totara-docker-dev/blob/master/php/php54-debug/Dockerfile) | [![Build status PHP 5.4 Debug](https://img.shields.io/docker/build/derschatta/totara-dev-php54-debug.svg)](https://hub.docker.com/r/derschatta/totara-dev-php54-debug/)
-php55 | PHP | 5.5 |  [Dockerfile](https://github.com/derschatta/totara-docker-dev/blob/master/php/php56/Dockerfile) | [![Build status PHP 5.5](https://img.shields.io/docker/build/derschatta/totara-dev-php55.svg)](https://hub.docker.com/r/derschatta/totara-dev-php55/)
+php55 | PHP | 5.5 |  [Dockerfile](https://github.com/derschatta/totara-docker-dev/blob/master/php/php55/Dockerfile) | [![Build status PHP 5.5](https://img.shields.io/docker/build/derschatta/totara-dev-php55.svg)](https://hub.docker.com/r/derschatta/totara-dev-php55/)
 php55-debug | PHP with xdebug support | 5.5 |  [Dockerfile](https://github.com/derschatta/totara-docker-dev/blob/master/php/php55-debug/Dockerfile) | [![Build status PHP 5.5 Debug](https://img.shields.io/docker/build/derschatta/totara-dev-php55-debug.svg)](https://hub.docker.com/r/derschatta/totara-dev-php55-debug/)
 php56 | PHP | 5.6 |  [Dockerfile](https://github.com/derschatta/totara-docker-dev/blob/master/php/php56/Dockerfile) | [![Build status PHP 5.6](https://img.shields.io/docker/build/derschatta/totara-dev-php56.svg)](https://hub.docker.com/r/derschatta/totara-dev-php56/)
 php56-debug | PHP with xdebug support | 5.6 |  [Dockerfile](https://github.com/derschatta/totara-docker-dev/blob/master/php/php56-debug/Dockerfile) | [![Build status PHP 5.6 Debug](https://img.shields.io/docker/build/derschatta/totara-dev-php56-debug.svg)](https://hub.docker.com/r/derschatta/totara-dev-php56-debug/)
