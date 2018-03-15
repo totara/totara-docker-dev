@@ -1,16 +1,27 @@
-###### Build status:
-Name | Status | Name | Status
---- | --- | --- | ---
-PHP 5.4 | [![Build status PHP 5.4](https://img.shields.io/docker/build/derschatta/totara-dev-php54.svg)](https://hub.docker.com/r/derschatta/totara-dev-php54/) | PHP 7.0 | [![Build status PHP 7.0](https://img.shields.io/docker/build/derschatta/totara-dev-php70.svg)](https://hub.docker.com/r/derschatta/totara-dev-php70/)
-PHP 5.5 | [![Build status PHP 5.5](https://img.shields.io/docker/build/derschatta/totara-dev-php55.svg)](https://hub.docker.com/r/derschatta/totara-dev-php55/) | PHP 7.1 | [![Build status PHP 7.1](https://img.shields.io/docker/build/derschatta/totara-dev-php71.svg)](https://hub.docker.com/r/derschatta/totara-dev-php71/)
-PHP 5.6 | [![Build status PHP 5.6](https://img.shields.io/docker/build/derschatta/totara-dev-php56.svg)](https://hub.docker.com/r/derschatta/totara-dev-php56/) | PHP 7.2 | [![Build status PHP 7.2](https://img.shields.io/docker/build/derschatta/totara-dev-php72.svg)](https://hub.docker.com/r/derschatta/totara-dev-php72/)
-Nginx | [![Build status Nginx](https://img.shields.io/docker/build/derschatta/totara-dev-nginx.svg)](https://hub.docker.com/r/derschatta/totara-dev-nginx/) |  | 
+###### Container versions and build status:
+Name | Description | Version | Dockerfile | Build
+--- | --- | --- | --- | ---
+nginx | webserver | 1.13.x | [Dockerfile](https://github.com/derschatta/totara-docker-dev/blob/master/nginx/Dockerfile) | [![Build status Nginx](https://img.shields.io/docker/build/derschatta/totara-dev-nginx.svg)](https://hub.docker.com/r/derschatta/totara-dev-nginx/)
+php54 | PHP | 5.4 |  [Dockerfile](https://github.com/derschatta/totara-docker-dev/blob/master/php/php56/Dockerfile) | [![Build status PHP 5.4](https://img.shields.io/docker/build/derschatta/totara-dev-php54.svg)](https://hub.docker.com/r/derschatta/totara-dev-php54/)
+php54-debug | PHP with xdebug support | 5.4 |  [Dockerfile](https://github.com/derschatta/totara-docker-dev/blob/master/php/php54-debug/Dockerfile) | [![Build status PHP 5.4 Debug](https://img.shields.io/docker/build/derschatta/totara-dev-php54-debug.svg)](https://hub.docker.com/r/derschatta/totara-dev-php54-debug/)
+php55 | PHP | 5.5 |  [Dockerfile](https://github.com/derschatta/totara-docker-dev/blob/master/php/php56/Dockerfile) | [![Build status PHP 5.5](https://img.shields.io/docker/build/derschatta/totara-dev-php55.svg)](https://hub.docker.com/r/derschatta/totara-dev-php55/)
+php55-debug | PHP with xdebug support | 5.5 |  [Dockerfile](https://github.com/derschatta/totara-docker-dev/blob/master/php/php55-debug/Dockerfile) | [![Build status PHP 5.5 Debug](https://img.shields.io/docker/build/derschatta/totara-dev-php55-debug.svg)](https://hub.docker.com/r/derschatta/totara-dev-php55-debug/)
+php56 | PHP | 5.6 |  [Dockerfile](https://github.com/derschatta/totara-docker-dev/blob/master/php/php56/Dockerfile) | [![Build status PHP 5.6](https://img.shields.io/docker/build/derschatta/totara-dev-php56.svg)](https://hub.docker.com/r/derschatta/totara-dev-php56/)
+php56-debug | PHP with xdebug support | 5.6 |  [Dockerfile](https://github.com/derschatta/totara-docker-dev/blob/master/php/php56-debug/Dockerfile) | [![Build status PHP 5.6 Debug](https://img.shields.io/docker/build/derschatta/totara-dev-php56-debug.svg)](https://hub.docker.com/r/derschatta/totara-dev-php56-debug/)
+php70 | PHP | 7.0 |  [Dockerfile](https://github.com/derschatta/totara-docker-dev/blob/master/php/php70/Dockerfile) | [![Build status PHP 7.0](https://img.shields.io/docker/build/derschatta/totara-dev-php70.svg)](https://hub.docker.com/r/derschatta/totara-dev-php70/)
+php70-debug | PHP with xdebug support | 7.0 |  [Dockerfile](https://github.com/derschatta/totara-docker-dev/blob/master/php/php70-debug/Dockerfile) | [![Build status PHP 7.0 Debug](https://img.shields.io/docker/build/derschatta/totara-dev-php70-debug.svg)](https://hub.docker.com/r/derschatta/totara-dev-php70-debug/)
+php71 | PHP | 7.1 |  [Dockerfile](https://github.com/derschatta/totara-docker-dev/blob/master/php/php71/Dockerfile) | [![Build status PHP 7.1](https://img.shields.io/docker/build/derschatta/totara-dev-php71.svg)](https://hub.docker.com/r/derschatta/totara-dev-php71/)
+php71-debug | PHP with xdebug support | 7.1 |  [Dockerfile](https://github.com/derschatta/totara-docker-dev/blob/master/php/php71-debug/Dockerfile) | [![Build status PHP 7.1 Debug](https://img.shields.io/docker/build/derschatta/totara-dev-php71-debug.svg)](https://hub.docker.com/r/derschatta/totara-dev-php71-debug/)
+php72 | PHP | 7.2 |  [Dockerfile](https://github.com/derschatta/totara-docker-dev/blob/master/php/php72/Dockerfile) | [![Build status PHP 7.2](https://img.shields.io/docker/build/derschatta/totara-dev-php72.svg)](https://hub.docker.com/r/derschatta/totara-dev-php72/)
+php72-debug | PHP with xdebug support | 7.2 |  [Dockerfile](https://github.com/derschatta/totara-docker-dev/blob/master/php/php72-debug/Dockerfile) | [![Build status PHP 7.2 Debug](https://img.shields.io/docker/build/derschatta/totara-dev-php72-debug.svg)](https://hub.docker.com/r/derschatta/totara-dev-php72-debug/)
 
 ## A Docker setup for local Totara Learn development
 
 This project aims to provide an easy way to start developing for Totara by providing a Docker setup.
 
-This setup was created and tested intensively on a MAC. It should work the same on Linux and Windows.
+This setup was created and tested intensively on a MAC and Linux. It works on Windows as well but wasn't tested that much yet.
+
+Although this project started as a development environment for Totara Learn it can be used for any other PHP project.
 
 ### What you get:
  * NGINX as a webserver
@@ -27,8 +38,8 @@ This setup was created and tested intensively on a MAC. It should work the same 
  * Docker-sync: http://docker-sync.io/ (optional, for more speed on Mac)
  * At least 3.25GB of RAM for MSSQL
 
-## Warning
-Please note that there's a current [issue with docker-sync](https://github.com/EugenMayer/docker-sync/issues/517) on Mac and Docker versions newer than [17.09.1-ce-mac42](https://docs.docker.com/docker-for-mac/release-notes/#docker-community-edition-17091-ce-mac42-2017-12-11-stable). To be on the safe side I recommend download and installing this version.
+> ##### Warning
+> Please note that there's a current [issue with docker-sync](https://github.com/EugenMayer/docker-sync/issues/517) on Mac and Docker versions newer than [17.09.1-ce-mac42](https://docs.docker.com/docker-for-mac/release-notes/#docker-community-edition-17091-ce-mac42-2017-12-11-stable). To be on the safe side I recommend to download and installing this version.
 
 ### Installation:
  1. Clone the Totara source code (see requirements) 
@@ -41,7 +52,7 @@ Make sure you have all the hosts in your /etc/hosts file to be able to access th
 
 __Example:__
 ```bash
-127.0.0.1   localhost totara71 totara56 totara70 totara72 totara71.behat totara56.behat
+127.0.0.1   localhost totara56 totara56.behat totara70 totara70.behat totara71 ...
 ```
 
 ### Shortcut commands
@@ -70,12 +81,15 @@ docker-sync start
 ```
 
 ```bash
-# run in background
+# start all containers in background
 tup
 # to limit the amount of containers fired up
-# you can just up the db container which automatically
-# starts all dependent containers
-tup pgsql
+# you can just start the db and php container of your choice,
+# it automatically starts nginx container as well
+tup pgsql php-7.1
+# if you later need to access any other php container 
+# just start it with
+tup php-5.6
 ```
 
 ### Build
