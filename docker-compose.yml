@@ -251,7 +251,7 @@ services:
       - totara
 
   mssql:
-    image: derschatta/mssql
+    image: derschatta/totara-dev-mssql
     ports:
       - "1433:1433"
     environment:
