@@ -4,6 +4,9 @@ services:
   nginx:
     build: ./nginx
 
+  mssql:
+     build: ./mssql
+
   php-5.4:
     build:
       context: ./php/php54
