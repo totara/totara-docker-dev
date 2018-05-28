@@ -4,7 +4,7 @@ ARG TIME_ZONE=Pacific/Auckland
 
 COPY config/php.ini /usr/local/etc/php/
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         apt-transport-https \
 		libfreetype6-dev \
 		libjpeg62-turbo-dev \
@@ -13,8 +13,11 @@ RUN apt-get update && apt-get install -y \
 		libxml2-dev \
 		libicu-dev \
 		libpq-dev \
-		locales \
+		gnupg2 \
 		nano \
+		wget \
+		openssl \
+		locales \
 		tzdata \
 	&& docker-php-ext-install -j$(nproc) xmlrpc \
 	    zip \
@@ -30,7 +33,6 @@ RUN apt-get update && apt-get install -y \
 
 # we need en_US locales for MSSQL connection to work
 # we need en_AU locales for behat to work
-
 RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
     sed -i -e 's/# en_AU.UTF-8 UTF-8/en_AU.UTF-8 UTF-8/' /etc/locale.gen && \
     dpkg-reconfigure --frontend=noninteractive locales && \

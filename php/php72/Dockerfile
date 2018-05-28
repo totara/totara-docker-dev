@@ -13,7 +13,6 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
 		libxml2-dev \
 		libicu-dev \
 		libpq-dev \
-		locales \
 		gnupg2 \
 		nano \
 		wget \
