@@ -15,11 +15,17 @@ services:
     networks:
       totara:
         aliases:
+            - totara54
             - totara54.behat
+            - totara55
             - totara55.behat
+            - totara56
             - totara56.behat
+            - totara70
             - totara70.behat
+            - totara71
             - totara71.behat
+            - totara72
             - totara72.behat
 
   php-5.4:
