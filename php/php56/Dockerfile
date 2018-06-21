@@ -3,6 +3,7 @@ FROM php:5.6-fpm
 ARG TIME_ZONE=Pacific/Auckland
 
 COPY config/php.ini /usr/local/etc/php/php.ini
+COPY config/fpm.conf /usr/local/etc/php-fpm.d/zz-totara.conf
 
 RUN apt-get update && apt-get install -y \
         apt-transport-https \

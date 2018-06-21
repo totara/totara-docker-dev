@@ -3,6 +3,7 @@ FROM php:7.2-fpm
 ARG TIME_ZONE=Pacific/Auckland
 
 COPY config/php.ini /usr/local/etc/php/
+COPY config/fpm.conf /usr/local/etc/php-fpm.d/zz-totara.conf
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         apt-transport-https \
