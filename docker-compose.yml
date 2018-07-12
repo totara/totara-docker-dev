@@ -7,6 +7,7 @@ services:
         - REMOTE_DATA
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -197,13 +198,13 @@ services:
       - totara
 
   nodejs:
-    image: node:8.10.0
+    image: node:8.11
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
     working_dir: ${REMOTE_SRC}
 
   pgsql:
-    image: postgres:10.3
+    image: postgres:10.4
     ports:
       - "5432:5432"
     environment:
@@ -242,7 +243,7 @@ services:
       - totara
 
   mariadb:
-    image: mariadb:10.2
+    image: mariadb:10
     ports:
       - "3307:3306"
     environment:
