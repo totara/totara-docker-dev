@@ -7,31 +7,31 @@ COPY config/fpm.conf /usr/local/etc/php-fpm.d/zz-totara.conf
 
 RUN apt-get update && apt-get install -y \
         apt-transport-https \
-		libfreetype6-dev \
-		libjpeg62-turbo-dev \
-		libmcrypt-dev \
-		libpng-dev \
-		libxml2-dev \
-		libicu-dev \
-		libpq-dev \
-		freetds-bin \
+        libfreetype6-dev \
+        libjpeg62-turbo-dev \
+        libmcrypt-dev \
+        libpng-dev \
+        libxml2-dev \
+        libicu-dev \
+        libpq-dev \
+        freetds-bin \
         freetds-common \
         freetds-dev \
         nano \
         git \
         locales \
         tzdata \
-	&& docker-php-ext-install -j$(nproc) xmlrpc \
-	    zip \
-	    intl \
-	    soap \
-	    opcache \
-	    pdo_pgsql \
-	    pdo_mysql \
-	    pgsql \
-	    mysqli \
-	&& docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-	&& docker-php-ext-install -j$(nproc) gd
+    && docker-php-ext-install -j$(nproc) xmlrpc \
+        zip \
+        intl \
+        soap \
+        opcache \
+        pdo_pgsql \
+        pdo_mysql \
+        pgsql \
+        mysqli \
+    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-install -j$(nproc) gd
 
 # we need en_AU locales for behat to work
 
