@@ -316,6 +316,15 @@ services:
     networks:
       - totara
 
+  redis:
+    image: redis
+    # activate persistency
+    command: "redis-server --appendonly yes"
+    volumes:
+      - redis-data:/data
+    networks:
+      - totara
+
 volumes:
     pgsql-data:
     pgsql93-data:
@@ -323,6 +332,7 @@ volumes:
     mysql-data:
     totara-data:
     mariadb-data:
+    redis-data:
 
 networks:
   totara:
