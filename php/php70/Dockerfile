@@ -42,6 +42,10 @@ RUN git clone https://github.com/tideways/php-profiler-extension.git \
 
 RUN echo "extension=tideways_xhprof.so" >> /usr/local/etc/php/conf.d/tideways_xhprof.ini
 
+RUN pecl install -o -f redis \
+    &&  rm -rf /tmp/pear \
+    &&  docker-php-ext-enable redis
+
 # we need en_US locales for MSSQL connection to work
 # we need en_AU locales for behat to work
 RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
