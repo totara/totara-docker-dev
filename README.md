@@ -24,22 +24,24 @@ This setup was created and tested intensively on a MAC and Linux. It works on Wi
 Although this project started as a development environment for Totara Learn it can be used for any other PHP project.
 
 ### What you get:
- * NGINX as a webserver
- * PHP 5.4, 5.5, 5.6, 7.0, 7.1, 7.2 to test for different versions
- * PostgreSQL (9.3.x and 10.x), MariaDB (10.2.x) and MySQL (5.7.x), and Microsoft SQL Server (2017) support
- * A PHPUnit and Behat setup to run tests (including Selenium)
+ * [NGINX](https://nginx.org/) as a webserver
+ * [PHP](http://php.net/) 5.4, 5.5, 5.6, 7.0, 7.1, 7.2 to test for different versions
+ * [PostgreSQL](https://www.postgresql.org/) (9.3.x and 10.x), [MariaDB](https://mariadb.org/) (10.2.x) and [MySQL](https://www.mysql.com/) (5.7.x), and [Microsoft SQL Server 2017](https://www.microsoft.com/en-us/sql-server/sql-server-2017) support
+ * A [PHPUnit](https://phpunit.de/) and [Behat](http://behat.org/en/latest/) setup to run tests (including [Selenium](https://www.seleniumhq.org/))
  * A [mailcatcher](https://mailcatcher.me/) instance to inspect mails
+ * [Redis](https://redis.io/) for caching and/or session handling
+ * [XHProf](https://github.com/tideways/php-xhprof-extension) for profiling
  * [XDebug](https://xdebug.org/) installed, ready for debugging with your favorite IDE
 
 ### Requirements:
  * Totara source code: https://help.totaralearning.com/display/DEV/Getting+the+code
- * Docker: https://www.docker.com (use [17.09.1-ce-mac42](https://docs.docker.com/docker-for-mac/release-notes/#docker-community-edition-17091-ce-mac42-2017-12-11-stable), see warning below)
+ * Docker: https://www.docker.com (for Docker on Mac please read warning below)
  * Docker-compose: https://docs.docker.com/compose/install (included in Docker for Mac/Windows)
  * Docker-sync: http://docker-sync.io/ (optional, for more speed on Mac)
  * At least 3.25GB of RAM for MSSQL
 
-> ##### Warning
-> Please note that there's a current [issue with docker-sync](https://github.com/EugenMayer/docker-sync/issues/517) on Mac and Docker versions newer than [17.09.1-ce-mac42](https://docs.docker.com/docker-for-mac/release-notes/#docker-community-edition-17091-ce-mac42-2017-12-11-stable). To be on the safe side I recommend to download and installing this version.
+> ##### Warning Docker for Mac
+> Please note that there's a current [issue with docker-sync](https://github.com/EugenMayer/docker-sync/issues/517) on Mac and Docker stable versions newer than [17.09.1-ce-mac42](https://docs.docker.com/docker-for-mac/release-notes/#docker-community-edition-17091-ce-mac42-2017-12-11-stable). To be on the safe side I recommend to download and installing this version. In the edge version [18.05.0-ce-mac67 and newer](https://docs.docker.com/docker-for-mac/edge-release-notes/#docker-community-edition-18050-ce-mac67-2018-06-07) the issue seem to be fixed as well.
 
 ### Installation:
  1. Clone the Totara source code (see requirements) 
@@ -52,7 +54,7 @@ Make sure you have all the hosts in your /etc/hosts file to be able to access th
 
 __Example:__
 ```bash
-127.0.0.1   localhost totara56 totara56.behat totara70 totara70.behat totara71 ...
+127.0.0.1   localhost totara54 totara54.behat totara55 totara55.behat totara56 totara56.behat totara70 totara70.behat totara71 totara71.behat totara72 totara72.behat
 ```
 
 ### Shortcut commands
@@ -61,14 +63,14 @@ This project comes with a few bash scripts to simplify usage accross platforms. 
 
 ```bash
 tdocker                           # shortcut to general docker-compose ... command
-tup [container]                   # start (all) container(s)            
+tup [containers]                  # start (all) container(s)            
 tbash [container]                 # log into a container, i.e. php-7.2
 tstop [container]                 # stop (all) container(s)
 trestart [container]              # restart (all) container(s)
 tdown                             # shutdown all containers
 tstats                            # show docker stats including container names
 tbuild [container]                # build (all) container(s)
-tgrunt                            # run grunt scripts in container
+tgrunt [subfolder]                # run grunt scripts in container, if you use subfolders for version pass it as 2nd argument
 tscale [container]=6              # scale up the number of containers, i.e. selenium-chrome
 tunit [container] [folder] [init] # run or init unit tests in given container for given version
 ```
@@ -86,7 +88,7 @@ tup
 # to limit the amount of containers fired up
 # you can just start the db and php container of your choice,
 # it automatically starts nginx container as well
-tup pgsql php-7.1
+tup pgsql php-7.2
 # if you later need to access any other php container 
 # just start it with
 tup php-5.6
@@ -99,7 +101,7 @@ By default prebuilt images from docker hub (https://hub.docker.com/u/derschatta/
 ```bash
 tbuild
 # or for individual images
-tbuild php-7.1
+tbuild php-7.2
 ```
 
 ### Config & Database
@@ -293,5 +295,5 @@ Or you use the shortcut bash script:
 
 ```bash
 tgrunt
-tgrunt 11
+tgrunt 12
 ``` 
