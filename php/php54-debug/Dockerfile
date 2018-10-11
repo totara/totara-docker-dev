@@ -1,6 +1,6 @@
 FROM derschatta/totara-dev-php54:latest
 
-RUN pecl install xdebug-2.4.1
+RUN pecl install -f xdebug-2.4.1
 
 RUN echo "[xdebug]" >> /etc/php5/conf.d/xdebug.ini \
     && echo "zend_extension=/usr/lib/php5/20100525/xdebug.so" >> /etc/php5/conf.d/xdebug.ini \
