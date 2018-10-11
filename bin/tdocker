@@ -7,7 +7,7 @@ PROJECTPATH="$( cd $SCRIPTPATH && cd ..; pwd -P )"
 # the docker-sync configuration should be used
 if [ -d "$PROJECTPATH/.docker-sync" ]
 then
-    cd $PROJECTPATH && docker-compose -f docker-compose.yml -f docker-compose-sync.yml "$@"
+    cd $PROJECTPATH; docker-compose -f docker-compose.yml -f docker-compose-sync.yml "$@"
 else
-    cd $PROJECTPATH && docker-compose "$@"
+    cd $PROJECTPATH; docker-compose "$@"
 fi

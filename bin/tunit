@@ -13,10 +13,9 @@ export $(egrep -v '^#' $PROJECTPATH/.env | xargs)
 # Example:
 #   ./tunit php-7.2 11 path/to/test.php
 
-PHPCONTAINER=$1
-MYPATH=$REMOTE_SRC/$2
-SETUP=$3
-
+PHPCONTAINER=$1; shift
+MYPATH=$REMOTE_SRC/$1; shift
+SETUP=$1;
 
 if [[ $SETUP = "init" ]]
 then
@@ -24,5 +23,5 @@ then
     $SCRIPTPATH/tdocker exec $PHPCONTAINER sh -c "cd $MYPATH && php admin/tool/phpunit/cli/init.php"
 else
     echo "Running unit tests..."
-    $SCRIPTPATH/tdocker exec $PHPCONTAINER sh -c "cd $MYPATH && vendor/bin/phpunit $3"
+    $SCRIPTPATH/tdocker exec $PHPCONTAINER sh -c "cd $MYPATH; vendor/bin/phpunit $@"
 fi
