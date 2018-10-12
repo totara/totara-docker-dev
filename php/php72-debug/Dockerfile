@@ -1,4 +1,4 @@
-FROM derschatta/totara-dev-php72:latest
+FROM totara/docker-dev-php72:latest
 
 RUN pecl install -f xdebug
 

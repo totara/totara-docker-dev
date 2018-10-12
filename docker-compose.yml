@@ -2,7 +2,7 @@ version: "2"
 services:
 
   nginx:
-    image: derschatta/totara-dev-nginx
+    image: totara/docker-dev-nginx
     container_name: totara_nginx
     environment:
         - REMOTE_DATA
@@ -32,7 +32,7 @@ services:
             - totara72.behat.totaralms.com
 
   php-5.4:
-    image: derschatta/totara-dev-php54
+    image: totara/docker-dev-php54
     container_name: totara_php54
     working_dir: ${REMOTE_SRC}
     environment:
@@ -47,7 +47,7 @@ services:
       - totara
 
   php-5.4-debug:
-    image: derschatta/totara-dev-php54-debug
+    image: totara/docker-dev-php54-debug
     container_name: totara_php54_debug
     working_dir: ${REMOTE_SRC}
     environment:
@@ -62,7 +62,7 @@ services:
       - totara
 
   php-5.5:
-    image: derschatta/totara-dev-php55
+    image: totara/docker-dev-php55
     container_name: totara_php55
     working_dir: ${REMOTE_SRC}
     environment:
@@ -77,7 +77,7 @@ services:
       - totara
 
   php-5.5-debug:
-    image: derschatta/totara-dev-php55-debug
+    image: totara/docker-dev-php55-debug
     container_name: totara_php55_debug
     working_dir: ${REMOTE_SRC}
     environment:
@@ -92,7 +92,7 @@ services:
       - totara
 
   php-5.6:
-    image: derschatta/totara-dev-php56
+    image: totara/docker-dev-php56
     container_name: totara_php56
     working_dir: ${REMOTE_SRC}
     environment:
@@ -107,7 +107,7 @@ services:
       - totara
 
   php-5.6-debug:
-    image: derschatta/totara-dev-php56-debug
+    image: totara/docker-dev-php56-debug
     container_name: totara_php56_debug
     working_dir: ${REMOTE_SRC}
     environment:
@@ -122,7 +122,7 @@ services:
       - totara
 
   php-7.0:
-    image: derschatta/totara-dev-php70
+    image: totara/docker-dev-php70
     container_name: totara_php70
     working_dir: ${REMOTE_SRC}
     environment:
@@ -137,7 +137,7 @@ services:
       - totara
 
   php-7.0-debug:
-    image: derschatta/totara-dev-php70-debug
+    image: totara/docker-dev-php70-debug
     container_name: totara_php70_debug
     working_dir: ${REMOTE_SRC}
     environment:
@@ -152,7 +152,7 @@ services:
       - totara
 
   php-7.1:
-    image: derschatta/totara-dev-php71
+    image: totara/docker-dev-php71
     container_name: totara_php71
     working_dir: ${REMOTE_SRC}
     environment:
@@ -167,7 +167,7 @@ services:
       - totara
 
   php-7.1-debug:
-    image: derschatta/totara-dev-php71-debug
+    image: totara/docker-dev-php71-debug
     container_name: totara_php71_debug
     working_dir: ${REMOTE_SRC}
     environment:
@@ -182,7 +182,7 @@ services:
       - totara
 
   php-7.2:
-    image: derschatta/totara-dev-php72
+    image: totara/docker-dev-php72
     container_name: totara_php72
     working_dir: ${REMOTE_SRC}
     environment:
@@ -197,7 +197,7 @@ services:
       - totara
 
   php-7.2-debug:
-    image: derschatta/totara-dev-php72-debug
+    image: totara/docker-dev-php72-debug
     container_name: totara_php72_debug
     working_dir: ${REMOTE_SRC}
     environment:
@@ -291,7 +291,7 @@ services:
       - totara
 
   mssql:
-    image: derschatta/totara-dev-mssql
+    image: totara/docker-dev-mssql
     container_name: totara_mssql
     ports:
       - "1433:1433"
