@@ -62,6 +62,18 @@ subsequent starts are fast.
  
 The tup and tdown commands take care of starting and shutting down docker-sync as well.
 
+#### First run and docker-sync
+
+If you use docker-sync you need to run 
+
+```bash
+docker-sync start
+```
+
+before any of the following commands. The initial sync takes a while so be patient. 
+
+If you then use the following commands in the future dockerp-sync is automatically started with it.
+
 #### Start containers
 
 It is recommended to specify the containers you really need. The minimum you probably need is the db and the php container of your choice, the nginx container is started automatically alongside the php container.
