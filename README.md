@@ -82,23 +82,28 @@ subsequent starts are fast.
  
 The tup and tdown commands take care of starting and shutting down docker-sync as well.
 
-#### Start all
+#### Start containers
 
-This starts a lot of containers so consider to run only those you need (check out the next command)
-
-```bash
-tup
-```
-
-#### Start specific containers
-
-It is recommended to limit the amount of containers fired up. The minimum you probably need is the db and the php container of your choice, the nginx container is started automatically alongside the php container.
+It is recommended to specify the containers you really need. The minimum you probably need is the db and the php container of your choice, the nginx container is started automatically alongside the php container.
 
 ```bash
 tup pgsql php-7.2
-# if you later need to access any other php container 
-# just start it with
+```
+
+If you need additional containers at a later point just run tup with the container you need:
+
+```bash
 tup php-5.6
+tup mariadb
+tup selenium-hub
+```
+
+#### Start all
+
+This starts a lot of containers so consider to run only those you need.
+
+```bash
+tup
 ```
 
 ### Build
