@@ -66,6 +66,8 @@ The tup and tdown commands take care of starting and shutting down docker-sync a
 
 It is recommended to specify the containers you really need. The minimum you probably need is the db and the php container of your choice, the nginx container is started automatically alongside the php container.
 
+The scripts for the following commands are located in the bin/ folder of this project. Either run the commands directly, like `bin/tup`, or add the bin folder to your PATH to not bother about your current folder.
+
 ```bash
 tup pgsql php-7.2
 ```
@@ -84,6 +86,15 @@ This starts a lot of containers so consider to run only those you need.
 
 ```bash
 tup
+```
+
+#### Stop/Shutdown
+
+```bash
+# this just stops the containers, equivalent to docker-compose stop
+tstop
+# this shuts all containers (and docker-sync) down, equivalent to docker-compose down
+tdown
 ```
 
 #### More Commands
