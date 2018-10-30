@@ -77,17 +77,24 @@ tunit [container] [folder] [init] # run or init unit tests in given container fo
 
 ### Run
 
-```bash
-# if you use docker-sync, fire up docker-sync as a daemon in the background
-docker-sync start
-```
+If you are using **docker-sync**, the first time you run the following commands it does a one-time sync of the project which can take a while
+subsequent starts are fast.
+ 
+The tup and tdown commands take care of starting and shutting down docker-sync as well.
+
+#### Start all
+
+This starts a lot of containers so consider to run only those you need (check out the next command)
 
 ```bash
-# start all containers in background
 tup
-# to limit the amount of containers fired up
-# you can just start the db and php container of your choice,
-# it automatically starts nginx container as well
+```
+
+#### Start specific containers
+
+It is recommended to limit the amount of containers fired up. The minimum you probably need is the db and the php container of your choice, the nginx container is started automatically alongside the php container.
+
+```bash
 tup pgsql php-7.2
 # if you later need to access any other php container 
 # just start it with
@@ -295,5 +302,9 @@ Or you use the shortcut bash script:
 
 ```bash
 tgrunt
+# if your project lives in the subfolder 12 then run
 tgrunt 12
+# if you want to run a specific grunt task
+tgrunt 12 gherkinlint
+
 ``` 
