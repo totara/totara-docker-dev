@@ -115,15 +115,12 @@ tscale [container]=6              # scale up the number of containers, i.e. sele
 tunit [container] [folder] [init] # run or init unit tests in given container for given version
 ```
 
-## Build
 
-By default prebuilt images from docker hub (https://hub.docker.com/u/derschatta/) will be used. If you want to modify any of the containers to your needs then you can rebuild them locally with the following command:
+### Multiple versions
 
-```bash
-tbuild
-# or for individual images
-tbuild php-7.2
-```
+I recommend to check out each Totara Learn version in a different subfolder below the folder LOCAL_SRC defined in .env. This enables you to access different versions without having to switch branches all the time.
+
+This is just a suggestion which worked fine for me. There are different ways to handle this and at the end you need to decide yourself how to do it.
 
 ### Config & Database
 
@@ -235,25 +232,7 @@ $CFG->dboptions = array(
 
 Make sure your config file contains the PHPUnit configuration needed and the database is ready.
 
-**Initiate:**
-```bash
-# assuming you have a subfolder called 11 then you can call
-# to initiate the unit tests
-tunit php-7.1 11 init
-```
-**Run:**
-```bash
-# run all unit tests in given container for version
-tunit php-7.1 11
-# or add more phpunit params
-tunit php-7.1 11 --test-suffix=_test.php relative/path/to/tests/
-```
-
-### Run behat tests
-
-Make sure your config file contains the Behat configuration needed and the database is ready.
-
-Log into one of the test containers
+Log into one of the PHP containers:
 ```bash
 tbash php-5.6
 tbash php-7.1
@@ -262,21 +241,46 @@ tbash php-5.6-debug
 tbash php-7.1-debug
 ```
 
-Go to the project folder
+If your project is in a subfolder:
 ```bash
-# replace version
-cd /var/www/totara/src/[version]
+cd subfolder
 ```
 
-If needed run the init script to initiate the behat tests
+If needed initiate the PHPUnit setup:
 ```bash
-# in the project folder
-php composer.phar install
-# initiate the test environment (use --parallel=x if needed)
+php admin/tool/phpunit/cli/init.php
+```
+
+Start the testsuite:
+```bash
+vendor/bin/phpunit
+```
+
+### Run behat tests
+
+Make sure your config file contains the Behat configuration needed and the database is ready.
+
+Log into one of the PHP containers:
+```bash
+tbash php-5.6
+tbash php-7.1
+# or if you need xdebug support
+tbash php-5.6-debug
+tbash php-7.1-debug
+```
+
+If your project is in a subfolder:
+```bash
+cd subfolder
+```
+
+If needed initiate the behat tests
+```bash
+# use --parallel=x if needed
 php admin/tool/behat/cli/init.php
 ```
 
-To start running
+Run behat with:
 ```bash
 # for t11
 vendor/bin/behat
@@ -284,9 +288,15 @@ vendor/bin/behat
 vendor/bin/behat --config /var/www/totara/data/ver9.pgsql.behat/behatrun/behat/behat.yml
 ```
 
-### Switch between different versions
+## Build
 
-I recommend to check out each Totara Learn version in a different subfolder below the folder LOCAL_SRC defined in .env. This is just a suggestion which worked fine for me. There are different ways to handle this and at the end you need to decide yourself how to do it.
+By default prebuilt images from docker hub (https://hub.docker.com/u/derschatta/) will be used. If you want to modify any of the containers to your needs then you can rebuild them locally with the following command:
+
+```bash
+tbuild
+# or for individual images
+tbuild php-7.2
+```
 
 ## Mailcatcher
 
