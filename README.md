@@ -124,7 +124,7 @@ This is just a suggestion which worked fine for me. There are different ways to 
 
 ### Config & Database
 
-Make sure you have configured Totara and created the databases you need. You can connect to the databases from your host using any tools you prefer (host = _localhost_, use defautls ports).
+Make sure you have configured Totara and created the databases you need. You can connect to the databases from your host using any tools you prefer (host = _localhost_, use default ports).
 
 #### Credentials
 
@@ -150,7 +150,22 @@ tdocker exec mariadb mysql -u root -p"root"
 tdocker exec php-7.1 /opt/mssql-tools/bin/sqlcmd -S mssql -U SA -P "Totara.Mssql1"
 ```
 
-Create a database schema for each Totara version you would like to develop on.
+Create a database for each Totara version you would like to develop on.
+
+Example commands:
+```sql
+# PostgreSQL
+CREATE DATABASE totara_12;
+
+# MariaDB/MySQL
+CREATE DATABASE totara_12 DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+
+# MSSQL
+CREATE DATABASE totara_12 COLLATE Latin1_General_CS_AS
+ALTER DATABASE totara_12 SET ANSI_NULLS ON
+ALTER DATABASE totara_12 SET QUOTED_IDENTIFIER ON
+ALTER DATABASE totara_12 SET READ_COMMITTED_SNAPSHOT ON;
+```
 
 #### data directories
 
