@@ -305,7 +305,7 @@ vendor/bin/behat --config /var/www/totara/data/ver9.pgsql.behat/behatrun/behat/b
 
 ## Build
 
-By default prebuilt images from docker hub (https://hub.docker.com/u/derschatta/) will be used. If you want to modify any of the containers to your needs then you can rebuild them locally with the following command:
+By default prebuilt images from [Docker Hub](https://hub.docker.com/u/totara/) will be used. If you want to modify any of the containers to your needs then you can rebuild them locally with the following command:
 
 ```bash
 tbuild
