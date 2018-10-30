@@ -77,7 +77,7 @@ tunit [container] [folder] [init] # run or init unit tests in given container fo
 
 ### Run
 
-If you are using **docker-sync**, the first time you run the following commands it does a one-time sync of the project which can take a while
+If you are using **docker-sync**, the first time you run the following commands it does a one-time sync of the project which can take a while,
 subsequent starts are fast.
  
 The tup and tdown commands take care of starting and shutting down docker-sync as well.
