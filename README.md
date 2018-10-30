@@ -15,7 +15,7 @@ php71-debug | 7.1 + xdebug 2.6.0 |  [Dockerfile](https://github.com/totara/totar
 php72 | 7.2 |  [Dockerfile](https://github.com/totara/totara-docker-dev/blob/master/php/php72/Dockerfile) | [![Build status PHP 7.2](https://img.shields.io/docker/build/totara/docker-dev-php72.svg)](https://hub.docker.com/r/totara/docker-dev-php72/)
 php72-debug | 7.2 + xdebug 2.6.0 |  [Dockerfile](https://github.com/totara/totara-docker-dev/blob/master/php/php72-debug/Dockerfile) | [![Build status PHP 7.2 Debug](https://img.shields.io/docker/build/totara/docker-dev-php72-debug.svg)](https://hub.docker.com/r/totara/docker-dev-php72-debug/)
 
-## A Docker setup for local Totara Learn development
+# A Docker setup for local Totara Learn development
 
 This project aims to provide an easy way to start developing for Totara by providing a Docker setup.
 
@@ -43,39 +43,19 @@ Although this project started as a development environment for Totara Learn it c
 > ##### Warning Docker for Mac
 > Please note that there's a current [issue with docker-sync](https://github.com/EugenMayer/docker-sync/issues/517) on Mac and Docker stable versions newer than [17.09.1-ce-mac42](https://docs.docker.com/docker-for-mac/release-notes/#docker-community-edition-17091-ce-mac42-2017-12-11-stable). To be on the safe side I recommend to download and installing this version. In the edge version [18.05.0-ce-mac67 and newer](https://docs.docker.com/docker-for-mac/edge-release-notes/#docker-community-edition-18050-ce-mac67-2018-06-07) the issue seem to be fixed as well.
 
-### Installation:
+## Install
  1. Clone the Totara source code (see requirements) 
  1. Clone this project
  1. Install docker-sync (optionally, recommended for MAC)
  1. Copy the file __.env.dist__ to __.env__ and change at least the path to your local Totara source folder (LOCAL_SRC)
-
-#### /etc/hosts
-Make sure you have all the hosts in your /etc/hosts file to be able to access them via the browser.
+ 1. Make sure you have all the hosts in your /etc/hosts file to be able to access them via the browser
 
 __Example:__
 ```bash
 127.0.0.1   localhost totara54 totara54.behat totara55 totara55.behat totara56 totara56.behat totara70 totara70.behat totara71 totara71.behat totara72 totara72.behat
 ```
 
-### Shortcut commands
-
-This project comes with a few bash scripts to simplify usage accross platforms. The scripts are located in the **bin/** folder. Ideally you add the bin folder to your PATH environment variable so you can run the commands from anywhere.
-
-```bash
-tdocker                           # shortcut to general docker-compose ... command
-tup [containers]                  # start (all) container(s)            
-tbash [container]                 # log into a container, i.e. php-7.2
-tstop [container]                 # stop (all) container(s)
-trestart [container]              # restart (all) container(s)
-tdown                             # shutdown all containers
-tstats                            # show docker stats including container names
-tbuild [container]                # build (all) container(s)
-tgrunt [subfolder]                # run grunt scripts in container, if you use subfolders for version pass it as 2nd argument
-tscale [container]=6              # scale up the number of containers, i.e. selenium-chrome
-tunit [container] [folder] [init] # run or init unit tests in given container for given version
-```
-
-### Run
+## Use
 
 If you are using **docker-sync**, the first time you run the following commands it does a one-time sync of the project which can take a while,
 subsequent starts are fast.
@@ -106,7 +86,25 @@ This starts a lot of containers so consider to run only those you need.
 tup
 ```
 
-### Build
+#### More Commands
+
+This project comes with a few bash scripts to simplify usage across platforms. The scripts are located in the **bin/** folder. Ideally you add the bin folder to your PATH environment variable so you can run the commands from anywhere.
+
+```bash
+tdocker                           # shortcut to general docker-compose ... command
+tup [containers]                  # start (all) container(s)            
+tbash [container]                 # log into a container, i.e. php-7.2
+tstop [container]                 # stop (all) container(s)
+trestart [container]              # restart (all) container(s)
+tdown                             # shutdown all containers
+tstats                            # show docker stats including container names
+tbuild [container]                # build (all) container(s)
+tgrunt [subfolder]                # run grunt scripts in container, if you use subfolders for version pass it as 2nd argument
+tscale [container]=6              # scale up the number of containers, i.e. selenium-chrome
+tunit [container] [folder] [init] # run or init unit tests in given container for given version
+```
+
+## Build
 
 By default prebuilt images from docker hub (https://hub.docker.com/u/derschatta/) will be used. If you want to modify any of the containers to your needs then you can rebuild them locally with the following command:
 
@@ -279,7 +277,7 @@ vendor/bin/behat --config /var/www/totara/data/ver9.pgsql.behat/behatrun/behat/b
 
 I recommend to check out each Totara Learn version in a different subfolder below the folder LOCAL_SRC defined in .env. This is just a suggestion which worked fine for me. There are different ways to handle this and at the end you need to decide yourself how to do it.
 
-# Mailcatcher
+## Mailcatcher
 
 The setup comes with mailcatcher support. Just add the following to your config and all mails will be sent to it:
 
@@ -291,7 +289,7 @@ Open __http://localhost:8080__ to open the mailcatcher GUI.
 
 If needed, modify the local port in the docker-compose.yml file.
 
-# NodeJS, NPM and grunt 
+## NodeJS, NPM and grunt 
 
 If you want to use grunt or npm you can log into the nodejs container and issue the commands there:
 
