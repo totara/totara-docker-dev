@@ -37,7 +37,7 @@ Although this project started as a development environment for Totara Learn it c
  * Totara source code: https://help.totaralearning.com/display/DEV/Getting+the+code
  * Docker: https://www.docker.com (for Docker on Mac please read warning below)
  * Docker-compose: https://docs.docker.com/compose/install (included in Docker for Mac/Windows)
- * Docker-sync: http://docker-sync.io/ (optional, for more speed on Mac)
+ * Docker-sync: http://docker-sync.io/ (optional, for more speed on Mac, not needed for Linux)
  * At least 3.25GB of RAM for MSSQL
 
 > ##### Warning Docker for Mac
@@ -56,11 +56,6 @@ __Example:__
 ```
 
 ## Use
-
-If you are using **docker-sync**, the first time you run the following commands it does a one-time sync of the project which can take a while,
-subsequent starts are fast.
- 
-The tup and tdown commands take care of starting and shutting down docker-sync as well.
 
 #### First run and docker-sync
 
@@ -198,7 +193,7 @@ database = pgsql, mysql, mssql
 
 #### Config example
 
-This is an example for the t11 branch with the 3 different databases and the correct data directories. Please note: You will need additional configuration parameters for PHPUnit and Behat. Please refer to Totara docs and have a look at config-dist.php for examples.
+This is an example for the t12 branch with the 3 different databases and the correct data directories. Please note: You will need additional configuration parameters for PHPUnit and Behat. Please refer to Totara docs and have a look at config-dist.php for examples.
 
 ```php
 //=========================================================================
@@ -213,29 +208,29 @@ This is an example for the t11 branch with the 3 different databases and the cor
 //$CFG->dbhost    = 'mysql';  // eg 'localhost' or 'db.isp.com' or IP
 //$CFG->dbuser    = 'root';   // your database username
 //$CFG->dbpass    = 'root';   // your database password
-//$CFG->dataroot  = '/var/www/totara/data/ver11.mysql';
-//$CFG->behat_dataroot = '/var/www/totara/data/ver11.mysql.behat';
-//$CFG->phpunit_dataroot = '/var/www/totara/data/ver11.mysql.phpunit';
+//$CFG->dataroot  = '/var/www/totara/data/ver12.mysql';
+//$CFG->behat_dataroot = '/var/www/totara/data/ver12.mysql.behat';
+//$CFG->phpunit_dataroot = '/var/www/totara/data/ver12.mysql.phpunit';
 
 //$CFG->dbtype    = 'sqlsrv';
 //$CFG->dbhost    = 'mssql';  // eg 'localhost' or 'db.isp.com' or IP
 //$CFG->dbuser    = 'SA';   // your database username
 //$CFG->dbpass    = 'Totara.Mssql1';   // your database password
-//$CFG->dataroot  = '/var/www/totara/data/ver11.mssql';
-//$CFG->behat_dataroot = '/var/www/totara/data/ver11.mssql.behat';
-//$CFG->phpunit_dataroot = '/var/www/totara/data/ver11.mssql.phpunit';
+//$CFG->dataroot  = '/var/www/totara/data/ver12.mssql';
+//$CFG->behat_dataroot = '/var/www/totara/data/ver12.mssql.behat';
+//$CFG->phpunit_dataroot = '/var/www/totara/data/ver12.mssql.phpunit';
 
 $CFG->dbtype    = 'pgsql';      // 'pgsql', 'mariadb', 'mysqli', 'mssql', 'sqlsrv'
 $CFG->dbhost    = 'pgsql';  // eg 'localhost' or 'db.isp.com' or IP
 $CFG->dbuser    = 'postgres';   // your database username
 $CFG->dbpass    = '';   // your database password
-$CFG->dataroot  = '/var/www/totara/data/ver11.pgsql';
-$CFG->behat_dataroot = '/var/www/totara/data/ver11.pgsql.behat';
-$CFG->phpunit_dataroot = '/var/www/totara/data/ver11.pgsql.phpunit';
+$CFG->dataroot  = '/var/www/totara/data/ver12.pgsql';
+$CFG->behat_dataroot = '/var/www/totara/data/ver12.pgsql.behat';
+$CFG->phpunit_dataroot = '/var/www/totara/data/ver12.pgsql.phpunit';
 
 
 $CFG->dblibrary = 'native';     // 'native' only at the moment
-$CFG->dbname    = 'totara_11';     // database name, eg moodle
+$CFG->dbname    = 'totara_12';     // database name, eg moodle
 $CFG->prefix    = 'mdl_';       // prefix to use for all table names
 $CFG->dboptions = array(
     'dbpersist' => false,       // should persistent database connections be
