@@ -2,6 +2,7 @@
 Name | Version | Dockerfile | Build
 --- | --- | --- | ---
 nginx | 1.13.x | [Dockerfile](https://github.com/totara/totara-docker-dev/blob/master/nginx/Dockerfile) | [![Build status Nginx](https://img.shields.io/docker/build/totara/docker-dev-nginx.svg)](https://hub.docker.com/r/totara/docker-dev-nginx/)
+mssql | 2017 | [Dockerfile](https://github.com/totara/totara-docker-dev/blob/master/mssql/Dockerfile) | [![Build status Mssql](https://img.shields.io/docker/build/totara/docker-dev-mssql.svg)](https://hub.docker.com/r/totara/docker-dev-mssql/)
 php54 | 5.4 |  [Dockerfile](https://github.com/totara/totara-docker-dev/blob/master/php/php54/Dockerfile) | [![Build status PHP 5.4](https://img.shields.io/docker/build/totara/docker-dev-php54.svg)](https://hub.docker.com/r/totara/docker-dev-php54/)
 php54-debug | 5.4 + xdebug 2.4.1 |  [Dockerfile](https://github.com/totara/totara-docker-dev/blob/master/php/php54-debug/Dockerfile) | [![Build status PHP 5.4 Debug](https://img.shields.io/docker/build/totara/docker-dev-php54-debug.svg)](https://hub.docker.com/r/totara/docker-dev-php54-debug/)
 php55 | 5.5 |  [Dockerfile](https://github.com/totara/totara-docker-dev/blob/master/php/php55/Dockerfile) | [![Build status PHP 5.5](https://img.shields.io/docker/build/totara/docker-dev-php55.svg)](https://hub.docker.com/r/totara/docker-dev-php55/)
