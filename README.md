@@ -138,8 +138,8 @@ Make sure you have configured Totara and created the databases you need. You can
 
 DB | Host | User | Password
 --- | --- | --- | ---
-**PostresSQL 10.x** | pgsql | postresql | 
-**PostresSQL 9.3.x** | pgsql93 | postresql | 
+**PostresSQL 10.x** | pgsql | postgres | 
+**PostresSQL 9.3.x** | pgsql93 | postgres | 
 **Mysql** | mysql | root | root
 **MariaDB** | mariadb | root | root
 **Mssql** | mssql | SA | Totara.Mssql1
@@ -177,20 +177,24 @@ ALTER DATABASE totara_12 SET READ_COMMITTED_SNAPSHOT ON;
 
 #### data directories
 
-The nginx container automatically creates all required data folders.
+The nginx container automatically creates a bunch of data folders ready to be used.
+
+All data directories have to be created within the `/var/www/totara/data` directory to be part of the data volume and be persistent even after shutting down docker.
 
 ```bash
 /var/www/totara/data/ver[versionnumber].[database]
 /var/www/totara/data/ver[versionnumber].[database].phpunit
 /var/www/totara/data/ver[versionnumber].[database].behat
 # example
-/var/www/totara/data/ver11.pgsql
-/var/www/totara/data/ver11.pgsql.phpunit
-/var/www/totara/data/ver11.pgsql.behat
+/var/www/totara/data/ver12.pgsql
+/var/www/totara/data/ver12.pgsql.phpunit
+/var/www/totara/data/ver12.pgsql.behat
 ```
 
 versionnumber = 22, 24, 25, 26, 27, 29, 9, 10, 11, 12
 database = pgsql, mysql, mssql
+
+To create a custom data directory just log into the nginx container (`tbash nginx`) and then create your custom folder inside `/var/www/totara/data`.
 
 #### Config example
 
