@@ -53,7 +53,7 @@ Although this project started as a development environment for Totara Learn it c
 
 __Example:__
 ```bash
-127.0.0.1   localhost totara54 totara54.behat totara55 totara55.behat totara56 totara56.behat totara70 totara70.behat totara71 totara71.behat totara72 totara72.behat
+127.0.0.1   localhost totara54 totara54.behat totara55 totara55.behat totara56 totara56.behat totara70 totara70.behat totara71 totara71.behat totara72 totara72.behat totara73 totara73.behat
 ```
 
 ## Use

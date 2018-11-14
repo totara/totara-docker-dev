@@ -60,3 +60,12 @@ services:
 
   php-7.2-debug:
     build: ./php/php72-debug
+
+  php-7.3:
+    build:
+      context: ./php/php73
+      args:
+        TIME_ZONE: ${TIME_ZONE}
+
+  php-7.3-debug:
+    build: ./php/php73-debug

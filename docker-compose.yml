@@ -211,6 +211,36 @@ services:
     networks:
       - totara
 
+  php-7.3:
+    image: totara/docker-dev-php73
+    container_name: totara_php73
+    working_dir: ${REMOTE_SRC}
+    environment:
+      HIST_FILE: /root/.bash_history
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+      - $HOME/.bash_history:/root/.bash_history
+    depends_on:
+      - php-7.3-debug
+    networks:
+      - totara
+
+  php-7.3-debug:
+    image: totara/docker-dev-php73-debug
+    container_name: totara_php73_debug
+    working_dir: ${REMOTE_SRC}
+    environment:
+      XDEBUG_CONFIG: remote_host=${HOST_IP}
+      PHP_IDE_CONFIG: serverName=totara73
+      HIST_FILE: /root/.bash_history
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+      - $HOME/.bash_history:/root/.bash_history
+    networks:
+      - totara
+
   nodejs:
     image: node:8.11
     container_name: totara_nodejs
