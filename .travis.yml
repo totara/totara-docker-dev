@@ -1,0 +1,15 @@
+language: python
+python:
+- 2.7
+
+services:
+- docker
+
+install:
+- docker build -t php72 php/php72
+- docker run -d --name php72 php72
+
+before_script:
+
+script:
+- docker ps | grep -q php72
