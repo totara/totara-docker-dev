@@ -6,10 +6,59 @@ services:
 - docker
 
 install:
+- docker build -t nginx nginx
+- docker run -d --name nginx nginx
+
+- docker build -t mssql mssql
+- docker run -d --name mssql mssql
+
+- docker build -t php54 php/php54
+- docker build -t php54-debug php/php54-debug
+- docker run -d --name php54 php54
+- docker run -d --name php54-debug php54-debug
+
+- docker build -t php55 php/php55
+- docker build -t php55-debug php/php55-debug
+- docker run -d --name php55 php55
+- docker run -d --name php55-debug php55-debug
+
+- docker build -t php56 php/php56
+- docker build -t php56-debug php/php56-debug
+- docker run -d --name php56 php56
+- docker run -d --name php56-debug php56-debug
+
+- docker build -t php70 php/php70
+- docker build -t php70-debug php/php70-debug
+- docker run -d --name php70 php70
+- docker run -d --name php70-debug php70-debug
+
+- docker build -t php71 php/php71
+- docker build -t php71-debug php/php71-debug
+- docker run -d --name php71 php71
+- docker run -d --name php71-debug php71-debug
+
 - docker build -t php72 php/php72
+- docker build -t php72-debug php/php72-debug
 - docker run -d --name php72 php72
+- docker run -d --name php72-debug php72-debug
 
 before_script:
 
 script:
+- docker ps | grep -q nginx
+- docker ps | grep -q mssql
+- docker ps | grep -q php54
+- docker ps | grep -q php54-debug
+- docker ps | grep -q php55
+- docker ps | grep -q php55-debug
+- docker ps | grep -q php56
+- docker ps | grep -q php56-debug
+- docker ps | grep -q php70
+- docker ps | grep -q php70-debug
+- docker ps | grep -q php71
+- docker ps | grep -q php71-debug
 - docker ps | grep -q php72
+- docker ps | grep -q php72-debug
+
+after_script:
+- docker images
