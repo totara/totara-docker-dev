@@ -27,13 +27,13 @@ services:
 - docker
 
 install:
-- docker build -t myimage $DOCKER_IMAGE
-- docker run --rm -d --name myimage myimage
+- docker build -t ${DOCKER_IMAGE/\//-} $DOCKER_IMAGE
+- docker run --rm -d --name ${DOCKER_IMAGE/\//-} ${DOCKER_IMAGE/\//-}
 
 before_script:
 
 script:
-- docker ps | grep -q myimage
+- docker ps | grep -q ${DOCKER_IMAGE/\//-}
 
 after_script:
 - docker images
