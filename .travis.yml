@@ -22,13 +22,13 @@ services:
 - docker
 
 install:
-- docker build -t $DOCKER_IMAGE $DOCKER_IMAGE
-- docker run --rm -d --name $DOCKER_IMAGE $DOCKER_IMAGE
+- docker build -t myimage $DOCKER_IMAGE
+- docker run --rm -d --name myimage myimage
 
 before_script:
 
 script:
-- docker ps | grep -q $DOCKER_IMAGE
+- docker ps | grep -q myimage
 
 after_script:
 - docker images
