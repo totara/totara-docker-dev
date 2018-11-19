@@ -1,0 +1,49 @@
+language: python
+python:
+- 2.7
+
+cache:
+  bundler: true
+  directories:
+  - $HOME/docker
+
+env:
+- DOCKER_IMAGE=nginx
+- DOCKER_IMAGE=mssql
+- DOCKER_IMAGE=php/php54
+- DOCKER_IMAGE=php/php54-debug
+- DOCKER_IMAGE=php/php55
+- DOCKER_IMAGE=php/php55-debug
+- DOCKER_IMAGE=php/php56
+- DOCKER_IMAGE=php/php56-debug
+- DOCKER_IMAGE=php/php70
+- DOCKER_IMAGE=php/php70-debug
+- DOCKER_IMAGE=php/php71
+- DOCKER_IMAGE=php/php71-debug
+- DOCKER_IMAGE=php/php72
+- DOCKER_IMAGE=php/php72-debug
+
+services:
+- docker
+
+install:
+- docker build -t ${DOCKER_IMAGE/\//-} $DOCKER_IMAGE
+- docker run --rm -d --name ${DOCKER_IMAGE/\//-} ${DOCKER_IMAGE/\//-}
+
+before_script:
+
+script:
+- docker ps | grep -q ${DOCKER_IMAGE/\//-}
+
+after_script:
+- docker images
+
+before_cache:
+# Save tagged docker images
+- >
+  mkdir -p $HOME/docker && docker images -a --filter='dangling=false' --format '{{.Repository}}:{{.Tag}} {{.ID}}'
+  | xargs -n 2 -t sh -c 'test -e $HOME/docker/$1.tar.gz || docker save $0 | gzip -2 > $HOME/docker/$1.tar.gz'
+
+before_install:
+# Load cached docker images
+- if [[ -d $HOME/docker ]]; then ls $HOME/docker/*.tar.gz | xargs -I {file} sh -c "zcat {file} | docker load"; fi
