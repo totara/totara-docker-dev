@@ -15,6 +15,8 @@ php71 | 7.1 |  [Dockerfile](https://github.com/totara/totara-docker-dev/blob/mas
 php71-debug | 7.1 + xdebug 2.6.0 |  [Dockerfile](https://github.com/totara/totara-docker-dev/blob/master/php/php71-debug/Dockerfile) | [![Build status PHP 7.1 Debug](https://img.shields.io/docker/build/totara/docker-dev-php71-debug.svg)](https://hub.docker.com/r/totara/docker-dev-php71-debug/)
 php72 | 7.2 |  [Dockerfile](https://github.com/totara/totara-docker-dev/blob/master/php/php72/Dockerfile) | [![Build status PHP 7.2](https://img.shields.io/docker/build/totara/docker-dev-php72.svg)](https://hub.docker.com/r/totara/docker-dev-php72/)
 php72-debug | 7.2 + xdebug 2.6.0 |  [Dockerfile](https://github.com/totara/totara-docker-dev/blob/master/php/php72-debug/Dockerfile) | [![Build status PHP 7.2 Debug](https://img.shields.io/docker/build/totara/docker-dev-php72-debug.svg)](https://hub.docker.com/r/totara/docker-dev-php72-debug/)
+php73 | 7.3 |  [Dockerfile](https://github.com/totara/totara-docker-dev/blob/master/php/php73/Dockerfile) | [![Build status PHP 7.3](https://img.shields.io/docker/build/totara/docker-dev-php73.svg)](https://hub.docker.com/r/totara/docker-dev-php73/)
+php73-debug | 7.3 + xdebug 2.6.0 |  [Dockerfile](https://github.com/totara/totara-docker-dev/blob/master/php/php73-debug/Dockerfile) | [![Build status PHP 7.3 Debug](https://img.shields.io/docker/build/totara/docker-dev-php73-debug.svg)](https://hub.docker.com/r/totara/docker-dev-php73-debug/)
 
 # A Docker setup for local Totara Learn development
 
@@ -26,7 +28,7 @@ Although this project started as a development environment for Totara Learn it c
 
 ### What you get:
  * [NGINX](https://nginx.org/) as a webserver
- * [PHP](http://php.net/) 5.4, 5.5, 5.6, 7.0, 7.1, 7.2 to test for different versions
+ * [PHP](http://php.net/) 5.4, 5.5, 5.6, 7.0, 7.1, 7.2, 7.3 to test for different versions
  * [PostgreSQL](https://www.postgresql.org/) (9.3.x and 10.x), [MariaDB](https://mariadb.org/) (10.2.x) and [MySQL](https://www.mysql.com/) (5.7.x), and [Microsoft SQL Server 2017](https://www.microsoft.com/en-us/sql-server/sql-server-2017) support
  * A [PHPUnit](https://phpunit.de/) and [Behat](http://behat.org/en/latest/) setup to run tests (including [Selenium](https://www.seleniumhq.org/))
  * A [mailcatcher](https://mailcatcher.me/) instance to inspect mails

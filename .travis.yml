@@ -17,6 +17,8 @@ env:
 - DOCKER_IMAGE=php/php71-debug
 - DOCKER_IMAGE=php/php72
 - DOCKER_IMAGE=php/php72-debug
+- DOCKER_IMAGE=php/php73
+- DOCKER_IMAGE=php/php73-debug
 
 services:
 - docker
