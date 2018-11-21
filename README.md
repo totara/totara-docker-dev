@@ -1,3 +1,5 @@
+TravisCI build: [![Build Status](https://travis-ci.com/totara/totara-docker-dev.svg?branch=master)](https://travis-ci.com/totara/totara-docker-dev)
+
 ### Container versions and build status:
 Name | Version | Dockerfile | Build
 --- | --- | --- | ---
