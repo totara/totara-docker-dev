@@ -29,6 +29,8 @@ services:
             - totara71.behat
             - totara72
             - totara72.behat
+            - totara73
+            - totara73.behat
             - totara72.behat.totaralms.com
 
   php-5.4:
@@ -369,7 +371,7 @@ services:
       - totara
 
   selenium-chrome-standalone:
-    image: selenium/standalone-chrome
+    image: selenium/standalone-chrome:3.13
     container_name: totara_chrome_standalone
     ports:
       - "4445:4444"
