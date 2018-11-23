@@ -16,6 +16,9 @@ services:
   php-5.4-debug:
     build: ./php/php54-debug
 
+  php-5.4-cron:
+    build: ./php/php54-cron
+
   php-5.5:
     build:
       context: ./php/php55
@@ -24,6 +27,9 @@ services:
 
   php-5.5-debug:
     build: ./php/php55-debug
+
+  php-5.5-cron:
+    build: ./php/php55-cron
 
   php-5.6:
     build:
@@ -34,6 +40,9 @@ services:
   php-5.6-debug:
     build: ./php/php56-debug
 
+  php-5.6-cron:
+    build: ./php/php56-cron
+
   php-7.0:
     build:
       context: ./php/php70
@@ -42,6 +51,9 @@ services:
 
   php-7.0-debug:
     build: ./php/php70-debug
+
+  php-7.0-cron:
+    build: ./php/php70-cron
 
   php-7.1:
     build:
@@ -52,6 +64,9 @@ services:
   php-7.1-debug:
     build: ./php/php71-debug
 
+  php-7.1-cron:
+    build: ./php/php71-cron
+
   php-7.2:
     build:
       context: ./php/php72
@@ -61,6 +76,9 @@ services:
   php-7.2-debug:
     build: ./php/php72-debug
 
+  php-7.2-cron:
+    build: ./php/php72-cron
+
   php-7.3:
     build:
       context: ./php/php73
@@ -69,3 +87,6 @@ services:
 
   php-7.3-debug:
     build: ./php/php73-debug
+
+  php-7.3-cron:
+    build: ./php/php73-cron

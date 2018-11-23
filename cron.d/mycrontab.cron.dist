@@ -1,0 +1,7 @@
+# You can use this crontab as a template just copy it to mycrontab.cron and run the container
+#  The part "> /proc/1/fd/1 2>/proc/1/fd/2" makes sure the output goes to the docker logs
+
+# keep this line for ensuring the correct bin paths for all containers
+PATH=$PATH:/usr/bin:/usr/local/bin
+
+* * * * *   cd /var/www/totara/src && php admin/cli/cron.php > /proc/1/fd/1 2>/proc/1/fd/2

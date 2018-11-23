@@ -266,10 +266,10 @@ Make sure your config file contains the PHPUnit configuration needed and the dat
 Log into one of the PHP containers:
 ```bash
 tbash php-5.6
-tbash php-7.1
+tbash php-7.2
 # or if you need xdebug support
 tbash php-5.6-debug
-tbash php-7.1-debug
+tbash php-7.2-debug
 ```
 
 If your project is in a subfolder:
@@ -294,10 +294,10 @@ Make sure your config file contains the Behat configuration needed and the datab
 Log into one of the PHP containers:
 ```bash
 tbash php-5.6
-tbash php-7.1
+tbash php-7.2
 # or if you need xdebug support
 tbash php-5.6-debug
-tbash php-7.1-debug
+tbash php-7.2-debug
 ```
 
 If your project is in a subfolder:
@@ -327,6 +327,25 @@ By default prebuilt images from [Docker Hub](https://hub.docker.com/u/totara/) w
 tbuild
 # or for individual images
 tbuild php-7.2
+```
+
+## Running Cron
+
+You can run the cron manually by logging into a php container and run `php admin/cli/cron.php` from your source root. 
+
+You can also use the cron containers to run the cron automatically using crontab. Just create your own crontab files within the `cron.d` folder and start a cron container like:
+
+```bash
+tdocker run php-7.2-cron
+
+# or daemonized in the background
+tdocker run -d php-7.2-cron
+
+# you can access the logs anytime with
+docker logs -f [name/id of container]
+
+# to stop a daemonized cron container
+docker kill [name/id of container]
 ```
 
 ## Mailcatcher
