@@ -336,16 +336,17 @@ You can run the cron manually by logging into a php container and run `php admin
 You can also use the cron containers to run the cron automatically using crontab. Just create your own crontab files within the `cron.d` folder and start a cron container like:
 
 ```bash
-tdocker run php-7.2-cron
+# in the foreground
+tdocker up php-7.2-cron
 
-# or daemonized in the background
-tdocker run -d php-7.2-cron
+# in the background
+tup php-7.2-cron
 
-# you can access the logs anytime with
-docker logs -f [name/id of container]
+# access the logs anytime with
+tdocker logs -f php-7.2-cron
 
-# to stop a daemonized cron container
-docker kill [name/id of container]
+# stop a daemonized cron container
+tstop php-7.2-cron
 ```
 
 ## Mailcatcher
