@@ -19,14 +19,19 @@ services:
         aliases:
             - totara54
             - totara54.behat
+            - totara54.behat.totaralms.com
             - totara55
             - totara55.behat
+            - totara55.behat.totaralms.com
             - totara56
             - totara56.behat
+            - totara56.behat.totaralms.com
             - totara70
             - totara70.behat
+            - totara70.behat.totaralms.com
             - totara71
             - totara71.behat
+            - totara71.behat.totaralms.com
             - totara72
             - totara72.behat
             - totara72.behat.totaralms.com
