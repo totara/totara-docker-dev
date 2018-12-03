@@ -4,9 +4,6 @@ ARG TIME_ZONE=Pacific/Auckland
 
 ENV DEBIAN_FRONTEND noninteractive
 
-COPY config/php.ini /etc/php5/conf.d/99-php.ini
-COPY config/fpm.conf /etc/php5/fpm/pool.d/zz-totara.conf
-
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     tzdata \
     locales \
@@ -50,6 +47,9 @@ RUN sed -i 's/pm.max_children = 5/pm.max_children = 16/g' /etc/php5/fpm/pool.d/w
 
 RUN echo ${TIME_ZONE} > /etc/timezone \
     && dpkg-reconfigure --frontend noninteractive tzdata
+
+COPY config/php.ini /etc/php5/conf.d/99-php.ini
+COPY config/fpm.conf /etc/php5/fpm/pool.d/zz-totara.conf
 
 EXPOSE 9000
 
