@@ -2,9 +2,6 @@ FROM php:7.3-rc-fpm
 
 ARG TIME_ZONE=Pacific/Auckland
 
-COPY config/php.ini /usr/local/etc/php/
-COPY config/fpm.conf /usr/local/etc/php-fpm.d/zz-totara.conf
-
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         apt-transport-https \
         libfreetype6-dev \
@@ -79,3 +76,6 @@ RUN pear config-set php_ini `php --ini | grep "Loaded Configuration" | sed -e "s
 
 RUN ln -fs /usr/share/zoneinfo/${TIME_ZONE} /etc/localtime \
     && dpkg-reconfigure --frontend noninteractive tzdata
+
+COPY config/php.ini /usr/local/etc/php/
+COPY config/fpm.conf /usr/local/etc/php-fpm.d/zz-totara.conf
