@@ -6,7 +6,7 @@ cd $REMOTE_DATA
 
 echo "Creating data folders..."
 
-versions=("22" "24" "25" "26" "27" "29" "9" "10" "11" "12")
+versions=("22" "24" "25" "26" "27" "29" "9" "10" "11" "12" "13")
 
 for i in "${versions[@]}"
 do
