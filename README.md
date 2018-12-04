@@ -167,16 +167,16 @@ Create a database for each Totara version you would like to develop on.
 Example commands:
 ```sql
 # PostgreSQL
-CREATE DATABASE totara_12;
+CREATE DATABASE totara_13;
 
 # MariaDB/MySQL
-CREATE DATABASE totara_12 DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+CREATE DATABASE totara_13 DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
 
 # MSSQL
-CREATE DATABASE totara_12 COLLATE Latin1_General_CS_AS
-ALTER DATABASE totara_12 SET ANSI_NULLS ON
-ALTER DATABASE totara_12 SET QUOTED_IDENTIFIER ON
-ALTER DATABASE totara_12 SET READ_COMMITTED_SNAPSHOT ON;
+CREATE DATABASE totara_13 COLLATE Latin1_General_CS_AS
+ALTER DATABASE totara_13 SET ANSI_NULLS ON
+ALTER DATABASE totara_13 SET QUOTED_IDENTIFIER ON
+ALTER DATABASE totara_13 SET READ_COMMITTED_SNAPSHOT ON;
 ```
 
 #### data directories
@@ -190,19 +190,19 @@ All data directories have to be created within the `/var/www/totara/data` direct
 /var/www/totara/data/ver[versionnumber].[database].phpunit
 /var/www/totara/data/ver[versionnumber].[database].behat
 # example
-/var/www/totara/data/ver12.pgsql
-/var/www/totara/data/ver12.pgsql.phpunit
-/var/www/totara/data/ver12.pgsql.behat
+/var/www/totara/data/ver13.pgsql
+/var/www/totara/data/ver13.pgsql.phpunit
+/var/www/totara/data/ver13.pgsql.behat
 ```
 
-versionnumber = 22, 24, 25, 26, 27, 29, 9, 10, 11, 12
+versionnumber = 22, 24, 25, 26, 27, 29, 9, 10, 11, 12, 13
 database = pgsql, mysql, mssql
 
 To create a custom data directory just log into the nginx container (`tbash nginx`) and then create your custom folder inside `/var/www/totara/data`.
 
 #### Config example
 
-This is an example for the t12 branch with the 3 different databases and the correct data directories. Please note: You will need additional configuration parameters for PHPUnit and Behat. Please refer to Totara docs and have a look at config-dist.php for examples.
+This is an example for the t13 branch with the 3 different databases and the correct data directories. Please note: You will need additional configuration parameters for PHPUnit and Behat. Please refer to Totara docs and have a look at config-dist.php for examples.
 
 ```php
 //=========================================================================
@@ -217,29 +217,29 @@ This is an example for the t12 branch with the 3 different databases and the cor
 //$CFG->dbhost    = 'mysql';  // eg 'localhost' or 'db.isp.com' or IP
 //$CFG->dbuser    = 'root';   // your database username
 //$CFG->dbpass    = 'root';   // your database password
-//$CFG->dataroot  = '/var/www/totara/data/ver12.mysql';
-//$CFG->behat_dataroot = '/var/www/totara/data/ver12.mysql.behat';
-//$CFG->phpunit_dataroot = '/var/www/totara/data/ver12.mysql.phpunit';
+//$CFG->dataroot  = '/var/www/totara/data/ver13.mysql';
+//$CFG->behat_dataroot = '/var/www/totara/data/ver13.mysql.behat';
+//$CFG->phpunit_dataroot = '/var/www/totara/data/ver13.mysql.phpunit';
 
 //$CFG->dbtype    = 'sqlsrv';
 //$CFG->dbhost    = 'mssql';  // eg 'localhost' or 'db.isp.com' or IP
 //$CFG->dbuser    = 'SA';   // your database username
 //$CFG->dbpass    = 'Totara.Mssql1';   // your database password
-//$CFG->dataroot  = '/var/www/totara/data/ver12.mssql';
-//$CFG->behat_dataroot = '/var/www/totara/data/ver12.mssql.behat';
-//$CFG->phpunit_dataroot = '/var/www/totara/data/ver12.mssql.phpunit';
+//$CFG->dataroot  = '/var/www/totara/data/ver13.mssql';
+//$CFG->behat_dataroot = '/var/www/totara/data/ver13.mssql.behat';
+//$CFG->phpunit_dataroot = '/var/www/totara/data/ver13.mssql.phpunit';
 
 $CFG->dbtype    = 'pgsql';      // 'pgsql', 'mariadb', 'mysqli', 'mssql', 'sqlsrv'
 $CFG->dbhost    = 'pgsql';  // eg 'localhost' or 'db.isp.com' or IP
 $CFG->dbuser    = 'postgres';   // your database username
 $CFG->dbpass    = '';   // your database password
-$CFG->dataroot  = '/var/www/totara/data/ver12.pgsql';
-$CFG->behat_dataroot = '/var/www/totara/data/ver12.pgsql.behat';
-$CFG->phpunit_dataroot = '/var/www/totara/data/ver12.pgsql.phpunit';
+$CFG->dataroot  = '/var/www/totara/data/ver13.pgsql';
+$CFG->behat_dataroot = '/var/www/totara/data/ver13.pgsql.behat';
+$CFG->phpunit_dataroot = '/var/www/totara/data/ver13.pgsql.phpunit';
 
 
 $CFG->dblibrary = 'native';     // 'native' only at the moment
-$CFG->dbname    = 'totara_12';     // database name, eg moodle
+$CFG->dbname    = 'totara_13';     // database name, eg moodle
 $CFG->prefix    = 'mdl_';       // prefix to use for all table names
 $CFG->dboptions = array(
     'dbpersist' => false,       // should persistent database connections be
@@ -377,9 +377,9 @@ Or you use the shortcut bash script:
 
 ```bash
 tgrunt
-# if your project lives in the subfolder 12 then run
-tgrunt 12
+# if your project lives in the subfolder 13 then run
+tgrunt 13
 # if you want to run a specific grunt task
-tgrunt 12 gherkinlint
+tgrunt 13 gherkinlint
 
 ``` 
