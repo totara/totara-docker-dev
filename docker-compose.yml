@@ -328,7 +328,7 @@ services:
     working_dir: ${REMOTE_SRC}
 
   pgsql:
-    image: postgres:10.4
+    image: postgres:11.1
     container_name: totara_pgsql
     ports:
       - "5432:5432"
@@ -336,6 +336,20 @@ services:
       PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
       - pgsql-data:/var/lib/postgresql/data
+    depends_on:
+     - nginx
+    networks:
+      - totara
+
+  pgsql10:
+    image: postgres:10.6
+    container_name: totara_pgsql
+    ports:
+      - "5410:5432"
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - pgsql10-data:/var/lib/postgresql/data
     depends_on:
      - nginx
     networks:
@@ -474,6 +488,7 @@ services:
 
 volumes:
     pgsql-data:
+    pgsql10-data:
     pgsql93-data:
     mssql-data:
     mysql-data:
