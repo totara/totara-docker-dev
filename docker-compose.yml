@@ -329,7 +329,7 @@ services:
 
   pgsql:
     image: postgres:11.1
-    container_name: totara_pgsql
+    container_name: totara_pgsql11
     ports:
       - "5432:5432"
     environment:
@@ -343,7 +343,7 @@ services:
 
   pgsql10:
     image: postgres:10.6
-    container_name: totara_pgsql
+    container_name: totara_pgsql10
     ports:
       - "5410:5432"
     environment:
