@@ -1,0 +1,24 @@
+version: "2"
+services:
+
+  mariadb:
+    image: mariadb:10
+    container_name: totara_mariadb
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PW}
+    volumes:
+      - mariadb-data:/var/lib/mysql
+      - ./mariadb:/etc/mysql/conf.d
+    depends_on:
+      - nginx
+    mem_swappiness: 1
+    networks:
+      - totara
+
+volumes:
+    mariadb-data:
+
+networks:
+  totara:

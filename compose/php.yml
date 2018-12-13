@@ -1,0 +1,285 @@
+version: "2"
+services:
+
+  php-5.4:
+    image: totara/docker-dev-php54
+    container_name: totara_php54
+    working_dir: ${REMOTE_SRC}
+    environment:
+      HIST_FILE: /root/.bash_history
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+      - $HOME/.bash_history:/root/.bash_history
+    depends_on:
+      - php-5.4-debug
+    networks:
+      - totara
+
+  php-5.4-debug:
+    image: totara/docker-dev-php54-debug
+    container_name: totara_php54_debug
+    working_dir: ${REMOTE_SRC}
+    environment:
+      HOST_IP: ${HOST_IP}
+      PHP_IDE_CONFIG: serverName=totara54
+      HIST_FILE: /root/.bash_history
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+      - $HOME/.bash_history:/root/.bash_history
+    networks:
+      - totara
+
+  php-5.4-cron:
+    image: totara/docker-dev-php54-cron
+    container_name: totara_php54_cron
+    volumes:
+    - ${LOCAL_SRC}:${REMOTE_SRC}
+    - totara-data:${REMOTE_DATA}
+    - ./cron.d:/etc/cron.d
+    networks:
+    - totara
+
+  php-5.5:
+    image: totara/docker-dev-php55
+    container_name: totara_php55
+    working_dir: ${REMOTE_SRC}
+    environment:
+      HIST_FILE: /root/.bash_history
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+      - $HOME/.bash_history:/root/.bash_history
+    depends_on:
+      - php-5.5-debug
+    networks:
+      - totara
+
+  php-5.5-debug:
+    image: totara/docker-dev-php55-debug
+    container_name: totara_php55_debug
+    working_dir: ${REMOTE_SRC}
+    environment:
+      XDEBUG_CONFIG: remote_host=${HOST_IP}
+      PHP_IDE_CONFIG: serverName=totara55
+      HIST_FILE: /root/.bash_history
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+      - $HOME/.bash_history:/root/.bash_history
+    networks:
+      - totara
+
+  php-5.5-cron:
+    image: totara/docker-dev-php55-cron
+    container_name: totara_php55_cron
+    volumes:
+    - ${LOCAL_SRC}:${REMOTE_SRC}
+    - totara-data:${REMOTE_DATA}
+    - ./cron.d:/etc/cron.d
+    networks:
+    - totara
+
+  php-5.6:
+    image: totara/docker-dev-php56
+    container_name: totara_php56
+    working_dir: ${REMOTE_SRC}
+    environment:
+      HIST_FILE: /root/.bash_history
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+      - $HOME/.bash_history:/root/.bash_history
+    depends_on:
+      - php-5.6-debug
+    networks:
+      - totara
+
+  php-5.6-debug:
+    image: totara/docker-dev-php56-debug
+    container_name: totara_php56_debug
+    working_dir: ${REMOTE_SRC}
+    environment:
+      XDEBUG_CONFIG: remote_host=${HOST_IP}
+      PHP_IDE_CONFIG: serverName=totara56
+      HIST_FILE: /root/.bash_history
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+      - $HOME/.bash_history:/root/.bash_history
+    networks:
+      - totara
+
+  php-5.6-cron:
+    image: totara/docker-dev-php56-cron
+    container_name: totara_php56_cron
+    volumes:
+    - ${LOCAL_SRC}:${REMOTE_SRC}
+    - totara-data:${REMOTE_DATA}
+    - ./cron.d:/etc/cron.d
+    networks:
+    - totara
+
+  php-7.0:
+    image: totara/docker-dev-php70
+    container_name: totara_php70
+    working_dir: ${REMOTE_SRC}
+    environment:
+      HIST_FILE: /root/.bash_history
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+      - $HOME/.bash_history:/root/.bash_history
+    depends_on:
+      - php-7.0-debug
+    networks:
+      - totara
+
+  php-7.0-debug:
+    image: totara/docker-dev-php70-debug
+    container_name: totara_php70_debug
+    working_dir: ${REMOTE_SRC}
+    environment:
+      XDEBUG_CONFIG: remote_host=${HOST_IP}
+      PHP_IDE_CONFIG: serverName=totara70
+      HIST_FILE: /root/.bash_history
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+      - $HOME/.bash_history:/root/.bash_history
+    networks:
+      - totara
+
+  php-7.0-cron:
+    image: totara/docker-dev-php70-cron
+    container_name: totara_php70_cron
+    volumes:
+    - ${LOCAL_SRC}:${REMOTE_SRC}
+    - totara-data:${REMOTE_DATA}
+    - ./cron.d:/etc/cron.d
+    networks:
+    - totara
+
+  php-7.1:
+    image: totara/docker-dev-php71
+    container_name: totara_php71
+    working_dir: ${REMOTE_SRC}
+    environment:
+      HIST_FILE: /root/.bash_history
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+      - $HOME/.bash_history:/root/.bash_history
+    depends_on:
+      - php-7.1-debug
+    networks:
+      - totara
+
+  php-7.1-debug:
+    image: totara/docker-dev-php71-debug
+    container_name: totara_php71_debug
+    working_dir: ${REMOTE_SRC}
+    environment:
+      XDEBUG_CONFIG: remote_host=${HOST_IP}
+      PHP_IDE_CONFIG: serverName=totara71
+      HIST_FILE: /root/.bash_history
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+      - $HOME/.bash_history:/root/.bash_history
+    networks:
+      - totara
+
+  php-7.1-cron:
+    image: totara/docker-dev-php71-cron
+    container_name: totara_php71_cron
+    volumes:
+    - ${LOCAL_SRC}:${REMOTE_SRC}
+    - totara-data:${REMOTE_DATA}
+    - ./cron.d:/etc/cron.d
+    networks:
+    - totara
+
+  php-7.2:
+    image: totara/docker-dev-php72
+    container_name: totara_php72
+    working_dir: ${REMOTE_SRC}
+    environment:
+      HIST_FILE: /root/.bash_history
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+      - $HOME/.bash_history:/root/.bash_history
+    depends_on:
+      - php-7.2-debug
+    networks:
+      - totara
+
+  php-7.2-debug:
+    image: totara/docker-dev-php72-debug
+    container_name: totara_php72_debug
+    working_dir: ${REMOTE_SRC}
+    environment:
+      XDEBUG_CONFIG: remote_host=${HOST_IP}
+      PHP_IDE_CONFIG: serverName=totara72
+      HIST_FILE: /root/.bash_history
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+      - $HOME/.bash_history:/root/.bash_history
+    networks:
+      - totara
+
+  php-7.2-cron:
+    image: totara/docker-dev-php72-cron
+    container_name: totara_php72_cron
+    volumes:
+    - ${LOCAL_SRC}:${REMOTE_SRC}
+    - totara-data:${REMOTE_DATA}
+    - ./cron.d:/etc/cron.d
+    networks:
+    - totara
+
+  php-7.3:
+    image: totara/docker-dev-php73
+    container_name: totara_php73
+    working_dir: ${REMOTE_SRC}
+    environment:
+      HIST_FILE: /root/.bash_history
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+      - $HOME/.bash_history:/root/.bash_history
+    depends_on:
+      - php-7.3-debug
+    networks:
+      - totara
+
+  php-7.3-debug:
+    image: totara/docker-dev-php73-debug
+    container_name: totara_php73_debug
+    working_dir: ${REMOTE_SRC}
+    environment:
+      XDEBUG_CONFIG: remote_host=${HOST_IP}
+      PHP_IDE_CONFIG: serverName=totara73
+      HIST_FILE: /root/.bash_history
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+      - $HOME/.bash_history:/root/.bash_history
+    networks:
+      - totara
+
+  php-7.3-cron:
+    image: totara/docker-dev-php73-cron
+    container_name: totara_php73_cron
+    volumes:
+    - ${LOCAL_SRC}:${REMOTE_SRC}
+    - totara-data:${REMOTE_DATA}
+    - ./cron.d:/etc/cron.d
+    networks:
+    - totara
+
+volumes:
+    totara-data:

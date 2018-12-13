@@ -7,7 +7,16 @@ PROJECTPATH="$( cd $SCRIPTPATH && cd ..; pwd -P )"
 # the docker-sync configuration should be used
 if [ -d "$PROJECTPATH/.docker-sync" ]
 then
-    cd $PROJECTPATH; docker-compose -f docker-compose.yml -f docker-compose-sync.yml "$@"
+    cd $PROJECTPATH; docker-compose \
+        -f docker-compose.yml \
+        -f compose/nginx.yml \
+        -f compose/mariadb.yml \
+        -f compose/mssql.yml \
+        -f compose/mysql.yml \
+        -f compose/pgsql.yml \
+        -f compose/php.yml \
+        -f compose/selenium.yml \
+        -f compose/sync.yml "$@"
 else
     cd $PROJECTPATH; docker-compose "$@"
 fi
