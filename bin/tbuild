@@ -3,4 +3,15 @@
 SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 PROJECTPATH="$( cd $SCRIPTPATH && cd ..; pwd -P )"
 
-cd $PROJECTPATH && docker-compose -f docker-compose.yml -f docker-compose-dev.yml build $@
+cd $PROJECTPATH && docker-compose \
+    -f docker-compose.yml \
+    -f compose/nginx.yml \
+    -f compose/mariadb.yml \
+    -f compose/mssql.yml \
+    -f compose/mysql.yml \
+    -f compose/pgsql.yml \
+    -f compose/php.yml \
+    -f compose/selenium.yml \
+    -f compose/build.yml \
+    -f compose/sync.yml \
+    build "$@"

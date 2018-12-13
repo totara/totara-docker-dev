@@ -5,7 +5,7 @@ services:
     build: ./nginx
 
   mssql:
-     build: ./mssql
+    build: ./mssql
 
   php-5.4:
     build:
