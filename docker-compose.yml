@@ -335,7 +335,7 @@ services:
     environment:
       PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
-      - pgsql-data:/var/lib/postgresql/data
+      - pgsql-data11:/var/lib/postgresql/data
     depends_on:
      - nginx
     networks:
@@ -354,6 +354,20 @@ services:
      - nginx
     networks:
       - totara
+
+  pgsql96:
+    image: postgres:9.6
+    container_name: totara_pgsql96
+    ports:
+    - "5496:5432"
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+    - pgsql96-data:/var/lib/postgresql/data
+    depends_on:
+    - nginx
+    networks:
+    - totara
 
   pgsql93:
     image: postgres:9.3
@@ -487,9 +501,10 @@ services:
       - totara
 
 volumes:
-    pgsql-data:
-    pgsql10-data:
     pgsql93-data:
+    pgsql96-data:
+    pgsql10-data:
+    pgsql11-data:
     mssql-data:
     mysql-data:
     mysql80-data:
