@@ -1,4 +1,4 @@
-FROM php:7.3
+FROM php:7.3-fpm
 
 ARG TIME_ZONE=Pacific/Auckland
 
