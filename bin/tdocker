@@ -3,13 +3,29 @@
 SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 PROJECTPATH="$( cd $SCRIPTPATH && cd ..; pwd -P )"
 
-cd $PROJECTPATH; docker-compose \
-    -f docker-compose.yml \
-    -f compose/nginx.yml \
-    -f compose/mariadb.yml \
-    -f compose/mssql.yml \
-    -f compose/mysql.yml \
-    -f compose/pgsql.yml \
-    -f compose/php.yml \
-    -f compose/selenium.yml \
-    -f compose/sync.yml "$@"
+cd $PROJECTPATH;
+
+files=(
+    "docker-compose.yml"
+    "compose/mariadb.yml"
+    "compose/mssql.yml"
+    "compose/mysql.yml"
+    "compose/nginx.yml"
+    "compose/pgsql.yml"
+    "compose/php.yml"
+    "compose/selenium.yml"
+)
+
+if [ -d "$PROJECTPATH/.docker-sync" ]; then
+    files+=(
+        "compose/sync.yml"
+    )
+fi
+
+command="docker-compose "
+for file in "${files[@]}"; do
+    command+=" -f ${file}"
+done
+command+=" ${@}"
+
+eval $command
