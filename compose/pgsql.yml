@@ -6,6 +6,10 @@ services:
     container_name: totara_pgsql93
     ports:
     - "5493:5432"
+    command:
+      postgres
+      -c max_locks_per_transaction=1024
+      -c max_pred_locks_per_transaction=1024
     environment:
       PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
@@ -20,6 +24,10 @@ services:
     container_name: totara_pgsql96
     ports:
     - "5496:5432"
+    command:
+      postgres
+      -c max_locks_per_transaction=1024
+      -c max_pred_locks_per_transaction=1024
     environment:
       PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
@@ -34,6 +42,10 @@ services:
     container_name: totara_pgsql10
     ports:
     - "5410:5432"
+    command:
+      postgres
+      -c max_locks_per_transaction=1024
+      -c max_pred_locks_per_transaction=1024
     environment:
       PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
@@ -48,6 +60,10 @@ services:
     container_name: totara_pgsql11
     ports:
     - "5432:5432"
+    command:
+      postgres
+      -c max_locks_per_transaction=1024
+      -c max_pred_locks_per_transaction=1024
     environment:
       PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
