@@ -5,57 +5,69 @@ services:
     image: postgres:9.3
     container_name: totara_pgsql93
     ports:
-    - "5493:5432"
+      - "5493:5432"
     environment:
       PGDATA: /var/lib/postgresql/data/pgdata
+    command:
+      postgres -c 'config_file=/etc/postgresql/postgresql.conf'
     volumes:
-    - pgsql93-data:/var/lib/postgresql/data
+      - ./pgsql/my-postgres.conf:/etc/postgresql/postgresql.conf
+      - pgsql93-data:/var/lib/postgresql/data
     depends_on:
-    - nginx
+      - nginx
     networks:
-    - totara
+      - totara
 
   pgsql96:
     image: postgres:9.6
     container_name: totara_pgsql96
     ports:
-    - "5496:5432"
+      - "5496:5432"
     environment:
       PGDATA: /var/lib/postgresql/data/pgdata
+    command:
+      postgres -c 'config_file=/etc/postgresql/postgresql.conf'
     volumes:
-    - pgsql96-data:/var/lib/postgresql/data
+      - ./pgsql/my-postgres.conf:/etc/postgresql/postgresql.conf
+      - pgsql96-data:/var/lib/postgresql/data
     depends_on:
-    - nginx
+      - nginx
     networks:
-    - totara
+      - totara
 
   pgsql10:
     image: postgres:10.6
     container_name: totara_pgsql10
     ports:
-    - "5410:5432"
+      - "5410:5432"
     environment:
       PGDATA: /var/lib/postgresql/data/pgdata
+    command:
+      postgres -c 'config_file=/etc/postgresql/postgresql.conf'
     volumes:
-    - pgsql10-data:/var/lib/postgresql/data
+      - ./pgsql/my-postgres.conf:/etc/postgresql/postgresql.conf
+      - pgsql10-data:/var/lib/postgresql/data
     depends_on:
-    - nginx
+      - nginx
     networks:
-    - totara
+      - totara
 
   pgsql:
     image: postgres:11.1
     container_name: totara_pgsql11
     ports:
-    - "5432:5432"
+      - "5432:5432"
     environment:
       PGDATA: /var/lib/postgresql/data/pgdata
+    command:
+      postgres -c 'config_file=/etc/postgresql/postgresql.conf'
     volumes:
-    - pgsql11-data:/var/lib/postgresql/data
+      - ./pgsql/my-postgres.conf:/etc/postgresql/postgresql.conf
+      - pgsql11-data:/var/lib/postgresql/data
     depends_on:
-    - nginx
+      - nginx
     networks:
-    - totara
+      - totara
 
 volumes:
   pgsql93-data:
