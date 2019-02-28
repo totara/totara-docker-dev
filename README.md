@@ -42,16 +42,13 @@ Although this project started as a development environment for Totara Learn it c
  * Totara source code: https://help.totaralearning.com/display/DEV/Getting+the+code
  * Docker: https://www.docker.com (for Docker on Mac please read warning below)
  * Docker-compose: https://docs.docker.com/compose/install (included in Docker for Mac/Windows)
- * Docker-sync: http://docker-sync.io/ (optional, for more speed on Mac, not needed for Linux)
+ * Mutagen: http://mutagen.io/ (optional, for more speed on Mac, not needed for Linux)
  * At least 3.25GB of RAM for MSSQL
-
-> ##### Warning Docker for Mac
-> Please note that there's a current [issue with docker-sync](https://github.com/EugenMayer/docker-sync/issues/517) on Mac and Docker stable versions newer than [17.09.1-ce-mac42](https://docs.docker.com/docker-for-mac/release-notes/#docker-community-edition-17091-ce-mac42-2017-12-11-stable). To be on the safe side I recommend to download and installing this version. In the edge version [18.05.0-ce-mac67 and newer](https://docs.docker.com/docker-for-mac/edge-release-notes/#docker-community-edition-18050-ce-mac67-2018-06-07) the issue seem to be fixed as well.
 
 ## Install
  1. Clone the Totara source code (see requirements) 
  1. Clone this project
- 1. Install docker-sync (optionally, recommended for MAC)
+ 1. Install mutagen (optionally, recommended for MAC)
  1. Copy the file __.env.dist__ to __.env__ and change at least the path to your local Totara source folder (LOCAL_SRC)
  1. Make sure you have all the hosts in your /etc/hosts file to be able to access them via the browser
 
@@ -62,17 +59,31 @@ __Example:__
 
 ## Use
 
-#### First run and docker-sync
+#### mutagen
 
-If you use docker-sync you need to run 
+This should work on all platforms but is especially relevant for Mac OS and Windows as the performance of mounted volumes on those platforms is really bad. If you are using Linux you can skip this as performance there is pretty good, almost native.
+
+Mutagen is a two-way-sync tool with focus on performance. Read more about it here: https://mutagen.io.
+
+It runs in the background and keeps syncing your files onto a mounted volume inside your docker containers. It's pretty performant and the delay is minimal even if you change a lot of files at once.
+
+To use mutagen first install it. On Mac OS you can use homebrew for that or alternatively download the appropriate release file from https://github.com/havoc-io/mutagen/releases
 
 ```bash
-docker-sync start
+brew install havoc-io/mutagen/mutagen
 ```
 
-before any of the following commands. The initial sync takes a while so be patient. 
+To have mutagen automatically start up with your machine
+```bash
+mutagen daemon register
+```
 
-If you then use the following commands in the future dockerp-sync is automatically started with it.
+Then start the daemon. This is a background process without the sync does not work. If you have registered the daemon with the command above you won't need to do this every time.
+```bash
+mutagen daemon start
+```
+
+If you then use the commands `tup` and `tdown` as described in the following chapters the correct sync session is automatically created for you.
 
 #### Start containers
 
@@ -105,7 +116,7 @@ tup
 ```bash
 # this just stops the containers, equivalent to docker-compose stop
 tstop
-# this shuts all containers (and docker-sync) down, equivalent to docker-compose down
+# this shuts all containers (and pauses an existing mutagen session) down, equivalent to docker-compose down
 tdown
 ```
 

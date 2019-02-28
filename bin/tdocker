@@ -18,7 +18,7 @@ files=(
 
 if [ -f "$PROJECTPATH/.use-mutagen" ]; then
     files+=(
-        "compose/mutagen.yml"
+        "compose/sync.yml"
     )
 fi
 

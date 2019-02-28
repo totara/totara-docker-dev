@@ -3,11 +3,24 @@
 SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 PROJECTPATH="$( cd $SCRIPTPATH && cd ..; pwd -P )"
 
-# if there's a docker-sync folder we assume that
-# the docker-sync configuration should be used
+$SCRIPTPATH/tdocker up -d sync "$@"
+
+export $(egrep -v '^#' $PROJECTPATH/.env | xargs)
+
+# if mutagen should be used make sure it's started
 if [ -f "$PROJECTPATH/.use-mutagen" ]
 then
-    $SCRIPTPATH/tdocker up -d mutagen "$@"
-else
-    $SCRIPTPATH/tdocker up -d "$@"
+    # check if there's already a session
+    mutagen list | grep "$REMOTE_SRC" &> /dev/null
+    if [ $? != 0 ]; then
+       mutagen create \
+        --default-directory-mode=0755 \
+        --default-file-mode=0644 \
+        --ignore-vcs \
+        --ignore .idea \
+        --ignore .DS_Store \
+        $LOCAL_SRC docker://totara_sync$REMOTE_SRC
+    else
+        mutagen resume $REMOTE_SRC
+    fi
 fi

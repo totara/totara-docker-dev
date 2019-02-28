@@ -1,4 +1,3 @@
-.docker-sync
 .use-mutagen
 .env
 !.gitkeep
