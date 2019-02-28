@@ -19,7 +19,7 @@ if [ $? != 0 ]; then
     --ignore-vcs \
     --ignore .idea \
     --ignore .DS_Store \
-    /tmp /root/totara/test
+    /syncit /root/totara/test
 fi
 
-./mutagen monitor
+./mutagen monitor totara
