@@ -102,4 +102,3 @@ services:
 
 volumes:
     totara-www-sync:
-        external: true
