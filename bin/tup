@@ -5,9 +5,9 @@ PROJECTPATH="$( cd $SCRIPTPATH && cd ..; pwd -P )"
 
 # if there's a docker-sync folder we assume that
 # the docker-sync configuration should be used
-if [ -d "$PROJECTPATH/.docker-sync" ]
+if [ -f "$PROJECTPATH/.use-mutagen" ]
 then
-    cd $PROJECTPATH; docker-sync start
+    $SCRIPTPATH/tdocker up -d mutagen "$@"
+else
+    $SCRIPTPATH/tdocker up -d "$@"
 fi
-
-$SCRIPTPATH/tdocker up -d "$@"

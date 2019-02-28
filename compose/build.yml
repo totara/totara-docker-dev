@@ -90,3 +90,6 @@ services:
 
   php-7.3-cron:
     build: ./php/php73-cron
+
+  mutagen:
+    build: ./mutagen

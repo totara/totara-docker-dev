@@ -12,6 +12,6 @@ cd $PROJECTPATH && docker-compose \
     -f compose/pgsql.yml \
     -f compose/php.yml \
     -f compose/selenium.yml \
+    -f compose/mutagen.yml \
     -f compose/build.yml \
-    -f compose/sync.yml \
     build "$@"

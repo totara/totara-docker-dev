@@ -1,4 +1,5 @@
 .docker-sync
+.use-mutagen
 .env
 !.gitkeep
 /cron.d/*.cron
