@@ -82,6 +82,10 @@ Then start the daemon. This is a background process without the sync does not wo
 ```bash
 mutagen daemon start
 ```
+To activate the use of mutagen copy the file `.use-mutagen.dist` to `.use-mutagen`.
+```bash
+cp .use-mutagen.dist .use-mutagen
+```
 
 If you then use the commands `tup` and `tdown` as described in the following chapters the correct sync session is automatically created for you.
 
