@@ -377,7 +377,7 @@ tgrunt 13 gherkinlint
 
 ``` 
 
-### mutagen
+## mutagen
 
 This should work on all platforms but is especially relevant for Mac OS and Windows as the performance of mounted volumes on those platforms is really bad. If you are using Linux you can skip this as performance there is pretty good, almost native.
 
