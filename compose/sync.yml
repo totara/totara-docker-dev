@@ -93,6 +93,12 @@ services:
     volumes:
       - totara-www-sync:${REMOTE_SRC}:nocopy
 
+  sync:
+    image: alpine:latest
+    container_name: totara_sync
+    command: tail -f /dev/null
+    volumes:
+      - totara-www-sync:${REMOTE_SRC}:nocopy
+
 volumes:
     totara-www-sync:
-        external: true

@@ -16,7 +16,7 @@ files=(
     "compose/selenium.yml"
 )
 
-if [ -d "$PROJECTPATH/.docker-sync" ]; then
+if [ -f "$PROJECTPATH/.use-mutagen" ]; then
     files+=(
         "compose/sync.yml"
     )

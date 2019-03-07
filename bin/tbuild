@@ -13,5 +13,4 @@ cd $PROJECTPATH && docker-compose \
     -f compose/php.yml \
     -f compose/selenium.yml \
     -f compose/build.yml \
-    -f compose/sync.yml \
     build "$@"
