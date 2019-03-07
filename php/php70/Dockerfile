@@ -60,15 +60,18 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
     unixodbc \
     libgss3 \
     unixodbc-dev \
-    msodbcsql=13.1.9.2-1 \
-    mssql-tools=14.0.7.0-1
+    msodbcsql \
+    mssql-tools
 
 RUN echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile \
     && echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
 
+# using version 5.3.0 here as it's the last one with support for PHP 7.0
 RUN pear config-set php_ini `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"` system \
-    && pecl install sqlsrv \
-    && pecl install pdo_sqlsrv
+    && pecl install sqlsrv-5.3.0 \
+    && pecl install pdo_sqlsrv-5.3.0
+
+RUN docker-php-ext-enable sqlsrv.so && docker-php-ext-enable pdo_sqlsrv.so
 
 RUN ln -fs /usr/share/zoneinfo/${TIME_ZONE} /etc/localtime \
     && dpkg-reconfigure --frontend noninteractive tzdata

@@ -57,8 +57,8 @@ ENV LC_ALL en_US.UTF-8
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
     && curl https://packages.microsoft.com/config/debian/8/prod.list | tee /etc/apt/sources.list.d/mssql-tools.list \
     && apt-get update && ACCEPT_EULA=Y apt-get install -y \
-    msodbcsql=13.1.9.2-1 \
-    mssql-tools=14.0.7.0-1 \
+    msodbcsql \
+    mssql-tools \
     unixodbc-dev
 
 # Workaround to get MSSQL connection working on Debian 9 (stretch)
@@ -72,6 +72,8 @@ RUN echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile \
 RUN pear config-set php_ini `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"` system \
     && pecl install sqlsrv \
     && pecl install pdo_sqlsrv
+
+RUN docker-php-ext-enable sqlsrv.so && docker-php-ext-enable pdo_sqlsrv.so
 
 RUN ln -fs /usr/share/zoneinfo/${TIME_ZONE} /etc/localtime \
     && dpkg-reconfigure --frontend noninteractive tzdata
