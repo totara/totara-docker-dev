@@ -191,7 +191,7 @@ All data directories have to be created within the `/var/www/totara/data` direct
 versionnumber = 22, 24, 25, 26, 27, 29, 9, 10, 11, 12, 13
 database = pgsql, mysql, mssql
 
-To create a custom data directory just log into the nginx container (`tbash nginx`) and then create your custom folder inside `/var/www/totara/data`.
+To create a custom data directory just log into the nginx container (`tbash nginx`) and then create your custom folder inside `/var/www/totara/data`. You may need to create custom directories for multiple installations. If you do this, you will also need to set the correct permissions on custom directories that you create (e.g.; `chown www-data:www-data /var/www/totara/data/ver13_custom.pgsql`).
 
 #### Config example
 
