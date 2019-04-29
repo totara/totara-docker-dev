@@ -81,3 +81,6 @@ RUN ln -fs /usr/share/zoneinfo/${TIME_ZONE} /etc/localtime \
 
 COPY config/php.ini /usr/local/etc/php/
 COPY config/fpm.conf /usr/local/etc/php-fpm.d/zz-totara.conf
+
+# Source each .bash file found in the /bash/ folder
+RUN echo 'for f in ~/custom_bash/*.bash; do [[ -e "$f" ]] && source "$f"; done;' >> ~/.bashrc

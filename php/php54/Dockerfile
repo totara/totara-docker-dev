@@ -91,6 +91,9 @@ COPY config/php.ini /tmp/php.ini
 RUN cat /tmp/php.ini >> /usr/local/php/lib/php.ini
 COPY config/fpm.conf /usr/local/php/etc/php-fpm.d/zz-totara.conf
 
+# Source each .bash file found in the /bash/ folder
+RUN echo 'for f in ~/custom_bash/*.bash; do [[ -e "$f" ]] && source "$f"; done;' >> ~/.bashrc
+
 EXPOSE 9000
 
 CMD ["/usr/local/php/sbin/php-fpm", "-F"]

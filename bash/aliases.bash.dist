@@ -1,0 +1,22 @@
+# You can use these aliases as a template, just copy/rename this file to aliases.bash
+
+# Perform a fresh install of Totara
+alias install='php admin/cli/install_database.php --adminpass=admin --adminemail=admin@totara.local --agree-license --fullname=Totara\ 13\ Dev --shortname=t13-dev'
+
+# Initialise PHPUnit
+alias installunit='php admin/tool/phpunit/cli/init.php'
+
+# Initialise Behat
+alias installbehat='php admin/tool/behat/cli/init.php'
+
+# Run PhpUnit
+alias unit='vendor/bin/phpunit --test-suffix="test.php" '
+
+# Run Behat
+alias behat='vendor/bin/behat '
+
+# Run cron
+alias cron='php admin/cli/cron.php'
+
+# Create a test course
+alias createcourse='php admin/tool/generator/cli/maketestcourse.php --shortname=course --size=S'

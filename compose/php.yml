@@ -11,6 +11,7 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
+      - ./bash:/root/custom_bash
     depends_on:
       - php-5.4-debug
     networks:
@@ -28,6 +29,7 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
+      - ./bash:/root/custom_bash
     networks:
       - totara
 
@@ -51,6 +53,7 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
+      - ./bash:/root/custom_bash
     depends_on:
       - php-5.5-debug
     networks:
@@ -68,6 +71,7 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
+      - ./bash:/root/custom_bash
     networks:
       - totara
 
@@ -91,6 +95,7 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
+      - ./bash:/root/custom_bash
     depends_on:
       - php-5.6-debug
     networks:
@@ -108,6 +113,7 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
+      - ./bash:/root/custom_bash
     networks:
       - totara
 
@@ -131,6 +137,7 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
+      - ./bash:/root/custom_bash
     depends_on:
       - php-7.0-debug
     networks:
@@ -148,6 +155,7 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
+      - ./bash:/root/custom_bash
     networks:
       - totara
 
@@ -171,6 +179,7 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
+      - ./bash:/root/custom_bash
     depends_on:
       - php-7.1-debug
     networks:
@@ -188,6 +197,7 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
+      - ./bash:/root/custom_bash
     networks:
       - totara
 
@@ -211,6 +221,7 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
+      - ./bash:/root/custom_bash
     depends_on:
       - php-7.2-debug
     networks:
@@ -228,6 +239,7 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
+      - ./bash:/root/custom_bash
     networks:
       - totara
 
@@ -251,6 +263,7 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
+      - ./bash:/root/custom_bash
     depends_on:
       - php-7.3-debug
     networks:
@@ -268,6 +281,7 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
+      - ./bash:/root/custom_bash
     networks:
       - totara
 
