@@ -2,3 +2,4 @@
 .env
 !.gitkeep
 /cron.d/*.cron
+/bash/*.bash
