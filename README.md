@@ -436,6 +436,10 @@ You can use the session id or any part of the paths to monitor the session, for 
 mutagen monitor totara
 ```
 
+## Custom docker-compose configurations
+
+You can customise the docker compose configurations simply adding your own `.yml` or `.yaml` compose files into the `custom` folder. Any containers or other options you have will automatically override any existing default container options.
+
 ## Custom bash aliases
 
 The `bash` folder lets you add custom aliases and functions to your php containers. Any file with the `.bash` extension will be sourced into your php container whenever you bash into it. This is useful for when you need to run complex commands often during development, such as initialising tests. To get started, simply copy `aliases.bash.dist` to `aliases.bash` and define your aliases.

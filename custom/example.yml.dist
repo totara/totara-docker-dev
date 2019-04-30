@@ -1,0 +1,12 @@
+# Example compose file override
+version: "2"
+
+services:
+  nginx:
+    environment:
+      - EXTRA_ENV_VARIABLE=V2h5IGFyZSB5b3Ugd2FzdGluZyB5b3VyIHRpbWUgZGVjb2RpbmcgdGhpcz8=
+    volumes:
+      - extra_data:/extra_data
+
+volumes:
+  extra_data: {}

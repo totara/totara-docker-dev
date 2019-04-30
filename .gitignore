@@ -3,3 +3,5 @@
 !.gitkeep
 /cron.d/*.cron
 /bash/*.bash
+/custom/*.yml
+/custom/*.yaml
