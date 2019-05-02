@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if [ $# -eq 0 ] || [ $1 == 'all' ]
+  then
+    # pulling all images already present from docker hub
+    docker images --filter=reference='totara/docker-dev-*' --format "{{.Repository}}" | xargs -I % sh -c 'docker pull %'
+else
+    # pull a specific image by providing only the last part of the repository name, like 'nginx' or 'php73'
+    docker pull docker-dev-$1
+fi
+
