@@ -57,6 +57,21 @@ __Example:__
 127.0.0.1   localhost totara54 totara54.debug totara54.behat totara55 totara55.debug totara55.behat totara55 totara55.debug totara56.behat totara70 totara70.debug totara70.behat totara71 totara71.debug totara71.behat totara72 totara72.debug totara72.behat totara73 totara73.debug totara73.behat
 ```
 
+## Update
+If you are already using the docker setup but you want to make sure you get the latest changes and features:
+1. make sure you pull the latest code from this repository
+1. and use the `tpull` script in the bin/ folder to pull the latest images
+
+```bash
+tpull [all]   # updates all images already present locally by pulling the latest changes from docker hub
+tpull nginx   # to update a specific image use the last part of the repository name, for example nginx resolves to docker-dev-nginx
+tpull php73
+```
+
+If you pull images from containers which currently running don't forget to run `tup` on them so that the latest image is used.
+
+Alternatively to pulling the pre-built images you can also rebuild themselve by using `tbuild [container]`, for example `tbuild php-7.3`. Please note that rebuilding the images can take a while.
+
 ## Performance
 
 To speed up performance you can use a sync tool called mutagen. 
