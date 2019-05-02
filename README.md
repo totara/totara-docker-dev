@@ -61,14 +61,13 @@ __Example:__
 If you are already using the docker setup but you want to make sure you get the latest changes and features:
 1. make sure you pull the latest code from this repository
 1. and use the `tpull` script in the bin/ folder to pull the latest images
+1. `tup` any alreay running containers to apply changes
 
 ```bash
 tpull [all]   # updates all images already present locally by pulling the latest changes from docker hub
 tpull nginx   # to update a specific image use the last part of the repository name, for example nginx resolves to docker-dev-nginx
 tpull php73
 ```
-
-If you pull images from containers which currently running don't forget to run `tup` on them so that the latest image is used.
 
 Alternatively to pulling the pre-built images you can also rebuild themselve by using `tbuild [container]`, for example `tbuild php-7.3`. Please note that rebuilding the images can take a while.
 
