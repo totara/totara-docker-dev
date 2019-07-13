@@ -28,7 +28,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         pdo_mysql \
         pgsql \
         mysqli \
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-configure gd \
     && docker-php-ext-install -j$(nproc) gd
 
 RUN git clone https://github.com/tideways/php-profiler-extension.git \
@@ -58,7 +58,7 @@ ENV LC_ALL en_US.UTF-8
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
     && curl https://packages.microsoft.com/config/debian/8/prod.list | tee /etc/apt/sources.list.d/mssql-tools.list \
     && apt-get update && ACCEPT_EULA=Y apt-get install -y \
-    msodbcsql \
+    msodbcsql17 \
     mssql-tools \
     unixodbc-dev
 
