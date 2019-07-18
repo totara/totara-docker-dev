@@ -16,7 +16,11 @@ files=(
     "compose/selenium.yml"
 )
 
-if [ -f "$PROJECTPATH/.use-mutagen" ]; then
+if [[ "$1" -eq  "build" ]]; then
+    files+=(
+        "compose/build.yml"
+    )
+elif [[ -f "$PROJECTPATH/.use-mutagen" ]]; then
     files+=(
         "compose/sync.yml"
     )
