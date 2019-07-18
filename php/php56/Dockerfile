@@ -33,7 +33,7 @@ RUN apt-get update && apt-get install -y \
 RUN pecl install xhprof-0.9.4 \
     && docker-php-ext-enable xhprof
 
-RUN pecl install -o -f redis \
+RUN pecl install -o -f redis-4.3.0 \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable redis
 
