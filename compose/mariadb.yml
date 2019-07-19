@@ -2,7 +2,7 @@ version: "2"
 services:
 
   mariadb:
-    image: mariadb:10.4.3
+    image: mariadb:10.4.6
     container_name: totara_mariadb
     ports:
       - "3307:3306"
