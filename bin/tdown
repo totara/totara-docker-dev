@@ -10,5 +10,5 @@ $SCRIPTPATH/tdocker down
 # if mutagen should be used make sure it's started
 if [ -f "$PROJECTPATH/.use-mutagen" ]
 then
-    mutagen pause $REMOTE_SRC
+    mutagen sync pause totara
 fi

@@ -42,7 +42,7 @@ Although this project started as a development environment for Totara Learn it c
  * Totara source code: https://help.totaralearning.com/display/DEV/Getting+the+code
  * Docker: https://www.docker.com (for Docker on Mac please read warning below)
  * Docker-compose: https://docs.docker.com/compose/install (included in Docker for Mac/Windows)
- * Mutagen: http://mutagen.io/ (optional, for more speed on Mac, not needed for Linux)
+ * Mutagen v0.10.0+: http://mutagen.io/ (optional, for more speed on Mac, not needed for Linux)
  * At least 3.25GB of RAM for MSSQL
 
 ## Install
@@ -405,6 +405,8 @@ To use mutagen first install it. On Mac OS you can use homebrew for that or alte
 brew install havoc-io/mutagen/mutagen
 ```
 
+**Make sure you have at least version 0.10.0 runnning.**
+
 To have mutagen automatically start up with your machine
 ```bash
 mutagen daemon register
@@ -425,29 +427,30 @@ If you then use the commands `tup` and `tdown` as described in the following cha
 
 To find out if your sync is working you can use the following command:
 ```bash
-mutagen list
+mutagen sync list
 ```
 which shows something like:
 ```bash
-⇒  mutagen list
+⇒  mutagen sync list
 --------------------------------------------------------------------------------
-Session: 58438dbf-d8c1-43f5-ae43-61257b307574
+Name: totara
+Identifier: ddc06807-2554-47f4-ba8a-230f37c5e577
+Labels: None
 Alpha:
-        URL: /your/local/path/to/totara/src
-        Connection state: Connected
+	URL: /your/local/path/to/totara/src
+	Connection state: Connected
 Beta:
-        URL: docker://totara_sync/var/www/totara/src
-                DOCKER_HOST=
-                DOCKER_TLS_VERIFY=
-                DOCKER_CERT_PATH=
-        Connection state: Connected
+	URL: docker://totara_sync/var/www/totara/src
+		DOCKER_HOST=
+		DOCKER_TLS_VERIFY=
+		DOCKER_CERT_PATH=
+	Connection state: Connected
 Status: Watching for changes
 --------------------------------------------------------------------------------
-
 ```
 You can use the session id or any part of the paths to monitor the session, for example:
 ```bash
-mutagen monitor totara
+mutagen sync monitor totara
 ```
 
 ## Custom docker-compose configurations

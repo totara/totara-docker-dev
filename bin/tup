@@ -13,16 +13,14 @@ then
 
     # check if there's already a session
     mutagen list | grep "$REMOTE_SRC" &> /dev/null
+
     if [ $? != 0 ]; then
-       mutagen create \
-        --default-directory-mode=0755 \
-        --default-file-mode=0644 \
-        --ignore-vcs \
-        --ignore .idea \
-        --ignore .DS_Store \
-        $LOCAL_SRC docker://totara_sync$REMOTE_SRC
+       mutagen sync create \
+            -c $PROJECTPATH/mutagen.yml \
+            -n totara \
+            $LOCAL_SRC docker://totara_sync$REMOTE_SRC
     else
-        mutagen resume $REMOTE_SRC
+        mutagen sync resume totara
     fi
 else
     $SCRIPTPATH/tdocker up -d "$@"
