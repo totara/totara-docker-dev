@@ -8,7 +8,7 @@ services:
   # docker-compose -f docker-compose.yml -f compose/nginx.yml -f compose/pgsql.yml -f compose/php.yml up -d pgsql php-7.3
 
   nodejs:
-    image: node:8.11
+    image: node:8
     container_name: totara_nodejs
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
