@@ -45,6 +45,10 @@ Although this project started as a development environment for Totara Learn it c
  * Mutagen v0.10.0+: http://mutagen.io/ (optional, for more speed on Mac, not needed for Linux)
  * At least 3.25GB of RAM for MSSQL
 
+## Contribute
+
+Please check out the [contribute](CONTRIBUTE.md) page for more information on how you can help us.
+
 ## Install
  1. Clone the Totara source code (see requirements) 
  1. Clone this project
