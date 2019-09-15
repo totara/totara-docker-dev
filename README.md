@@ -24,14 +24,14 @@ php73-debug | 7.3 + xdebug 2.7.1 |  [Dockerfile](https://github.com/totara/totar
 
 This project aims to provide an easy way to start developing for Totara by providing a Docker setup.
 
-This setup was created and tested intensively on a MAC and Linux. It works on Windows as well but wasn't tested that much yet.
+This setup was created and tested intensively on a Mac OS and Linux. It works on Windows as well but wasn't tested that much yet.
 
 Although this project started as a development environment for Totara Learn it can be used for any other PHP project.
 
 ### What you get:
  * [NGINX](https://nginx.org/) as a webserver
  * [PHP](http://php.net/) 5.4, 5.5, 5.6, 7.0, 7.1, 7.2, 7.3 to test for different versions
- * [PostgreSQL](https://www.postgresql.org/) (9.3, 9.6, 10, 11), [MariaDB](https://mariadb.org/) (10.2.x) and [MySQL](https://www.mysql.com/) (5.7.x), and [Microsoft SQL Server 2017](https://www.microsoft.com/en-us/sql-server/sql-server-2017) support
+ * [PostgreSQL](https://www.postgresql.org/) (9.3, 9.6, 10, 11), [MariaDB](https://mariadb.org/) (10.4.x) and [MySQL](https://www.mysql.com/) (5.7.x), and [Microsoft SQL Server 2017](https://www.microsoft.com/en-us/sql-server/sql-server-2017) support
  * A [PHPUnit](https://phpunit.de/) and [Behat](http://behat.org/en/latest/) setup to run tests (including [Selenium](https://www.seleniumhq.org/))
  * A [mailcatcher](https://mailcatcher.me/) instance to inspect mails
  * [Redis](https://redis.io/) for caching and/or session handling
@@ -40,7 +40,7 @@ Although this project started as a development environment for Totara Learn it c
 
 ### Requirements:
  * Totara source code: https://help.totaralearning.com/display/DEV/Getting+the+code
- * Docker: https://www.docker.com (for Docker on Mac please read warning below)
+ * Docker: https://www.docker.com (for Docker on Mac OS please read the [Performance section](#performance))
  * Docker-compose: https://docs.docker.com/compose/install (included in Docker for Mac/Windows)
  * Mutagen v0.10.0+: http://mutagen.io/ (optional, for more speed on Mac, not needed for Linux)
  * At least 3.25GB of RAM for MSSQL
@@ -52,7 +52,7 @@ Please check out the [contribute](CONTRIBUTE.md) page for more information on ho
 ## Install
  1. Clone the Totara source code (see requirements) 
  1. Clone this project
- 1. Install mutagen (optionally, recommended for MAC)
+ 1. Install [mutagen](#mutagen) (optionally, recommended for Mac OS)
  1. Copy the file __.env.dist__ to __.env__ and change at least the path to your local Totara source folder (LOCAL_SRC)
  1. Make sure you have all the hosts in your /etc/hosts file to be able to access them via the browser
 
@@ -61,8 +61,9 @@ __Example:__
 127.0.0.1   localhost totara54 totara54.debug totara54.behat totara55 totara55.debug totara55.behat totara55 totara55.debug totara56.behat totara70 totara70.debug totara70.behat totara71 totara71.debug totara71.behat totara72 totara72.debug totara72.behat totara73 totara73.debug totara73.behat
 ```
 
-## Update
+## Upgrade
 If you are already using the docker setup but you want to make sure you get the latest changes and features:
+1. check out the newest [release upgrade notes](https://github.com/totara/totara-docker-dev/releases)
 1. make sure you pull the latest code from this repository
 1. and use the `tpull` script in the bin/ folder to pull the latest images
 1. `tup` any alreay running containers to apply changes
@@ -73,7 +74,7 @@ tpull nginx   # to update a specific image use the last part of the repository n
 tpull php73
 ```
 
-Alternatively to pulling the pre-built images you can also rebuild themselve by using `tbuild [container]`, for example `tbuild php-7.3`. Please note that rebuilding the images can take a while.
+Alternatively to pulling the pre-built images you can also rebuild themselves by using `tbuild [container]`, for example `tbuild php-7.3`. Please note that rebuilding the images can take a while.
 
 ## Performance
 
