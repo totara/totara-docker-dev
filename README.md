@@ -19,6 +19,8 @@ php72 | 7.2 |  [Dockerfile](https://github.com/totara/totara-docker-dev/blob/mas
 php72-debug | 7.2 + xdebug 2.7.1 |  [Dockerfile](https://github.com/totara/totara-docker-dev/blob/master/php/php72-debug/Dockerfile) | [![Build status PHP 7.2 Debug](https://img.shields.io/docker/build/totara/docker-dev-php72-debug.svg)](https://hub.docker.com/r/totara/docker-dev-php72-debug/)
 php73 | 7.3 |  [Dockerfile](https://github.com/totara/totara-docker-dev/blob/master/php/php73/Dockerfile) | [![Build status PHP 7.3](https://img.shields.io/docker/build/totara/docker-dev-php73.svg)](https://hub.docker.com/r/totara/docker-dev-php73/)
 php73-debug | 7.3 + xdebug 2.7.1 |  [Dockerfile](https://github.com/totara/totara-docker-dev/blob/master/php/php73-debug/Dockerfile) | [![Build status PHP 7.3 Debug](https://img.shields.io/docker/build/totara/docker-dev-php73-debug.svg)](https://hub.docker.com/r/totara/docker-dev-php73-debug/)
+php74 | 7.4 |  [Dockerfile](https://github.com/totara/totara-docker-dev/blob/master/php/php74/Dockerfile) | [![Build status PHP 7.3](https://img.shields.io/docker/build/totara/docker-dev-php74.svg)](https://hub.docker.com/r/totara/docker-dev-php74/)
+php74-debug | 7.4 + xdebug 2.7.1 |  [Dockerfile](https://github.com/totara/totara-docker-dev/blob/master/php/php74-debug/Dockerfile) | [![Build status PHP 7.3 Debug](https://img.shields.io/docker/build/totara/docker-dev-php74-debug.svg)](https://hub.docker.com/r/totara/docker-dev-php74-debug/)
 
 # A Docker setup for local Totara Learn development
 
@@ -54,7 +56,7 @@ Although this project started as a development environment for Totara Learn it c
 
 __Example:__
 ```bash
-127.0.0.1   localhost totara54 totara54.debug totara54.behat totara55 totara55.debug totara55.behat totara55 totara55.debug totara56.behat totara70 totara70.debug totara70.behat totara71 totara71.debug totara71.behat totara72 totara72.debug totara72.behat totara73 totara73.debug totara73.behat
+127.0.0.1   localhost totara54 totara54.debug totara54.behat totara55 totara55.debug totara55.behat totara55 totara55.debug totara56.behat totara70 totara70.debug totara70.behat totara71 totara71.debug totara71.behat totara72 totara72.debug totara72.behat totara73 totara73.debug totara73.behat totara74 totara74.debug totara74.behat
 ```
 
 ## Update
@@ -457,4 +459,3 @@ You can customise the docker compose configurations simply adding your own `.yml
 ## Custom bash aliases
 
 The `bash` folder lets you add custom aliases and functions to your php containers. Any file with the `.bash` extension will be sourced into your php container whenever you bash into it. This is useful for when you need to run complex commands often during development, such as initialising tests. To get started, simply copy `aliases.bash.dist` to `aliases.bash` and define your aliases.
- 

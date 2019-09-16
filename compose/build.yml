@@ -90,3 +90,15 @@ services:
 
   php-7.3-cron:
     build: ./php/php73-cron
+
+  php-7.4:
+    build:
+      context: ./php/php74
+      args:
+        TIME_ZONE: ${TIME_ZONE}
+
+  php-7.4-debug:
+    build: ./php/php74-debug
+
+  php-7.4-cron:
+    build: ./php/php74-cron
