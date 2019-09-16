@@ -1,6 +1,38 @@
 version: "2"
 services:
 
+  php-5.3:
+    image: totara/docker-dev-php53
+    container_name: totara_php53
+    working_dir: ${REMOTE_SRC}
+    environment:
+      HIST_FILE: /root/.bash_history
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+      - $HOME/.bash_history:/root/.bash_history
+      - ./bash:/root/custom_bash
+    depends_on:
+      - php-5.3-debug
+    networks:
+      - totara
+
+  php-5.3-debug:
+    image: totara/docker-dev-php53-debug
+    container_name: totara_php53_debug
+    working_dir: ${REMOTE_SRC}
+    environment:
+      HOST_IP: ${HOST_IP}
+      PHP_IDE_CONFIG: serverName=totara53
+      HIST_FILE: /root/.bash_history
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+      - $HOME/.bash_history:/root/.bash_history
+      - ./bash:/root/custom_bash
+    networks:
+      - totara
+
   php-5.4:
     image: totara/docker-dev-php54
     container_name: totara_php54
