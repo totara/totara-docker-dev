@@ -10,6 +10,15 @@ services:
   mssql:
     build: ./mssql
 
+  php-5.3:
+    build:
+      context: ./php/php53
+      args:
+        TIME_ZONE: ${TIME_ZONE}
+
+  php-5.3-debug:
+    build: ./php/php53-debug
+
   php-5.4:
     build:
       context: ./php/php54
