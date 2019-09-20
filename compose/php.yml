@@ -317,7 +317,7 @@ services:
     working_dir: ${REMOTE_SRC}
     environment:
       XDEBUG_CONFIG: remote_host=${HOST_IP}
-      PHP_IDE_CONFIG: serverName=totara73
+      PHP_IDE_CONFIG: serverName=totara74
       HIST_FILE: /root/.bash_history
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
