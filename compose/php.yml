@@ -327,5 +327,47 @@ services:
     networks:
     - totara
 
+  php-7.4:
+    image: totara/docker-dev-php74
+    container_name: totara_php74
+    working_dir: ${REMOTE_SRC}
+    environment:
+      HIST_FILE: /root/.bash_history
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+      - $HOME/.bash_history:/root/.bash_history
+      - ./bash:/root/custom_bash
+    depends_on:
+      - php-7.4-debug
+    networks:
+      - totara
+
+  php-7.4-debug:
+    image: totara/docker-dev-php74-debug
+    container_name: totara_php74_debug
+    working_dir: ${REMOTE_SRC}
+    environment:
+      XDEBUG_CONFIG: remote_host=${HOST_IP}
+      PHP_IDE_CONFIG: serverName=totara74
+      HIST_FILE: /root/.bash_history
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+      - $HOME/.bash_history:/root/.bash_history
+      - ./bash:/root/custom_bash
+    networks:
+      - totara
+
+  php-7.4-cron:
+    image: totara/docker-dev-php74-cron
+    container_name: totara_php74_cron
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+      - ./cron.d:/etc/cron.d
+    networks:
+      - totara
+
 volumes:
     totara-data:
