@@ -5,6 +5,8 @@ python:
 env:
 - DOCKER_IMAGE=nginx
 - DOCKER_IMAGE=mssql
+- DOCKER_IMAGE=php/php53
+- DOCKER_IMAGE=php/php53-debug
 - DOCKER_IMAGE=php/php54
 - DOCKER_IMAGE=php/php54-debug
 - DOCKER_IMAGE=php/php55

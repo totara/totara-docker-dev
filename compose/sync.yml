@@ -5,6 +5,14 @@ services:
     volumes:
       - totara-www-sync:${REMOTE_SRC}:nocopy
 
+  php-5.3:
+    volumes:
+      - totara-www-sync:${REMOTE_SRC}:nocopy
+
+  php-5.3-debug:
+    volumes:
+      - totara-www-sync:${REMOTE_SRC}:nocopy
+
   php-5.4:
     volumes:
       - totara-www-sync:${REMOTE_SRC}:nocopy

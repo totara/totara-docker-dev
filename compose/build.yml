@@ -10,11 +10,14 @@ services:
   mssql:
     build: ./mssql
 
+  php-5.3:
+    build: ./php/php53
+
+  php-5.3-debug:
+    build: ./php/php53-debug
+
   php-5.4:
-    build:
-      context: ./php/php54
-      args:
-        TIME_ZONE: ${TIME_ZONE}
+    build: ./php/php54
 
   php-5.4-debug:
     build: ./php/php54-debug
@@ -23,10 +26,7 @@ services:
     build: ./php/php54-cron
 
   php-5.5:
-    build:
-      context: ./php/php55
-      args:
-        TIME_ZONE: ${TIME_ZONE}
+    build: ./php/php55
 
   php-5.5-debug:
     build: ./php/php55-debug
