@@ -3,6 +3,9 @@
 # Perform a fresh install of Totara
 alias install='php admin/cli/install_database.php --adminpass=admin --adminemail=admin@totara.local --agree-license --fullname=Totara\ 13\ Dev --shortname=t13-dev'
 
+# Upgrade the installation
+alias upgrade='php admin/cli/upgrade.php --non-interactive'
+
 # Initialise PHPUnit
 alias installunit='php admin/tool/phpunit/cli/init.php'
 
@@ -11,6 +14,11 @@ alias installbehat='php admin/tool/behat/cli/init.php'
 
 # Run PhpUnit
 alias unit='vendor/bin/phpunit --test-suffix="test.php" '
+
+# Run all the PHPUnit tests in a specific folder - e.g. totara/plan/tests
+function unitdir() {
+	vendor/bin/phpunit "$1/tests/." --test-suffix="test.php"
+}
 
 # Run Behat
 alias behat='vendor/bin/behat '
