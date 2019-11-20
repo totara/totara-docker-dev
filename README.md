@@ -379,7 +379,24 @@ If needed, modify the local port in the docker-compose.yml file.
 
 ## NodeJS, NPM and grunt 
 
-If you want to use grunt or npm you can log into the nodejs container and issue the commands there:
+If you want to use npm you can use ```tnpm``` like this:
+```bash
+# if your project lives in a subfolder then run the command from inside that folder
+tnpm install
+tnpm run tui-dev
+tnpm run tui-watch
+```
+
+If you want to use grunt you can use ```tgrunt``` like this:
+```bash
+tgrunt
+# if your project lives in the subfolder 13 then run
+tgrunt 13
+# if you want to run a specific grunt task
+tgrunt 13 gherkinlint
+``` 
+
+Or alternativley you can just directly log in to the container directly run node/grunt commands:
 
 ```bash
 tdocker run nodejs bash
@@ -388,17 +405,6 @@ npm install
 npm install grunt-cli
 ./node_modules/.bin/grunt
 ```
-
-Or you use the shortcut bash script:
-
-```bash
-tgrunt
-# if your project lives in the subfolder 13 then run
-tgrunt 13
-# if you want to run a specific grunt task
-tgrunt 13 gherkinlint
-
-``` 
 
 ## mutagen
 
