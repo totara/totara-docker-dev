@@ -1,11 +1,13 @@
-FROM php:7.1-fpm
+FROM php:7.1-fpm-stretch
 
 ARG TIME_ZONE=Pacific/Auckland
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         apt-transport-https \
+        libgd3 \
+        libgd-dev \
         libfreetype6-dev \
-        libjpeg62-turbo-dev \
+        libjpeg-dev \
         libmcrypt-dev \
         libpng-dev \
         libxml2-dev \
@@ -18,6 +20,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         locales \
         tzdata \
         git \
+        libzip-dev \
+    && rm -rf /var/lib/apt/lists/* \
     && docker-php-ext-install -j$(nproc) xmlrpc \
         zip \
         intl \
@@ -28,6 +32,10 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         pgsql \
         mysqli \
     && docker-php-ext-configure gd \
+            --with-freetype-dir=/usr/include/ \
+            --with-png-dir=/usr/include/ \
+            --with-jpeg-dir=/usr/include/ \
+            --with-gd \
     && docker-php-ext-install -j$(nproc) gd
 
 RUN git clone https://github.com/tideways/php-profiler-extension.git \
@@ -57,9 +65,10 @@ ENV LC_ALL en_US.UTF-8
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
     && curl https://packages.microsoft.com/config/debian/8/prod.list | tee /etc/apt/sources.list.d/mssql-tools.list \
     && apt-get update && ACCEPT_EULA=Y apt-get install -y \
-    msodbcsql17 \
-    mssql-tools \
-    unixodbc-dev
+        msodbcsql17 \
+        mssql-tools \
+        unixodbc-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 # Workaround to get MSSQL connection working on Debian 9 (stretch)
 # https://emacstragic.net/2017/11/06/mssql-odbc-client-on-debian-9-stretch/
