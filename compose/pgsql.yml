@@ -52,11 +52,11 @@ services:
     networks:
       - totara
 
-  pgsql:
-    image: postgres:11.1
+  pgsql11:
+    image: postgres:11.6
     container_name: totara_pgsql11
     ports:
-      - "5432:5432"
+      - "5411:5432"
     environment:
       PGDATA: /var/lib/postgresql/data/pgdata
     command:
@@ -69,11 +69,29 @@ services:
     networks:
       - totara
 
+  pgsql:
+    image: postgres:12.1
+    container_name: totara_pgsql12
+    ports:
+      - "5432:5432"
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+    command:
+      postgres -c 'config_file=/etc/postgresql/postgresql.conf'
+    volumes:
+      - ./pgsql/my-postgres.conf:/etc/postgresql/postgresql.conf
+      - pgsql12-data:/var/lib/postgresql/data
+    depends_on:
+      - nginx
+    networks:
+      - totara
+
 volumes:
   pgsql93-data:
   pgsql96-data:
   pgsql10-data:
   pgsql11-data:
+  pgsql12-data:
 
 networks:
   totara:
