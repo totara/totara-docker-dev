@@ -1,4 +1,4 @@
-version: "2"
+version: "3.7"
 services:
 
   mariadb:
@@ -13,12 +13,8 @@ services:
       - ./mariadb:/etc/mysql/conf.d
     depends_on:
       - nginx
-    mem_swappiness: 1
     networks:
       - totara
 
 volumes:
     mariadb-data:
-
-networks:
-  totara:

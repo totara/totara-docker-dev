@@ -1,4 +1,4 @@
-version: "2"
+version: "3.7"
 services:
 
   selenium-hub:
@@ -40,6 +40,3 @@ services:
       - "4445:4444"
     networks:
       - totara
-
-networks:
-  totara:
