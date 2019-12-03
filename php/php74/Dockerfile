@@ -19,6 +19,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         tzdata \
         git \
         libzip-dev \
+        libmemcached-dev \
     && docker-php-ext-install -j$(nproc) xmlrpc \
         zip \
         intl \
@@ -42,6 +43,10 @@ RUN echo "extension=tideways_xhprof.so" >> /usr/local/etc/php/conf.d/tideways_xh
 RUN pecl install -o -f redis \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable redis
+
+RUN pecl install -o -f memcached \
+    &&  rm -rf /tmp/pear \
+    &&  docker-php-ext-enable memcached
 
 # we need en_US locales for MSSQL connection to work
 # we need en_AU locales for behat to work

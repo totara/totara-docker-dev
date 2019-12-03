@@ -32,6 +32,11 @@ services:
     networks:
       - totara
 
+  memcached:
+    image: memcached
+    networks:
+      - totara
+
 volumes:
     mssql-data:
     mysql-data:
