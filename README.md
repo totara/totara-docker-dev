@@ -307,6 +307,13 @@ vendor/bin/phpunit
 
 Make sure your config file contains the Behat configuration needed and the database is ready.
 
+If you want to run selenium tests make sure the selenium container is started:
+```bash
+tup selenium-hub
+```
+
+and you have a behat_local.yml file in your root code folder that provides the correct configuration (e.g. points to the selenium-hub host and the base_url is correct).
+
 Log into one of the PHP containers:
 ```bash
 tbash php-5.6
