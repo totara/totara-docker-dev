@@ -1,4 +1,4 @@
-version: "2"
+version: "3.7"
 services:
 
   pgsql93:
@@ -92,6 +92,3 @@ volumes:
   pgsql10-data:
   pgsql11-data:
   pgsql12-data:
-
-networks:
-  totara:
