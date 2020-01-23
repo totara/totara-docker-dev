@@ -1,9 +1,6 @@
 version: "3.7"
 services:
 
-  nodejs:
-    build: ./nodejs
-
   nginx:
     build: ./nginx
 
