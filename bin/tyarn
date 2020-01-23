@@ -1,0 +1,12 @@
+#!/bin/bash
+
+SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+PROJECTPATH="$( cd $SCRIPTPATH && cd ..; pwd -P )"
+
+export $(egrep -v '^#' $PROJECTPATH/.env | xargs)
+
+# If tnpm is called from a subdirectory, then we run npm in that subdirectory too
+SUBPATH="${PWD//$LOCAL_SRC/}"
+TOTARASITEDIR="$REMOTE_SRC/$SUBPATH"
+
+$SCRIPTPATH/tdocker run -w "$TOTARASITEDIR" nodejs yarn "$@"
