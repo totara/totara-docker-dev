@@ -18,6 +18,7 @@ RUN apt-get update && apt-get install -y \
         git \
         locales \
         tzdata \
+        libmemcached-dev \
     && docker-php-ext-install -j$(nproc) xmlrpc \
         zip \
         intl \
@@ -36,6 +37,14 @@ RUN pecl install xhprof-0.9.4 \
 RUN pecl install -o -f redis-4.3.0 \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable redis
+
+RUN pecl install -o -f igbinary-2.0.8 \
+    &&  rm -rf /tmp/pear \
+    &&  docker-php-ext-enable igbinary
+
+RUN pecl install -o -f memcached-2.2.0 \
+    &&  rm -rf /tmp/pear \
+    &&  docker-php-ext-enable memcached
 
 # we need en_AU locales for behat to work
 RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
