@@ -16,5 +16,21 @@ services:
     networks:
       - totara
 
+  mariadb102:
+    image: mariadb:10.2
+    container_name: totara_mariadb102
+    ports:
+      - "3302:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PW}
+    volumes:
+      - mariadb102-data:/var/lib/mysql
+      - ./mariadb:/etc/mysql/conf.d
+    depends_on:
+      - nginx
+    networks:
+      - totara
+
 volumes:
-    mariadb-data:
+  mariadb-data:
+  mariadb102-data:

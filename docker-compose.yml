@@ -33,12 +33,8 @@ services:
       - totara
 
 volumes:
-    mssql-data:
-    mysql-data:
-    mysql80-data:
-    totara-data:
-    mariadb-data:
-    redis-data:
+  totara-data:
+  redis-data:
 
 networks:
   totara:
