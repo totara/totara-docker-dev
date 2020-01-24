@@ -69,11 +69,11 @@ services:
     image: totara/docker-dev-php54-cron
     container_name: totara_php54_cron
     volumes:
-    - ${LOCAL_SRC}:${REMOTE_SRC}
-    - totara-data:${REMOTE_DATA}
-    - ./cron.d:/etc/cron.d
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+      - ./cron.d:/etc/cron.d
     networks:
-    - totara
+      - totara
 
   php-5.5:
     image: totara/docker-dev-php55
@@ -111,11 +111,11 @@ services:
     image: totara/docker-dev-php55-cron
     container_name: totara_php55_cron
     volumes:
-    - ${LOCAL_SRC}:${REMOTE_SRC}
-    - totara-data:${REMOTE_DATA}
-    - ./cron.d:/etc/cron.d
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+      - ./cron.d:/etc/cron.d
     networks:
-    - totara
+      - totara
 
   php-5.6:
     image: totara/docker-dev-php56
@@ -153,11 +153,11 @@ services:
     image: totara/docker-dev-php56-cron
     container_name: totara_php56_cron
     volumes:
-    - ${LOCAL_SRC}:${REMOTE_SRC}
-    - totara-data:${REMOTE_DATA}
-    - ./cron.d:/etc/cron.d
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+      - ./cron.d:/etc/cron.d
     networks:
-    - totara
+      - totara
 
   php-7.0:
     image: totara/docker-dev-php70
@@ -195,11 +195,11 @@ services:
     image: totara/docker-dev-php70-cron
     container_name: totara_php70_cron
     volumes:
-    - ${LOCAL_SRC}:${REMOTE_SRC}
-    - totara-data:${REMOTE_DATA}
-    - ./cron.d:/etc/cron.d
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+      - ./cron.d:/etc/cron.d
     networks:
-    - totara
+      - totara
 
   php-7.1:
     image: totara/docker-dev-php71
@@ -237,11 +237,11 @@ services:
     image: totara/docker-dev-php71-cron
     container_name: totara_php71_cron
     volumes:
-    - ${LOCAL_SRC}:${REMOTE_SRC}
-    - totara-data:${REMOTE_DATA}
-    - ./cron.d:/etc/cron.d
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+      - ./cron.d:/etc/cron.d
     networks:
-    - totara
+      - totara
 
   php-7.2:
     image: totara/docker-dev-php72
@@ -279,11 +279,11 @@ services:
     image: totara/docker-dev-php72-cron
     container_name: totara_php72_cron
     volumes:
-    - ${LOCAL_SRC}:${REMOTE_SRC}
-    - totara-data:${REMOTE_DATA}
-    - ./cron.d:/etc/cron.d
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+      - ./cron.d:/etc/cron.d
     networks:
-    - totara
+      - totara
 
   php-7.3:
     image: totara/docker-dev-php73
@@ -321,11 +321,11 @@ services:
     image: totara/docker-dev-php73-cron
     container_name: totara_php73_cron
     volumes:
-    - ${LOCAL_SRC}:${REMOTE_SRC}
-    - totara-data:${REMOTE_DATA}
-    - ./cron.d:/etc/cron.d
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+      - ./cron.d:/etc/cron.d
     networks:
-    - totara
+      - totara
 
   php-7.4:
     image: totara/docker-dev-php74
@@ -370,4 +370,4 @@ services:
       - totara
 
 volumes:
-    totara-data:
+  totara-data:

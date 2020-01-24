@@ -5,46 +5,46 @@ services:
     image: totara/docker-dev-nginx
     container_name: totara_nginx
     environment:
-    - REMOTE_DATA
+      - REMOTE_DATA
     ports:
-    - "80:80"
-    - "443:443"
+      - "80:80"
+      - "443:443"
     volumes:
-    - ${LOCAL_SRC}:${REMOTE_SRC}
-    - totara-data:${REMOTE_DATA}
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
     depends_on:
-    - mailcatcher
+      - mailcatcher
     networks:
       totara:
         aliases:
-        - totara54
-        - totara54.debug
-        - totara54.behat
-        - totara54.behat.totaralms.com
-        - totara55
-        - totara55.debug
-        - totara55.behat
-        - totara55.behat.totaralms.com
-        - totara56
-        - totara56.debug
-        - totara56.behat
-        - totara56.behat.totaralms.com
-        - totara70
-        - totara70.debug
-        - totara70.behat
-        - totara70.behat.totaralms.com
-        - totara71
-        - totara71.debug
-        - totara71.behat
-        - totara71.behat.totaralms.com
-        - totara72
-        - totara72.debug
-        - totara72.behat
-        - totara72.behat.totaralms.com
-        - totara73
-        - totara73.debug
-        - totara73.behat
-        - totara73.behat.totaralms.com
+          - totara54
+          - totara54.debug
+          - totara54.behat
+          - totara54.behat.totaralms.com
+          - totara55
+          - totara55.debug
+          - totara55.behat
+          - totara55.behat.totaralms.com
+          - totara56
+          - totara56.debug
+          - totara56.behat
+          - totara56.behat.totaralms.com
+          - totara70
+          - totara70.debug
+          - totara70.behat
+          - totara70.behat.totaralms.com
+          - totara71
+          - totara71.debug
+          - totara71.behat
+          - totara71.behat.totaralms.com
+          - totara72
+          - totara72.debug
+          - totara72.behat
+          - totara72.behat.totaralms.com
+          - totara73
+          - totara73.debug
+          - totara73.behat
+          - totara73.behat.totaralms.com
 
 volumes:
   totara-data:

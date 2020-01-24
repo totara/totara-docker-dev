@@ -18,4 +18,4 @@ services:
       - totara
 
 volumes:
-    mssql-data:
+  mssql-data:

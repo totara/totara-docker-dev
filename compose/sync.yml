@@ -95,7 +95,7 @@ services:
 
   php-7.3-cron:
     volumes:
-    - totara-www-sync:${REMOTE_SRC}:nocopy
+      - totara-www-sync:${REMOTE_SRC}:nocopy
 
   php-7.4:
     volumes:
@@ -121,4 +121,4 @@ services:
       - totara-www-sync:${REMOTE_SRC}:nocopy
 
 volumes:
-    totara-www-sync:
+  totara-www-sync:
