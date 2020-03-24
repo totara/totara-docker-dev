@@ -5,12 +5,8 @@ PROJECTPATH="$( cd $SCRIPTPATH && cd ..; pwd -P )"
 
 export $(egrep -v '^#' $PROJECTPATH/.env | xargs)
 
-# You can specify a subdirectory as first parameter to this script if needed
-MYPATH=$REMOTE_SRC/$1; shift
+# If tgrunt is called from a subdirectory, then we run grunt in that subdirectory
+SUBPATH="${PWD//$LOCAL_SRC/}"
+TOTARASITEDIR="$REMOTE_SRC/$SUBPATH"
 
-echo "Starting grunt tasks..."
-$SCRIPTPATH/tdocker run --rm nodejs sh -c "\
-    cd $MYPATH \
-    && npm install \
-    && npm install grunt-cli \
-    && ./node_modules/grunt-cli/bin/grunt $@"
+$SCRIPTPATH/tdocker run --rm -w "$TOTARASITEDIR" nodejs ./node_modules/.bin/grunt "$@"
