@@ -130,19 +130,20 @@ tdown
 This project comes with a few bash scripts to simplify usage across platforms. The scripts are located in the **bin/** folder. Ideally you add the bin folder to your PATH environment variable so you can run the commands from anywhere.
 
 ```bash
-tdocker                           # shortcut to general docker-compose ... command
-tup [containers]                  # start (all) container(s)            
 tbash [container]                 # log into a container, i.e. php-7.2
-tstop [container]                 # stop (all) container(s)
-trestart [container]              # restart (all) container(s)
-tdown                             # shutdown all containers
-tstats                            # show docker stats including container names
 tbuild [container]                # build (all) container(s)
-tgrunt [subfolder]                # run grunt scripts in container, if you use subfolders for version pass it as 2nd argument
+tdocker                           # shortcut to general docker-compose ... command
+tdown                             # shutdown all containers
+tgrunt [options]                  # run grunt in container, supports running in subfolders
+tnpm [options]                    # run npm in container, supports running in subfolders
+tpull                             # pull latest images (only those which you already have locally) 
+trestart [container]              # restart (all) container(s)
 tscale [container]=6              # scale up the number of containers, i.e. selenium-chrome
+tstats                            # show docker stats including container names
+tstop [container]                 # stop (all) container(s)
 tunit [container] [folder] [init] # run or init unit tests in given container for given version
+tup [containers]                  # start (all) container(s)            
 ```
-
 
 ### Multiple versions
 
@@ -156,12 +157,17 @@ Make sure you have configured Totara and created the databases you need. You can
 
 #### Credentials
 
-DB | Host | User | Password
+DB | Host | User | Password |
 --- | --- | --- | ---
-**PostresSQL 10.x** | pgsql | postgres | 
-**PostresSQL 9.3.x** | pgsql93 | postgres | 
-**Mysql** | mysql | root | root
-**MariaDB** | mariadb | root | root
+**PostresSQL 12 (latest)** | pgsql | postgres | 
+**PostresSQL 11** | pgsql11 | postgres | 
+**PostresSQL 10** | pgsql10 | postgres | 
+**PostresSQL 9.6** | pgsql96 | postgres | 
+**PostresSQL 9.3** | pgsql93 | postgres | 
+**Mysql 8** | mysql8 | root | root
+**Mysql 5.7** | mysql | root | root
+**MariaDB 10.4** | mariadb | root | root
+**MariaDB 10.2** | mariadb102 | root | root
 **Mssql** | mssql | SA | Totara.Mssql1
 
 To use the command line clients provided by the containers you can use the following commands:
@@ -396,20 +402,19 @@ tnpm run tui-watch
 
 If you want to use grunt you can use ```tgrunt``` like this:
 ```bash
+# if your project lives in a subfolder then run the command from inside that folder
 tgrunt
-# if your project lives in the subfolder 13 then run
-tgrunt 13
-# if you want to run a specific grunt task
-tgrunt 13 gherkinlint
+tgrunt gherkinlint
+tgrunt css
+...
 ``` 
 
-Or alternativley you can just directly log in to the container directly run node/grunt commands:
+Or alternatively you can just directly log in to the container directly run node/grunt commands:
 
 ```bash
 tdocker run nodejs bash
 # go to your source directory and
 npm install
-npm install grunt-cli
 ./node_modules/.bin/grunt
 ```
 
