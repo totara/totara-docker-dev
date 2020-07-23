@@ -130,7 +130,7 @@ tdown
 This project comes with a few bash scripts to simplify usage across platforms. The scripts are located in the **bin/** folder. Ideally you add the bin folder to your PATH environment variable so you can run the commands from anywhere.
 
 ```bash
-tbash [container]                 # log into a container, i.e. php-7.2
+tbash [container]                 # log into a container via bash, i.e. php-7.2
 tbuild [container]                # build (all) container(s)
 tdb [options]                     # run common actions for your databases
 tdocker                           # shortcut to general docker-compose ... command
@@ -143,7 +143,8 @@ tscale [container]=6              # scale up the number of containers, i.e. sele
 tstats                            # show docker stats including container names
 tstop [container]                 # stop (all) container(s)
 tunit [container] [folder] [init] # run or init unit tests in given container for given version
-tup [containers]                  # start (all) container(s)            
+tup [containers]                  # start (all) container(s)
+tzsh [php container]              # log into a php container via oh my zsh, i.e. php-7.2
 ```
 
 ### Multiple versions
@@ -491,6 +492,13 @@ mutagen sync monitor totara
 
 You can customise the docker compose configurations simply adding your own `.yml` or `.yaml` compose files into the `custom` folder. Any containers or other options you have will automatically override any existing default container options.
 
-## Custom bash aliases
+## Custom shell aliases
 
-The `bash` folder lets you add custom aliases and functions to your php containers. Any file with the `.bash` extension will be sourced into your php container whenever you bash into it. This is useful for when you need to run complex commands often during development, such as initialising tests. To get started, simply copy `aliases.bash.dist` to `aliases.bash` and define your aliases.
+The `shell` folder lets you add custom aliases and functions to your php containers. Any file with the `.sh` extension will be sourced into your php container whenever you bash/sh into it. This is useful for when you need to run complex commands often during development, such as initialising tests. To get started, simply copy `aliases.sh.dist` to `aliases.sh` and define your aliases.
+
+## Oh My Zsh shell
+
+Oh My Zsh is an extention for the standard zsh shell. You can use it with the php containers instead of bash by using the `tzsh` command.
+It is better than the basic bash shell as it brings colour support, autocompletion, autosuggestions and more.
+To begin using it, you will need to install [custom fonts](https://github.com/romkatv/nerd-fonts) and configure your terminal emulator to use them.
+Oh My Zsh is highly configurable - see `shell/.zshrc` for the current configuration and check out the [ohmyzsh](https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/README.md) and [powerline10k](https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/README.md) docs for more ideas on what is possible.
