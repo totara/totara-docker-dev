@@ -3,6 +3,6 @@ mutagen.yml.lock
 .env
 !.gitkeep
 /cron.d/*.cron
-/bash/*.bash
+/shell/*.sh
 /custom/*.yml
 /custom/*.yaml

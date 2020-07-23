@@ -6,12 +6,14 @@ services:
     container_name: totara_php53
     working_dir: ${REMOTE_SRC}
     environment:
+      CONTAINERNAME: php-5.3
       HIST_FILE: /root/.bash_history
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
-      - ./bash:/root/custom_bash
+      - zsh-history:/root/.zsh_history
+      - ./shell:/root/custom_shell
     depends_on:
       - php-5.3-debug
     networks:
@@ -22,6 +24,7 @@ services:
     container_name: totara_php53_debug
     working_dir: ${REMOTE_SRC}
     environment:
+      CONTAINERNAME: php-5.3-debug
       HOST_IP: ${HOST_IP}
       PHP_IDE_CONFIG: serverName=totara53
       HIST_FILE: /root/.bash_history
@@ -29,7 +32,8 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
-      - ./bash:/root/custom_bash
+      - zsh-history:/root/.zsh_history
+      - ./shell:/root/custom_shell
     networks:
       - totara
 
@@ -38,12 +42,14 @@ services:
     container_name: totara_php54
     working_dir: ${REMOTE_SRC}
     environment:
+      CONTAINERNAME: php-5.4
       HIST_FILE: /root/.bash_history
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
-      - ./bash:/root/custom_bash
+      - zsh-history:/root/.zsh_history
+      - ./shell:/root/custom_shell
     depends_on:
       - php-5.4-debug
     networks:
@@ -54,6 +60,7 @@ services:
     container_name: totara_php54_debug
     working_dir: ${REMOTE_SRC}
     environment:
+      CONTAINERNAME: php-5.4-debug
       HOST_IP: ${HOST_IP}
       PHP_IDE_CONFIG: serverName=totara54
       HIST_FILE: /root/.bash_history
@@ -61,7 +68,8 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
-      - ./bash:/root/custom_bash
+      - zsh-history:/root/.zsh_history
+      - ./shell:/root/custom_shell
     networks:
       - totara
 
@@ -80,12 +88,14 @@ services:
     container_name: totara_php55
     working_dir: ${REMOTE_SRC}
     environment:
+      CONTAINERNAME: php-5.5
       HIST_FILE: /root/.bash_history
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
-      - ./bash:/root/custom_bash
+      - zsh-history:/root/.zsh_history
+      - ./shell:/root/custom_shell
     depends_on:
       - php-5.5-debug
     networks:
@@ -96,6 +106,7 @@ services:
     container_name: totara_php55_debug
     working_dir: ${REMOTE_SRC}
     environment:
+      CONTAINERNAME: php-5.5-debug
       XDEBUG_CONFIG: remote_host=${HOST_IP}
       PHP_IDE_CONFIG: serverName=totara55
       HIST_FILE: /root/.bash_history
@@ -103,7 +114,8 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
-      - ./bash:/root/custom_bash
+      - zsh-history:/root/.zsh_history
+      - ./shell:/root/custom_shell
     networks:
       - totara
 
@@ -122,12 +134,14 @@ services:
     container_name: totara_php56
     working_dir: ${REMOTE_SRC}
     environment:
+      CONTAINERNAME: php-5.6
       HIST_FILE: /root/.bash_history
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
-      - ./bash:/root/custom_bash
+      - zsh-history:/root/.zsh_history
+      - ./shell:/root/custom_shell
     depends_on:
       - php-5.6-debug
     networks:
@@ -138,6 +152,7 @@ services:
     container_name: totara_php56_debug
     working_dir: ${REMOTE_SRC}
     environment:
+      CONTAINERNAME: php-5.6-debug
       XDEBUG_CONFIG: remote_host=${HOST_IP}
       PHP_IDE_CONFIG: serverName=totara56
       HIST_FILE: /root/.bash_history
@@ -145,7 +160,8 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
-      - ./bash:/root/custom_bash
+      - zsh-history:/root/.zsh_history
+      - ./shell:/root/custom_shell
     networks:
       - totara
 
@@ -164,12 +180,14 @@ services:
     container_name: totara_php70
     working_dir: ${REMOTE_SRC}
     environment:
+      CONTAINERNAME: php-7.0
       HIST_FILE: /root/.bash_history
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
-      - ./bash:/root/custom_bash
+      - zsh-history:/root/.zsh_history
+      - ./shell:/root/custom_shell
     depends_on:
       - php-7.0-debug
     networks:
@@ -180,6 +198,7 @@ services:
     container_name: totara_php70_debug
     working_dir: ${REMOTE_SRC}
     environment:
+      CONTAINERNAME: php-7.0-debug
       XDEBUG_CONFIG: remote_host=${HOST_IP}
       PHP_IDE_CONFIG: serverName=totara70
       HIST_FILE: /root/.bash_history
@@ -187,7 +206,8 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
-      - ./bash:/root/custom_bash
+      - zsh-history:/root/.zsh_history
+      - ./shell:/root/custom_shell
     networks:
       - totara
 
@@ -206,12 +226,14 @@ services:
     container_name: totara_php71
     working_dir: ${REMOTE_SRC}
     environment:
+      CONTAINERNAME: php-7.1
       HIST_FILE: /root/.bash_history
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
-      - ./bash:/root/custom_bash
+      - zsh-history:zsh_history
+      - ./shell:/root/custom_shell
     depends_on:
       - php-7.1-debug
     networks:
@@ -222,6 +244,7 @@ services:
     container_name: totara_php71_debug
     working_dir: ${REMOTE_SRC}
     environment:
+      CONTAINERNAME: php-7.1-debug
       XDEBUG_CONFIG: remote_host=${HOST_IP}
       PHP_IDE_CONFIG: serverName=totara71
       HIST_FILE: /root/.bash_history
@@ -229,7 +252,8 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
-      - ./bash:/root/custom_bash
+      - zsh-history:/root/.zsh_history
+      - ./shell:/root/custom_shell
     networks:
       - totara
 
@@ -248,12 +272,14 @@ services:
     container_name: totara_php72
     working_dir: ${REMOTE_SRC}
     environment:
+      CONTAINERNAME: php-7.2
       HIST_FILE: /root/.bash_history
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
-      - ./bash:/root/custom_bash
+      - zsh-history:/root/.zsh_history
+      - ./shell:/root/custom_shell
     depends_on:
       - php-7.2-debug
     networks:
@@ -264,6 +290,7 @@ services:
     container_name: totara_php72_debug
     working_dir: ${REMOTE_SRC}
     environment:
+      CONTAINERNAME: php-7.2-debug
       XDEBUG_CONFIG: remote_host=${HOST_IP}
       PHP_IDE_CONFIG: serverName=totara72
       HIST_FILE: /root/.bash_history
@@ -271,7 +298,8 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
-      - ./bash:/root/custom_bash
+      - zsh-history:/root/.zsh_history
+      - ./shell:/root/custom_shell
     networks:
       - totara
 
@@ -290,12 +318,14 @@ services:
     container_name: totara_php73
     working_dir: ${REMOTE_SRC}
     environment:
+      CONTAINERNAME: php-7.3
       HIST_FILE: /root/.bash_history
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
-      - ./bash:/root/custom_bash
+      - zsh-history:/root/.zsh_history
+      - ./shell:/root/custom_shell
     depends_on:
       - php-7.3-debug
     networks:
@@ -306,6 +336,7 @@ services:
     container_name: totara_php73_debug
     working_dir: ${REMOTE_SRC}
     environment:
+      CONTAINERNAME: php-7.3-debug
       XDEBUG_CONFIG: remote_host=${HOST_IP}
       PHP_IDE_CONFIG: serverName=totara73
       HIST_FILE: /root/.bash_history
@@ -313,7 +344,8 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
-      - ./bash:/root/custom_bash
+      - zsh-history:/root/.zsh_history
+      - ./shell:/root/custom_shell
     networks:
       - totara
 
@@ -332,12 +364,14 @@ services:
     container_name: totara_php74
     working_dir: ${REMOTE_SRC}
     environment:
+      CONTAINERNAME: php-7.4
       HIST_FILE: /root/.bash_history
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
-      - ./bash:/root/custom_bash
+      - zsh-history:/root/.zsh_history
+      - ./shell:/root/custom_shell
     depends_on:
       - php-7.4-debug
     networks:
@@ -348,6 +382,7 @@ services:
     container_name: totara_php74_debug
     working_dir: ${REMOTE_SRC}
     environment:
+      CONTAINERNAME: php-7.4-debug
       XDEBUG_CONFIG: remote_host=${HOST_IP}
       PHP_IDE_CONFIG: serverName=totara74
       HIST_FILE: /root/.bash_history
@@ -355,7 +390,8 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
-      - ./bash:/root/custom_bash
+      - zsh-history:/root/.zsh_history
+      - ./shell:/root/custom_shell
     networks:
       - totara
 
@@ -371,3 +407,4 @@ services:
 
 volumes:
   totara-data:
+  zsh-history:

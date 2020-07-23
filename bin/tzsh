@@ -1,0 +1,5 @@
+#!/bin/bash
+
+SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+
+$SCRIPTPATH/tdocker exec "$1" /bin/zsh

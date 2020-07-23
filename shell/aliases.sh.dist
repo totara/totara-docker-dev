@@ -1,0 +1,130 @@
+# Copy this file to aliases.sh (aka remove the .dist) to enable them for use in your php containers
+# You can use these as is or customise and add new ones to your liking
+
+# To be backwards compatible with older totara versions
+function getserverdir() {
+	if [ -f './server/config.php' ]; then
+		SERVERDIR='server/';
+	else
+		SERVERDIR='';
+	fi;
+}
+
+# Perform a fresh install of Totara
+function install() {
+	getserverdir
+	if [[ ! -f "${SERVERDIR}config.php" && ! -f "${SERVERDIR}version.php" ]]; then
+		echo "Couldn't find a site to install"
+		return 1
+	fi
+	if [ -z $1 ]; then
+		# Make the site name the version of the totara site
+		local get_version_code="
+			\$matches=array();
+			\$totara_regex=\"/version[\s]*=[\s]*\'([^\']+)\'/\";
+			preg_match_all(\$totara_regex, file_get_contents('${SERVERDIR}version.php'), \$matches);
+			if (!empty(\$matches) && isset(\$matches[1][0])) {
+				echo('Totara ' . \$matches[1][0] . ' development site');
+				return;
+			}
+			\$moodle_regex=\"/release[\s]*=[\s]*\'([^\s]+)[^\']+\'/\";
+			preg_match_all(\$moodle_regex, file_get_contents('${SERVERDIR}version.php'), \$matches);
+			if (!empty(\$matches) && isset(\$matches[1][0])) {
+				echo('Moodle ' . \$matches[1][0] . ' development site');
+			}
+		"
+		local version=$(php -r "$get_version_code")
+		php ${SERVERDIR}admin/cli/install_database.php \
+			--adminpass=admin \
+			--adminemail=admin@example.com \
+			--agree-license \
+			--shortname="$version"\
+			--fullname="$version" 
+	else
+		php ${SERVERDIR}admin/cli/install_database.php $@
+	fi
+}
+
+# Upgrade the installation
+function upgrade() {
+	getserverdir
+	php ${SERVERDIR}admin/cli/upgrade.php --non-interactive --allow-unstable $@
+}
+
+# Run cron
+function cron() {
+	getserverdir
+	php ${SERVERDIR}admin/cli/cron.php $@
+}
+
+# Purge caches
+function purge() {
+	getserverdir
+	php ${SERVERDIR}admin/cli/purge_caches.php $@
+}
+
+# Initialise PHPUnit
+function installunit() {
+	getserverdir
+	php ${SERVERDIR}admin/tool/phpunit/cli/init.php $@
+}
+
+# Initialise Behat
+function installbehat() {
+	getserverdir
+	php ${SERVERDIR}admin/tool/behat/cli/init.php $@
+}
+
+# Initialise Behat in parallel mode
+function installbehatparallel() {
+	getserverdir
+	if [ -z "$1" ]; then
+		php ${SERVERDIR}admin/tool/behat/cli/init.php --parallel=4;
+	else
+		php ${SERVERDIR}admin/tool/behat/cli/init.php $@;
+	fi
+}
+
+# Run PhpUnit
+function unit() {
+	getserverdir
+	if [ -z "$SERVERDIR" ]; then
+		vendor/bin/phpunit --test-suffix="test.php" $@;
+	else
+		php test/phpunit/phpunit.php run --test-suffix="test.php" $@;
+	fi
+}
+
+# Run Behat
+function behat() {
+	getserverdir
+	if [ -z "$SERVERDIR" ]; then
+		vendor/bin/behat $@;
+	else
+		test/behat/vendor/bin/behat --config test/behat/behat.yml $@;
+	fi
+}
+
+# Run Behat in parallel mode
+function behatparallel() {
+	getserverdir
+	if [ -z "$SERVERDIR" ]; then
+		php admin/tool/behat/cli/run.php $@;
+	else
+		php test/behat/behat.php behat_run $@;
+	fi
+}
+
+# Create a test course
+function createcourse() {
+	getserverdir
+	php ${SERVERDIR}admin/tool/generator/cli/maketestcourse.php \
+		--shortname=course \
+		--size=S $@
+}
+
+# Create a test user
+function createuser() {
+	getserverdir
+	php ${SERVERDIR}totara/generator/cli/maketestuser.php $@
+}

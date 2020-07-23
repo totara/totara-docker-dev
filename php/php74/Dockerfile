@@ -87,5 +87,16 @@ RUN ln -fs /usr/share/zoneinfo/${TIME_ZONE} /etc/localtime \
 COPY config/php.ini /usr/local/etc/php/
 COPY config/fpm.conf /usr/local/etc/php-fpm.d/zz-totara.conf
 
-# Source each .bash file found in the /bash/ folder
-RUN echo 'for f in ~/custom_bash/*.bash; do [[ -e "$f" ]] && source "$f"; done;' >> ~/.bashrc
+# Source each .sh file found in the /shell/ folder
+RUN echo 'for f in ~/custom_shell/*.sh; do [[ -e "$f" ]] && source "$f"; done;' >> ~/.bashrc
+
+# Have the option of using the oh my zsh shell.
+RUN apt-get update && apt-get install -y zsh
+RUN sh -c "$(curl https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" --unattended
+RUN git clone https://github.com/romkatv/powerlevel10k ~/.oh-my-zsh/custom/themes/powerlevel10k
+RUN git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+RUN git clone https://github.com/zsh-users/zsh-completions ~/.oh-my-zsh/custom/plugins/zsh-completions
+RUN git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+RUN echo 'setopt +o nomatch' > ~/.zshrc
+RUN echo 'source ~/custom_shell/.zshrc' >> ~/.zshrc
+RUN cat ~/.bashrc >> ~/.zshrc
