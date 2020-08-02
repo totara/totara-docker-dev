@@ -132,6 +132,7 @@ This project comes with a few bash scripts to simplify usage across platforms. T
 ```bash
 tbash [container]                 # log into a container, i.e. php-7.2
 tbuild [container]                # build (all) container(s)
+tdb [options]                     # run common actions for your databases
 tdocker                           # shortcut to general docker-compose ... command
 tdown                             # shutdown all containers
 tgrunt [options]                  # run grunt in container, supports running in subfolders
@@ -153,7 +154,13 @@ This is just a suggestion which worked fine for me. There are different ways to 
 
 ### Config & Database
 
-Make sure you have configured Totara and created the databases you need. You can connect to the databases from your host using any tools you prefer (host = _localhost_, use default ports).
+Make sure you have configured Totara and created the databases you need. You can connect to the databases from your host using the ```tdb``` command, or any tools you prefer (host = _localhost_, use default ports).
+
+#### ```tdb``` Command
+
+The ```tdb``` command allows you to easily interact with any of the 4 supported DBMSes in a simple and consistent way. The script allows you to create, drop, backup and restore any database without having to remember the specific commands for each dbms. To get started, simply define your database ```$CFG``` variables in your ```config.php```, then run ```tdb``` from your totara site directory (not in a container)
+
+Alternatively, you can manually configure your databases via the following credentials and commands.
 
 #### Credentials
 
