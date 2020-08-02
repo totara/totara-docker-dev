@@ -20,6 +20,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         git \
         libzip-dev \
         libmemcached-dev \
+        zip \
     && docker-php-ext-install -j$(nproc) xmlrpc \
         zip \
         intl \

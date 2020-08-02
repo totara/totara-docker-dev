@@ -19,6 +19,7 @@ RUN apt-get update && apt-get install -y \
         locales \
         tzdata \
         libmemcached-dev \
+        zip \
     && docker-php-ext-install -j$(nproc) xmlrpc \
         zip \
         intl \

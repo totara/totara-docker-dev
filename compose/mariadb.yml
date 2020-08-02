@@ -3,7 +3,7 @@ services:
 
   mariadb:
     image: mariadb:10.4
-    container_name: totara_mariadb
+    container_name: totara_mariadb104
     ports:
       - "3307:3306"
     environment:

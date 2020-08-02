@@ -1,0 +1,470 @@
+#!/bin/bash
+
+script_name=$(basename "$0")
+script_path="$( cd "$(dirname $0)" || exit; pwd -P )"
+project_path="$( cd "$script_path" && cd ..; pwd -P )"
+
+export $(grep -E -v '^#' "$project_path/.env" | xargs)
+
+ignore_dataroot=0
+if [[ "$1" == "-i" || "$1" == "--ignore-dataroot" ]]; then
+    ignore_dataroot=1
+    shift
+fi
+
+# Print help info
+action=$1
+action_options=(
+    create
+    recreate
+    drop
+    backup
+    restore
+    shell
+)
+if [[ -z $action || ! " ${action_options[@]} " =~ " ${action} " ]]; then
+    echo "Helper for interacting with your totara database.
+It detects your database engine via your config.php, so if you have multiple sites
+running you'll need to run this from the folder you wish to interact with.
+
+Usage: $script_name [OPTIONS] <action> [database name] [backup file]
+
+Actions:
+  create       Create database
+  recreate     Drop database and then recreate it
+  drop         Drop database
+  backup       Dump database to a backup file
+  restore      Restore database from a backup file
+  shell        Start a tty session for a database
+
+Options:
+  -i, --ignore-dataroot    Ignore the dataroot directory when backing up and restoring.
+
+Examples:
+  $script_name create                                // Will create a database with the name defined in your config.php if it doesn't already exist
+  $script_name drop unt_totara13                     // Will drop the database with the name 'unt_totara13'
+  $script_name -i backup                             // Will backup the database but not the dataroot to your home directory
+  $script_name restore totara13 /home/myfeature.sql  // Will restore the database dumped in the '/home/myfeature.sql' file into the 'totara13' database
+"
+    exit;
+fi
+
+# Handle subdirectory
+sub_path="${PWD//$LOCAL_SRC/}"
+if [ -z "$sub_path" ]; then
+    local_dir="$LOCAL_SRC"
+    remote_dir="$REMOTE_SRC"
+else
+    local_dir="${LOCAL_SRC}/${sub_path}"
+    remote_dir="${REMOTE_SRC}/${sub_path}"
+fi
+
+if [ ! -f "$local_dir/config.php" ]; then
+    echo -e "\x1B[33mCould not find a totara site (or a config.php)\nIf you have multiple sites, make sure you run this command from the correct directory.\x1B[0m"
+    exit
+fi
+
+# Get PHP Version to use based on totara version
+version_php_path="$local_dir/version.php"
+if [ -f "$local_dir/server/version.php" ]; then
+    version_php_path="$local_dir/server/version.php"
+fi
+php_get_version_code="
+    \$matches=array();
+    \$totara_regex=\"/version[\s]*=[\s]*\'([^\']+)\'/\";
+    preg_match_all(\$totara_regex, file_get_contents('${version_php_path}'), \$matches);
+    if (!empty(\$matches) && isset(\$matches[1][0])) {
+        echo(\$matches[1][0]);
+        return;
+    }
+"
+totara_version=$(php -r "$php_get_version_code")
+if [[ "$totara_version" =~ '14.' || "$totara_version" =~ '14dev' ]]; then
+    php_version='7.3'
+elif [[ "$totara_version" =~ '13.' || "$totara_version" =~ '13dev' ]]; then
+    php_version='7.3'
+elif [[ "$totara_version" =~ '12.' || "$totara_version" =~ '11.' ]]; then
+    php_version='7.3'
+elif [[ "$totara_version" =~ '10.' ]]; then
+    php_version='7.2'
+elif [[ "$totara_version" =~ '9.' ]]; then
+    php_version='7.0'
+else
+    php_version='5.6'
+fi
+php_container_version=$(echo $php_version | sed 's/[^0-9]*//g')
+
+# Get running php container, or start it if it isn't running
+php_containers=($(docker ps --filter "name=php$php_container_version" --format '{{.ID}} {{.Names}}' | grep -v "_debug" | xargs))
+if [ -z $php_containers ]; then
+    tup "php-$php_version"
+    php_containers=($(docker ps --filter "name=php$php_container_version" --format '{{.ID}} {{.Names}}' | grep -v "_debug" | xargs))
+fi
+php_container=${php_containers[0]}
+php_container_name=${php_containers[1]}
+php_command="docker exec $php_container";
+
+# Get the database variables from the site config.php
+config_php_path="$remote_dir/config.php"
+if [ -f "$local_dir/server/config.php" ]; then
+    config_php_path="$remote_dir/server/config.php"
+fi
+php_get_config_vars="
+    define(\"CLI_SCRIPT\", true);
+    define(\"ABORT_AFTER_CONFIG\", true);
+    require_once(\"$config_php_path\");
+    if (!isset(\$CFG->dbtype) || !isset(\$CFG->dbhost) || !isset(\$CFG->dbname) || !isset(\$CFG->dbuser) || !isset(\$CFG->dbpass) || !isset(\$CFG->dataroot)) {
+        echo(0);
+        return;
+    }
+    echo \"1 \$CFG->dataroot \$CFG->dbtype \$CFG->dbhost \$CFG->dbname \$CFG->dbuser \$CFG->dbpass\";
+"
+
+config_output=$( eval "$php_command php -r '$php_get_config_vars'" )
+
+# Show a relevant error message if there is an issue with the config php
+if [[ "$config_output" =~ "dataroot is not configured properly" ]]; then
+    echo -e "\x1B[33m\$CFG->dataroot is not configured properly, directory does not exist or is not accessible.\x1B[0m"
+    exit
+elif [[ "$config_output" =~ "Parse error" ]]; then
+    echo -e "\x1B[33mThe site config.php is invalid or the currently running PHP container version is incompatible with this totara version.\nDouble check your config.php and/or try stopping all running php containers and up the correct container for this site.\x1B[0m"
+    exit
+elif [[ "$config_output" =~ "Creating default object from empty value" ]]; then
+    echo -e "\x1B[33mThe site config.php is is incompatible with this totara version.\nDouble check you've checked out the correct code and/or your config.php is correct.\x1B[0m"
+    exit
+fi
+
+config_vars=($config_output)
+
+if [ "${config_vars[0]}" == '0' ]; then
+    echo -e "\x1B[33mDatabase config variables are missing from config.php\x1B[0m"
+    exit
+fi
+
+dataroot=${config_vars[1]}
+db_type=${config_vars[2]}
+db_host=${config_vars[3]}
+db_user=${config_vars[5]}
+db_password=${config_vars[6]}
+
+# Get the db name. Defaults to what is defined in config.php
+if [ ! -z $2 ]; then
+    db_name=$2
+else
+    db_name=${config_vars[4]}
+fi
+
+# Get the db container
+if [[ "$db_host" == 'pgsql' ]]; then
+    db_container_name='totara_pgsql12'
+elif [[ "$db_host" == 'mysql' ]]; then
+    db_container_name='totara_mysql57'
+elif [[ "$db_host" == 'mariadb' ]]; then
+    db_container_name='totara_mariadb104'
+else
+    db_container_name="totara_${db_host}"
+fi
+db_containers=($(docker ps --filter "name=$db_host" --format '{{.ID}} {{.Names}}' | grep "$db_container_name" | xargs))
+if [ -z $db_containers ]; then
+    tup "$db_host"
+    echo -e "\x1B[2mWaiting 10 seconds for dbms to start up\x1B[0m"
+    sleep 10
+    db_containers=($(docker ps --filter "name=$db_host" --format '{{.ID}} {{.Names}}' | grep "$db_container_name" | xargs))
+fi
+db_container=${db_containers[0]}
+db_command="docker exec $db_container";
+
+# Get the backup file path. Defaults to a new backup folder in the users's home directory.
+if [[ $action == 'backup' || $action == 'restore' ]]; then
+    backup_folder='/tdb_backups'
+    backup_file_local=$3
+    if [ -z "$backup_file_local" ]; then
+        backup_file_remote="$backup_folder/${db_name}.${db_host}"
+        backup_file_local=$HOME$backup_file_remote
+        backup_file_name=$(basename "$backup_file_local")
+        mkdir -p "$HOME$backup_folder"
+        echo -e "\x1B[2mNote: Backup file path was not specified. Will try use '$backup_file_local'\x1B[0m"
+    else
+        backup_file_name=$(basename "$backup_file_local")
+        backup_file_remote="$backup_folder/$backup_file_name"
+    fi
+
+    # Make sure the zip command is available in the container if we are backing up the dataroot.
+    $php_command zip --help >> /dev/null
+    if [[ ! $? -eq 0 && "$ignore_dataroot" == "0" ]]; then
+        echo -e "\x1B[33mThe 'zip' command is not installed for the $php_container_name container.\nRebuild/pull the container and restart it to fix this.\x1B[0m"
+        exit
+    fi
+    # If backing up, make sure we don't accidentally overwrite an existing backup file.
+    if [[ $action == 'backup' && -f "$backup_file_local" ]]; then
+        echo -e "\x1B[33mBackup file already exists. Delete it, then run this again.\x1B[0m"
+        exit
+    # If restoring, make sure the backup file exists.
+    elif [[ $action == 'restore' && ! -f "$backup_file_local" ]]; then
+        echo -e "\x1B[33mBackup file does not exist.\x1B[0m"
+        exit
+    fi
+
+    $db_command sh -c "mkdir -p $backup_folder"
+    $php_command sh -c "mkdir -p $backup_folder"
+
+    # Dataroot backup functionality. For now we don't care about the phpunit/behat dataroots.
+    # We only backup/restore the dataroot if we are backing up/restoring the site database.
+    if [[ "$ignore_dataroot" == "0" && "$db_name" == "${config_vars[4]}" ]]; then
+        dataroot_name=$(basename "$dataroot")
+        dataroot_dir=$(dirname "$dataroot")
+        backup_dataroot_suffix=".dataroot.zip";
+        backup_dataroot_remote="$backup_file_remote$backup_dataroot_suffix"
+        backup_dataroot_local="$backup_file_local$backup_dataroot_suffix"
+
+        # If backing up, make sure we don't accidentally overwrite an existing dataroot zip.
+        if [[ $action == 'backup' && -f "$backup_dataroot_local" ]]; then
+            echo -e "\x1B[33mBackup dataroot zip already exists. Delete it, then run this again.\x1B[0m"
+            exit
+        # If restoring, make sure the backup dataroot zip exists.
+        elif [[ $action == 'restore' && ! -f "$backup_dataroot_local" ]]; then
+            echo -e "\x1B[33mWARNING: Backup dataroot zip does not exist at '$backup_dataroot_local'\n         This may cause uploaded files, caches and other non-database objects to not work correctly.\x1B[0m"
+        fi
+    fi
+fi
+
+##########################################
+#               PostgreSQL               #
+##########################################
+if [ "$db_type" == 'pgsql' ]; then
+    # Create pgsql database
+    if [ "$action" == 'create' ]; then
+        $db_command createdb -U "$db_user" -T template1 -E UTF-8 "$db_name"
+
+    # Drop and create pgsql database
+    elif [ "$action" == 'recreate' ]; then
+        $db_command dropdb -U "$db_user" --if-exists "$db_name"
+        $db_command createdb -U "$db_user" -T template1 -E UTF-8 "$db_name"
+
+    # Drop pgsql database
+    elif [ "$action" == 'drop' ]; then
+        $db_command dropdb -U "$db_user" "$db_name"
+
+    # Backup pgsql database
+    elif [ "$action" == 'backup' ]; then
+        $db_command pg_dump -U "$db_user" "$db_name" > "$backup_file_local"
+
+    # Restore pgsql database
+    elif [ "$action" == 'restore' ]; then
+        docker cp "$backup_file_local" "$db_container":"$backup_file_remote"
+        $db_command dropdb -U "$db_user" --if-exists "$db_name"
+        $db_command createdb -U "$db_user" -T template1 -E UTF-8 "$db_name"
+        $db_command psql -U "$db_user" --dbname "$db_name" -f "$backup_file_remote" >> /dev/null
+        if [[ "${PIPESTATUS[0]}" == '1' || ! $? -eq 0 ]]; then
+            $db_command sh -c "rm $backup_file_remote"
+            echo -e "\x1B[31mThere was an error while restoring $db_host database '$db_name' from file '$backup_file_local'\x1B[0m"
+            exit
+        fi
+        $db_command sh -c "rm $backup_file_remote"
+
+    # Start pgsql shell
+    elif [ "$action" == 'shell' ]; then
+        docker exec -it "$db_container" sh -c "psql -U $db_user --dbname \"$db_name\""
+
+    # Handle unimplemented action
+    else
+        echo -e "\x1B[2mNote: $action for $db_type isn't implemented yet.\x1B[0m"
+        exit
+    fi
+
+##########################################
+#                 MySQL                  #
+##########################################
+elif [ "$db_type" == 'mysqli' ]; then
+    # Handles executing sql commands
+    function db_sql_cmd() {
+        # Export password to avoid insecure password warnings
+        eval "$db_command sh -c 'export MYSQL_PWD=$db_password; mysql -u\"$db_user\" -e \"$1\"'"
+    }
+
+    # Create mysql database
+    if [ "$action" == 'create' ]; then
+        db_sql_cmd "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci" || exit
+
+    # Drop and create mysql database
+    elif [ "$action" == 'recreate' ]; then
+        db_sql_cmd "DROP DATABASE IF EXISTS $db_name" >> /dev/null
+        db_sql_cmd "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci" || exit
+
+    # Drop mysql database
+    elif [ "$action" == 'drop' ]; then
+        db_sql_cmd "DROP DATABASE $db_name" || exit
+
+    # Backup mysql database
+    elif [ "$action" == 'backup' ]; then
+        eval "$db_command sh -c 'export MYSQL_PWD=$db_password; mysqldump -u\"$db_user\" $db_name > $backup_file_remote'" || exit
+        docker cp "$db_container":"$backup_file_remote" "$backup_file_local"
+        $db_command sh -c "rm $backup_file_remote"
+
+    # Restore mysql database
+    elif [ "$action" == 'restore' ]; then
+        db_sql_cmd "DROP DATABASE IF EXISTS $db_name"
+        db_sql_cmd "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci"
+        docker cp "$backup_file_local" "$db_container":"$backup_file_remote"
+        $db_command sh -c "export MYSQL_PWD=$db_password; mysql -u\"$db_user\" $db_name < $backup_file_remote" >> /dev/null
+        if [ "${PIPESTATUS[0]}" == '1' ]; then
+            $db_command sh -c "rm $backup_file_remote"
+            echo -e "\x1B[31mThere was an error while restoring $db_host database '$db_name' from file '$backup_file_local'\x1B[0m"
+            exit
+        fi
+        $db_command sh -c "rm $backup_file_remote"
+
+    # Start mysql shell
+    elif [ "$action" == 'shell' ]; then
+        docker exec -it "$db_container" sh -c "export MYSQL_PWD=$db_password; mysql -u\"$db_user\" -A $db_name"
+
+    # Handle unimplemented action
+    else
+        echo -e "\x1B[2mNote: $action for $db_type isn't implemented yet.\x1B[0m"
+        exit
+    fi
+
+##########################################
+#                MariaDB                 #
+##########################################
+elif [ "$db_type" == 'mariadb' ]; then
+    db_sql_cmd="$db_command mysql -u\"$db_user\" -p\"$db_password\""
+
+    # Create mariadb database
+    if [ "$action" == 'create' ]; then
+        eval "$db_sql_cmd -e \"CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci\"" || exit
+
+    # Drop and create mariadb database
+    elif [ "$action" == 'recreate' ]; then
+        eval "$db_sql_cmd -e \"DROP DATABASE IF EXISTS $db_name\"" >> /dev/null
+        eval "$db_sql_cmd -e \"CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci\"" || exit
+
+    # Drop mariadb database
+    elif [ "$action" == 'drop' ]; then
+        eval "$db_sql_cmd -e \"DROP DATABASE $db_name\"" || exit
+
+    # Backup mariadb database
+    elif [ "$action" == 'backup' ]; then
+        eval "$db_command mysqldump -u\"$db_user\" -p\"$db_password\" $db_name" > "$backup_file_local" || exit
+
+    # Restore mariadb database
+    elif [ "$action" == 'restore' ]; then
+        eval "$db_sql_cmd -e \"DROP DATABASE IF EXISTS $db_name\""
+        eval "$db_sql_cmd -e \"CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci\""
+        docker cp "$backup_file_local" "$db_container":"$backup_file_remote"
+        $db_command sh -c "mysql -u\"$db_user\" -p\"$db_password\" $db_name < $backup_file_remote" >> /dev/null
+        if [ "${PIPESTATUS[0]}" == '1' ]; then
+            $db_command sh -c "rm $backup_file_remote"
+            echo -e "\x1B[31mThere was an error while restoring $db_host database '$db_name' from file '$backup_file_local'\x1B[0m"
+            exit
+        fi
+        $db_command sh -c "rm $backup_file_remote"
+
+    # Start mariadb shell
+    elif [ "$action" == 'shell' ]; then
+        docker exec -it "$db_container" sh -c "mysql -u\"$db_user\" -p\"$db_password\" -A $db_name"
+
+    # Handle unimplemented action
+    else
+        echo -e "\x1B[2mNote: $action for $db_type isn't implemented yet.\x1B[0m"
+        exit
+    fi
+
+##########################################
+#          Microsoft SQL Server          #
+##########################################
+elif [ "$db_type" == 'sqlsrv' ]; then
+    # Handles executing sql commands.
+    function db_sql_cmd() {
+        command_output=$(eval "$php_command /opt/mssql-tools/bin/sqlcmd -S $db_host -U $db_user -P \"$db_password\" -q \"$1\"")
+        error_msg=$(echo "$command_output" | grep 'Msg')
+        if [ -z "$2" ]; then
+            eval "$2"
+        fi
+        if [ -n "$error_msg" ]; then
+            echo -e "$(echo -e "$command_output" | grep -v 'CTRL+C')"
+            return 1
+        else
+            return 0
+        fi
+    }
+
+    # Create mssql database
+    if [ "$action" == 'create' ]; then
+        db_sql_cmd "CREATE DATABASE $db_name COLLATE Latin1_General_CS_AS ALTER DATABASE $db_name SET ANSI_NULLS ON ALTER DATABASE $db_name SET QUOTED_IDENTIFIER ON ALTER DATABASE $db_name SET READ_COMMITTED_SNAPSHOT ON" || exit
+
+    # Drop and create mssql database
+    elif [ "$action" == 'recreate' ]; then
+        db_sql_cmd "DROP DATABASE IF EXISTS $db_name"
+        db_sql_cmd "CREATE DATABASE $db_name COLLATE Latin1_General_CS_AS ALTER DATABASE $db_name SET ANSI_NULLS ON ALTER DATABASE $db_name SET QUOTED_IDENTIFIER ON ALTER DATABASE $db_name SET READ_COMMITTED_SNAPSHOT ON" || exit
+
+    # Drop mssql database
+    elif [ "$action" == 'drop' ]; then
+        db_sql_cmd "DROP DATABASE $db_name" || exit
+
+    # Backup mssql database
+    elif [ "$action" == 'backup' ]; then
+        db_sql_cmd "BACKUP DATABASE $db_name TO DISK='$backup_file_remote'" || exit
+        docker cp "$db_container":"$backup_file_remote" "$backup_file_local"
+        $db_command sh -c "rm $backup_file_remote"
+
+    # Restore mssql database
+    elif [ "$action" == 'restore' ]; then
+        docker cp "$backup_file_local" "$db_container":"$backup_file_remote"
+        db_sql_cmd "RESTORE DATABASE $db_name FROM DISK='$backup_file_remote' WITH REPLACE" "$db_command sh -c \"rm $backup_file_remote\"" || exit
+
+    # Start mssql shell
+    elif [ "$action" == 'shell' ]; then
+        docker exec -it "$php_container" sh -c "/opt/mssql-tools/bin/sqlcmd -S $db_host -U $db_user -P \"$db_password\" -q 'USE $db_name'"
+
+    # Handle unimplemented action
+    else
+        echo -e "\x1B[2mNote: $action for $db_type isn't implemented yet.\x1B[0m"
+        exit
+    fi
+fi
+
+# Don't do anything else if the commands failed
+if [[ ! $? -eq 0 ]]; then
+    exit
+fi
+
+# Common across all DBMSes
+if [ "$action" == 'create' ]; then
+    echo -e "\x1B[0m\x1B[32mSuccessfully created \x1B[36m$db_host\x1B[32m database \x1B[34m$db_name\x1B[0m"
+
+elif [ "$action" == 'recreate' ]; then
+    echo -e "\x1B[0m\x1B[32mSuccessfully dropped and recreated \x1B[36m$db_host\x1B[32m database \x1B[34m$db_name\x1B[0m"
+
+elif [ "$action" == 'drop' ]; then
+    echo -e "\x1B[0m\x1B[32mSuccessfully dropped \x1B[36m$db_host\x1B[32m database \x1B[34m$db_name\x1B[0m"
+
+elif [ "$action" == 'backup' ]; then
+    echo -e "\x1B[0m\x1B[32mSuccessfully backed up \x1B[36m$db_host\x1B[32m database \x1B[34m$db_name\x1B[32m to \x1B[39m\x1B[4m$backup_file_local\x1B[0m"
+
+    if [ "$ignore_dataroot" == "0" ]; then
+        $php_command sh -c "cd $dataroot && zip -0 -r $backup_dataroot_remote ." >> /dev/null
+        docker cp "$php_container":"$backup_dataroot_remote" "$backup_dataroot_local"
+        $php_command sh -c "rm $backup_dataroot_remote"
+        echo -e "\x1B[2mSuccessfully backed up dataroot to \x1B[0m\x1B[4m\x1B[37m$backup_dataroot_local\x1B[0m"
+    fi
+
+elif [ "$action" == 'restore' ]; then
+    echo -e "\x1B[0m\x1B[32mSuccessfully restored \x1B[36m$db_host\x1B[32m database \x1B[34m$db_name\x1B[32m from \x1B[39m\x1B[4m$backup_file_local\x1B[0m"
+
+    if [ "$ignore_dataroot" == "0" ]; then
+        docker cp "$backup_dataroot_local" "$php_container":"$backup_dataroot_remote"
+        $php_command sh -c "\
+            cd $dataroot_dir && \
+            rm -rf $dataroot_name && \
+            mkdir $dataroot_name && \
+            chmod 02777 $dataroot_name -R && \
+            cd $dataroot_name && \
+            unzip $backup_dataroot_remote && \
+            chown www-data:www-data . -R \
+        " >> /dev/null
+        $php_command sh -c "rm $backup_dataroot_remote"
+        echo -e "\x1B[2mSuccessfully restored dataroot from \x1B[0m\x1B[4m\x1B[37m$backup_dataroot_local\x1B[0m"
+    fi
+
+fi
