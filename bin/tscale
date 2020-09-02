@@ -2,4 +2,7 @@
 
 SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
 
-$SCRIPTPATH/tdocker scale "$@"
+CONTAINER=$1; shift
+NUMBER=$1; shift
+
+$SCRIPTPATH/tdocker up -d --scale $CONTAINER=$NUMBER $CONTAINER

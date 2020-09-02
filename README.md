@@ -139,7 +139,7 @@ tgrunt [options]                  # run grunt in container, supports running in 
 tnpm [options]                    # run npm in container, supports running in subfolders
 tpull                             # pull latest images (only those which you already have locally) 
 trestart [container]              # restart (all) container(s)
-tscale [container]=6              # scale up the number of containers, i.e. selenium-chrome
+tscale [container] [number]       # scale up the number of containers, i.e. `tscale selenium-chrome 6`
 tstats                            # show docker stats including container names
 tstop [container]                 # stop (all) container(s)
 tunit [container] [folder] [init] # run or init unit tests in given container for given version
