@@ -9,4 +9,9 @@ export $(egrep -v '^#' $PROJECTPATH/.env | xargs)
 SUBPATH="${PWD//$LOCAL_SRC/}"
 TOTARASITEDIR="$REMOTE_SRC/$SUBPATH"
 
-$SCRIPTPATH/tdocker run --rm -w "$TOTARASITEDIR" nodejs ./node_modules/.bin/grunt "$@"
+if [[ -f "server/Gruntfile.js" ]]; then
+    printf "You are running this from your project root. Try running this from your server directory instead.\n\n"
+    printf "Don't forget to initiate with `tnpm init` first (inside your server directory)\n"
+else
+    $SCRIPTPATH/tdocker run --rm -w "$TOTARASITEDIR" nodejs ./node_modules/.bin/grunt "$@"
+fi
