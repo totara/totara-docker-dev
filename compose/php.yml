@@ -439,6 +439,52 @@ services:
     networks:
       - totara
 
+  php-8.0:
+    image: totara/docker-dev-php80
+    container_name: totara_php80
+    working_dir: ${REMOTE_SRC}
+    environment:
+      CONTAINERNAME: php-8.0
+      HIST_FILE: /root/.bash_history
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+      - $HOME/.bash_history:/root/.bash_history
+      - zsh-history:/root/.zsh_history
+      - ./shell:/root/custom_shell
+    depends_on:
+      - php-8.0-debug
+    networks:
+      - totara
+
+  php-8.0-debug:
+    image: totara/docker-dev-php80-debug
+    container_name: totara_php80_debug
+    working_dir: ${REMOTE_SRC}
+    environment:
+      CONTAINERNAME: php-8.0-debug
+      XDEBUG_CONFIG: remote_host=${HOST_IP}
+      PHP_IDE_CONFIG: serverName=totara80
+      HIST_FILE: /root/.bash_history
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+      - $HOME/.bash_history:/root/.bash_history
+      - zsh-history:/root/.zsh_history
+      - ./shell:/root/custom_shell
+    networks:
+      - totara
+
+  php-8.0-cron:
+    image: totara/docker-dev-php80-cron
+    container_name: totara_php80_cron
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+      - ./cron.d:/etc/cron.d
+    networks:
+      - totara
+
 volumes:
   totara-data:
   zsh-history:
