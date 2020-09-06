@@ -102,3 +102,15 @@ services:
 
   php-7.4-cron:
     build: ./php/php74-cron
+
+  php-8.0:
+    build:
+      context: ./php/php80
+      args:
+        TIME_ZONE: ${TIME_ZONE}
+
+  php-8.0-debug:
+    build: ./php/php80-debug
+
+  php-8.0-cron:
+    build: ./php/php80-cron
