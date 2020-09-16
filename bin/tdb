@@ -373,7 +373,7 @@ elif [ "$db_type" == 'mariadb' ]; then
 ##########################################
 #          Microsoft SQL Server          #
 ##########################################
-elif [ "$db_type" == 'sqlsrv' ]; then
+elif [ "$db_type" == 'sqlsrv' -o  "$db_type" == 'mssql' ]; then
     # Handles executing sql commands.
     function db_sql_cmd() {
         command_output=$(eval "$php_command /opt/mssql-tools/bin/sqlcmd -S $db_host -U $db_user -P \"$db_password\" -q \"$1\"")
@@ -415,7 +415,7 @@ elif [ "$db_type" == 'sqlsrv' ]; then
 
     # Start mssql shell
     elif [ "$action" == 'shell' ]; then
-        docker exec -it "$php_container" sh -c "/opt/mssql-tools/bin/sqlcmd -S $db_host -U $db_user -P \"$db_password\" -q 'USE $db_name'"
+        docker exec -it "$db_container" /opt/mssql-tools/bin/sqlcmd -S "$db_host" -U "$db_user" -P "$db_password" -q "USE $db_name"
 
     # Handle unimplemented action
     else

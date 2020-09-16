@@ -9,4 +9,4 @@ export $(egrep -v '^#' $PROJECTPATH/.env | xargs)
 SUBPATH="${PWD//$LOCAL_SRC/}"
 TOTARASITEDIR="$REMOTE_SRC/$SUBPATH"
 
-$SCRIPTPATH/tdocker run -w "$TOTARASITEDIR" nodejs npm "$@"
+$SCRIPTPATH/tdocker run --rm -w "$TOTARASITEDIR" nodejs npm "$@"
