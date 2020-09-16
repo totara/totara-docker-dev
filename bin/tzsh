@@ -1,5 +1,17 @@
 #!/bin/bash
 
 SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+PROJECTPATH="$( cd $SCRIPTPATH && cd ..; pwd -P )"
 
-$SCRIPTPATH/tdocker exec "$1" /bin/zsh
+export $(egrep -v '^#' $PROJECTPATH/.env | xargs)
+
+# If tnpm is called from a subdirectory, then we run npm in that subdirectory too
+SUBPATH="${PWD//$LOCAL_SRC/}"
+TOTARASITEDIR="$REMOTE_SRC/$SUBPATH"
+LOCALPATH="$LOCAL_SRC/$SUBPATH"
+
+if [ ! -f "$LOCALPATH/version.php" ]; then
+    TOTARASITEDIR="$REMOTE_SRC"
+fi
+
+$SCRIPTPATH/tdocker exec -w $TOTARASITEDIR "$1" /bin/zsh
