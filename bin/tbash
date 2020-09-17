@@ -5,7 +5,7 @@ PROJECTPATH="$( cd $SCRIPTPATH && cd ..; pwd -P )"
 
 export $(egrep -v '^#' $PROJECTPATH/.env | xargs)
 
-# If tnpm is called from a subdirectory, then we run npm in that subdirectory too
+# If this command is called from a subdirectory which contains a project, then we automatically change to this directory
 SUBPATH="${PWD//$LOCAL_SRC/}"
 TOTARASITEDIR="$REMOTE_SRC/$SUBPATH"
 LOCALPATH="$LOCAL_SRC/$SUBPATH"
