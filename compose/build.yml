@@ -109,8 +109,5 @@ services:
       args:
         TIME_ZONE: ${TIME_ZONE}
 
-  php-8.0-debug:
-    build: ./php/php80-debug
-
   php-8.0-cron:
     build: ./php/php80-cron
