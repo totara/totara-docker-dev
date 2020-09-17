@@ -1,4 +1,4 @@
-FROM php:8.0-rc-fpm
+FROM php:8.0.0beta3-fpm
 
 ARG TIME_ZONE=Pacific/Auckland
 
@@ -29,6 +29,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         pdo_mysql \
         pgsql \
         mysqli \
+        exif \
     && docker-php-ext-configure gd \
     && docker-php-ext-install -j$(nproc) gd
 

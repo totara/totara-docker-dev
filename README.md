@@ -23,8 +23,7 @@ php73 | 7.3 |  [Dockerfile](https://github.com/totara/totara-docker-dev/blob/mas
 php73-debug | 7.3 + xdebug 2.9.6 |  [Dockerfile](https://github.com/totara/totara-docker-dev/blob/master/php/php73-debug/Dockerfile) | [![Build status PHP 7.3 Debug](https://img.shields.io/docker/build/totara/docker-dev-php73-debug.svg)](https://hub.docker.com/r/totara/docker-dev-php73-debug/)
 php74 | 7.4 |  [Dockerfile](https://github.com/totara/totara-docker-dev/blob/master/php/php74/Dockerfile) | [![Build status PHP 7.4](https://img.shields.io/docker/build/totara/docker-dev-php74.svg)](https://hub.docker.com/r/totara/docker-dev-php74/)
 php74-debug | 7.4 + xdebug 2.9.6 |  [Dockerfile](https://github.com/totara/totara-docker-dev/blob/master/php/php74-debug/Dockerfile) | [![Build status PHP 7.4 Debug](https://img.shields.io/docker/build/totara/docker-dev-php74-debug.svg)](https://hub.docker.com/r/totara/docker-dev-php74-debug/)
-php74 | 8.0 |  [Dockerfile](https://github.com/totara/totara-docker-dev/blob/master/php/php80/Dockerfile) | [![Build status PHP 8.0](https://img.shields.io/docker/build/totara/docker-dev-php80.svg)](https://hub.docker.com/r/totara/docker-dev-php80/)
-php74-debug | 8.0 + xdebug 2.9.6 |  [Dockerfile](https://github.com/totara/totara-docker-dev/blob/master/php/php80-debug/Dockerfile) | [![Build status PHP 8.0 Debug](https://img.shields.io/docker/build/totara/docker-dev-php80-debug.svg)](https://hub.docker.com/r/totara/docker-dev-php80-debug/)
+php80 | 8.0-beta3 |  [Dockerfile](https://github.com/totara/totara-docker-dev/blob/master/php/php80/Dockerfile) | [![Build status PHP 8.0](https://img.shields.io/docker/build/totara/docker-dev-php80.svg)](https://hub.docker.com/r/totara/docker-dev-php80/)
 
 # A Docker setup for local Totara Learn development
 
@@ -64,7 +63,7 @@ Please check out the [contribute](CONTRIBUTE.md) page for more information on ho
 
 __Example:__
 ```bash
-127.0.0.1   localhost totara54 totara54.debug totara54.behat totara55 totara55.debug totara55.behat totara55 totara55.debug totara56.behat totara70 totara70.debug totara70.behat totara71 totara71.debug totara71.behat totara72 totara72.debug totara72.behat totara73 totara73.debug totara73.behat totara74 totara74.debug totara74.behat totara80 totara80.debug totara80.behat
+127.0.0.1   localhost totara54 totara54.debug totara54.behat totara55 totara55.debug totara55.behat totara55 totara55.debug totara56.behat totara70 totara70.debug totara70.behat totara71 totara71.debug totara71.behat totara72 totara72.debug totara72.behat totara73 totara73.debug totara73.behat totara74 totara74.debug totara74.behat totara80 totara80.behat
 ```
 
 ## Upgrade

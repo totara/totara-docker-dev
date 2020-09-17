@@ -51,7 +51,6 @@ services:
           - totara74.behat
           - totara74.behat.totaralms.com
           - totara80
-          - totara80.debug
           - totara80.behat
           - totara80.behat.totaralms.com
 
