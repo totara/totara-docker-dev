@@ -33,6 +33,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         pgsql \
         mysqli \
         zip \
+        exif \
     && docker-php-ext-configure gd \
             --with-freetype-dir=/usr/include/ \
             --with-png-dir=/usr/include/ \
