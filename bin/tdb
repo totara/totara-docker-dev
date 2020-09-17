@@ -373,7 +373,7 @@ elif [ "$db_type" == 'mariadb' ]; then
 ##########################################
 #          Microsoft SQL Server          #
 ##########################################
-elif [ "$db_type" == 'sqlsrv' -o  "$db_type" == 'mssql' ]; then
+elif [[ "$db_type" == 'sqlsrv' ||  "$db_type" == 'mssql' ]]; then
     # Handles executing sql commands.
     function db_sql_cmd() {
         command_output=$(eval "$php_command /opt/mssql-tools/bin/sqlcmd -S $db_host -U $db_user -P \"$db_password\" -q \"$1\"")
