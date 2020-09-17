@@ -18,6 +18,7 @@ RUN phpbrew install -j $(nproc) $PHPVERSION \
     +sqlite \
     +xmlrpc \
     +zlib \
+    +exif \
     -- \
     --enable-gd-native-ttf \
     --with-fpm-group=www-data \
