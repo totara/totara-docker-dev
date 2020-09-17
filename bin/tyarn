@@ -5,7 +5,7 @@ PROJECTPATH="$( cd $SCRIPTPATH && cd ..; pwd -P )"
 
 export $(egrep -v '^#' $PROJECTPATH/.env | xargs)
 
-# If tnpm is called from a subdirectory, then we run npm in that subdirectory too
+# If tyarn is called from a subdirectory, then we run yarn in that subdirectory too
 SUBPATH="${PWD//$LOCAL_SRC/}"
 TOTARASITEDIR="$REMOTE_SRC/$SUBPATH"
 
