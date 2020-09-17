@@ -27,7 +27,7 @@ if [[ -z $action || ! " ${action_options[@]} " =~ " ${action} " ]]; then
 It detects your database engine via your config.php, so if you have multiple sites
 running you'll need to run this from the folder you wish to interact with.
 
-Usage: $script_name [OPTIONS] <action> [database name] [backup file]
+Usage: $script_name [OPTIONS] <action> [database name] [backup alias]
 
 Actions:
   create       Create database
@@ -43,8 +43,9 @@ Options:
 Examples:
   $script_name create                                // Will create a database with the name defined in your config.php if it doesn't already exist
   $script_name drop unt_totara13                     // Will drop the database with the name 'unt_totara13'
-  $script_name -i backup                             // Will backup the database but not the dataroot to your home directory
-  $script_name restore totara13 /home/myfeature.sql  // Will restore the database dumped in the '/home/myfeature.sql' file into the 'totara13' database
+  $script_name -i backup                             // Will backup the database but not the dataroot to backup directory specified in the .env file
+  $script_name backup mydatabasename myalias         // Will backup the database 'mydatabasename' and use 'myalias' as a name for the backup files
+  $script_name restore totara13 myalias              // Will restore the database dumped with the alias 'myalias' into the 'totara13' database
 "
     exit;
 fi
@@ -176,13 +177,19 @@ db_command="docker exec $db_container";
 
 # Get the backup file path. Defaults to a new backup folder in the users's home directory.
 if [[ $action == 'backup' || $action == 'restore' ]]; then
+    if [ -z "$TDB_BACKUP_PATH" ]; then
+        backup_folder_local="$HOME/tdb_backups"
+    else
+        backup_folder_local="$TDB_BACKUP_PATH"
+    fi
+
     backup_folder='/tdb_backups'
-    backup_file_local=$3
+    backup_file_local="$backup_folder_local/$3.${db_host}"
     if [ -z "$backup_file_local" ]; then
         backup_file_remote="$backup_folder/${db_name}.${db_host}"
-        backup_file_local=$HOME$backup_file_remote
+        backup_file_local="$backup_folder_local/${db_name}.${db_host}"
         backup_file_name=$(basename "$backup_file_local")
-        mkdir -p "$HOME$backup_folder"
+        mkdir -p "$backup_folder_local"
         echo -e "\x1B[2mNote: Backup file path was not specified. Will try use '$backup_file_local'\x1B[0m"
     else
         backup_file_name=$(basename "$backup_file_local")
