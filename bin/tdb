@@ -184,10 +184,10 @@ if [[ $action == 'backup' || $action == 'restore' ]]; then
     fi
 
     backup_folder='/tdb_backups'
-    backup_file_local="$backup_folder_local/$3.${db_host}"
+    backup_file_local="$backup_folder_local/$3.${db_type}"
     if [ -z "$backup_file_local" ]; then
-        backup_file_remote="$backup_folder/${db_name}.${db_host}"
-        backup_file_local="$backup_folder_local/${db_name}.${db_host}"
+        backup_file_remote="$backup_folder/${db_name}.${db_type}"
+        backup_file_local="$backup_folder_local/${db_name}.${db_type}"
         backup_file_name=$(basename "$backup_file_local")
         mkdir -p "$backup_folder_local"
         echo -e "\x1B[2mNote: Backup file path was not specified. Will try use '$backup_file_local'\x1B[0m"
