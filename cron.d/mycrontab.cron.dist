@@ -4,4 +4,6 @@
 # keep this line for ensuring the correct bin paths for all containers
 PATH=$PATH:/usr/bin:/usr/local/bin
 
-* * * * *   cd /var/www/totara/src && php admin/cli/cron.php > /proc/1/fd/1 2>/proc/1/fd/2
+* * * * *   cd /var/www/totara/src && php server/admin/cli/cron.php > /proc/1/fd/1 2>/proc/1/fd/2
+# Use the following if you want to run the recommendations engine regularly
+30 1 * * *  (cd /var/www/totara/src/server/ml/recommender/cli; bash ./run.sh)

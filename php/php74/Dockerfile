@@ -83,15 +83,6 @@ RUN pear config-set php_ini `php --ini | grep "Loaded Configuration" | sed -e "s
 
 RUN docker-php-ext-enable sqlsrv.so && docker-php-ext-enable pdo_sqlsrv.so
 
-RUN ln -fs /usr/share/zoneinfo/${TIME_ZONE} /etc/localtime \
-    && dpkg-reconfigure --frontend noninteractive tzdata
-
-COPY config/php.ini /usr/local/etc/php/
-COPY config/fpm.conf /usr/local/etc/php-fpm.d/zz-totara.conf
-
-# Source each .sh file found in the /shell/ folder
-RUN echo 'for f in ~/custom_shell/*.sh; do [[ -e "$f" ]] && source "$f"; done;' >> ~/.bashrc
-
 # Have the option of using the oh my zsh shell.
 RUN apt-get update && apt-get install -y zsh
 RUN sh -c "$(curl https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" --unattended
@@ -102,3 +93,38 @@ RUN git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.oh-my-zsh/
 RUN echo 'setopt +o nomatch' > ~/.zshrc
 RUN echo 'source ~/custom_shell/.zshrc' >> ~/.zshrc
 RUN cat ~/.bashrc >> ~/.zshrc
+
+# Install packages required for the recommendations engine
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    python3.7 \
+    python3-pip \
+    python3-wheel \
+    python3-venv \
+    python3-dev
+
+RUN pip3 install certifi==2020.6.20 \
+    chardet==3.0.4 \
+    dill==0.3.2 \
+    idna==2.10 \
+    joblib==0.16.0 \
+    langid==1.1.6 \
+    lightfm==1.15 \
+    numpy==1.19.0 \
+    pandas==1.0.5 \
+    python-dateutil==2.8.1 \
+    pytz==2020.1 \
+    requests==2.24.0 \
+    scikit-learn==0.23.1 \
+    scipy==1.5.1 \
+    six==1.15.0 \
+    threadpoolctl==2.1.0 \
+    urllib3==1.25.9
+
+RUN ln -fs /usr/share/zoneinfo/${TIME_ZONE} /etc/localtime \
+    && dpkg-reconfigure --frontend noninteractive tzdata
+
+COPY config/php.ini /usr/local/etc/php/
+COPY config/fpm.conf /usr/local/etc/php-fpm.d/zz-totara.conf
+
+# Source each .sh file found in the /shell/ folder
+RUN echo 'for f in ~/custom_shell/*.sh; do [[ -e "$f" ]] && source "$f"; done;' >> ~/.bashrc
