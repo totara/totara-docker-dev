@@ -175,25 +175,37 @@ fi
 db_container=${db_containers[0]}
 db_command="docker exec $db_container";
 
+# Normalise sqlsrv to be mssql to be more understandable
+if [ "$db_type" == 'sqlsrv' ]; then
+    db_type='mssql'
+fi
+
 # Get the backup file path. Defaults to a new backup folder in the users's home directory.
 if [[ $action == 'backup' || $action == 'restore' ]]; then
+    backup_folder_remote='/tdb_backups'
     if [ -z "$TDB_BACKUP_PATH" ]; then
-        backup_folder_local="$HOME/tdb_backups"
+        backup_folder_local="${HOME}${backup_folder_remote}"
+        if [ ! -d "$backup_folder_local" ]; then
+            mkdir "$backup_folder_local"
+            echo -e "\x1B[2mNote: Backup directory is not specified via \$TDB_BACKUP_PATH in your .env. Will try use \x1B[0m\x1B[4m\x1B[37m$backup_folder_local\x1B[0m"
+        fi
     else
         backup_folder_local="$TDB_BACKUP_PATH"
+        if [ ! -d "$backup_folder_local" ]; then
+            echo -e "\x1B[33mThe \x1B[0m\$TDB_BACKUP_PATH\x1B[0m\x1B[33m variable specified in your .env doesn't exist or is invalid (\x1B[0m\x1B[4m\x1B[37m$TDB_BACKUP_PATH\x1B[0m\x1B[33m)\x1B[0m"
+            exit
+        fi
     fi
 
-    backup_folder='/tdb_backups'
-    backup_file_local="$backup_folder_local/$3.${db_type}"
-    if [ -z "$backup_file_local" ]; then
-        backup_file_remote="$backup_folder/${db_name}.${db_type}"
+    if [ -z "$3" ]; then
+        backup_file_remote="$backup_folder_remote/${db_name}.${db_type}"
         backup_file_local="$backup_folder_local/${db_name}.${db_type}"
         backup_file_name=$(basename "$backup_file_local")
-        mkdir -p "$backup_folder_local"
-        echo -e "\x1B[2mNote: Backup file path was not specified. Will try use '$backup_file_local'\x1B[0m"
+        echo -e "\x1B[2mNote: Backup file alias was not specified. Will use \x1B[0m\x1B[4m\x1B[37m$backup_file_name\x1B[0m"
     else
+        backup_file_local="$backup_folder_local/$3.${db_type}"
         backup_file_name=$(basename "$backup_file_local")
-        backup_file_remote="$backup_folder/$backup_file_name"
+        backup_file_remote="$backup_folder_remote/$backup_file_name"
     fi
 
     # Make sure the zip command is available in the container if we are backing up the dataroot.
@@ -204,16 +216,16 @@ if [[ $action == 'backup' || $action == 'restore' ]]; then
     fi
     # If backing up, make sure we don't accidentally overwrite an existing backup file.
     if [[ $action == 'backup' && -f "$backup_file_local" ]]; then
-        echo -e "\x1B[33mBackup file already exists. Delete it, then run this again.\x1B[0m"
+        echo -e "\x1B[33mBackup file \x1B[0m\x1B[4m\x1B[37m$backup_file_local\x1B[0m\x1B[33m already exists. Delete it, then run this again.\x1B[0m"
         exit
     # If restoring, make sure the backup file exists.
     elif [[ $action == 'restore' && ! -f "$backup_file_local" ]]; then
-        echo -e "\x1B[33mBackup file does not exist.\x1B[0m"
+        echo -e "\x1B[33mBackup file \x1B[0m\x1B[4m\x1B[37m$backup_file_local\x1B[0m\x1B[33m does not exist.\x1B[0m"
         exit
     fi
 
-    $db_command sh -c "mkdir -p $backup_folder"
-    $php_command sh -c "mkdir -p $backup_folder"
+    $db_command sh -c "mkdir -p $backup_folder_remote"
+    $php_command sh -c "mkdir -p $backup_folder_remote"
 
     # Dataroot backup functionality. For now we don't care about the phpunit/behat dataroots.
     # We only backup/restore the dataroot if we are backing up/restoring the site database.
@@ -387,7 +399,7 @@ elif [ "$db_type" == 'mariadb' ]; then
 ##########################################
 #          Microsoft SQL Server          #
 ##########################################
-elif [[ "$db_type" == 'sqlsrv' ||  "$db_type" == 'mssql' ]]; then
+elif [ "$db_type" == 'mssql' ]; then
     # Handles executing sql commands.
     function db_sql_cmd() {
         command_output=$(eval "$php_command /opt/mssql-tools/bin/sqlcmd -S $db_host -U $db_user -P \"$db_password\" -q \"$1\"")
