@@ -232,7 +232,7 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
-      - zsh-history:zsh_history
+      - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
     depends_on:
       - php-7.1-debug
