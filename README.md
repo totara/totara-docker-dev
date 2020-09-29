@@ -35,7 +35,7 @@ Although this project started as a development environment for Totara Learn it c
 ### What you get:
  * [NGINX](https://nginx.org/) as a webserver
  * [PHP](http://php.net/) 5.3, 5.4, 5.5, 5.6, 7.0, 7.1, 7.2, 7.3, 7.4 to test for different versions
- * [PostgreSQL](https://www.postgresql.org/) (9.3, 9.6, 10, 11, 12), [MariaDB](https://mariadb.org/) (10.2 and 10.4) and [MySQL](https://www.mysql.com/) (5.7.x and 8), and [Microsoft SQL Server 2017](https://www.microsoft.com/en-us/sql-server/sql-server-2017) support
+ * [PostgreSQL](https://www.postgresql.org/) (9.3, 9.6, 10, 11, 12), [MariaDB](https://mariadb.org/) (10.2, 10.4 and 10.5) and [MySQL](https://www.mysql.com/) (5.7.x and 8), and [Microsoft SQL Server 2017](https://www.microsoft.com/en-us/sql-server/sql-server-2017) support
  * A [PHPUnit](https://phpunit.de/) and [Behat](http://behat.org/en/latest/) setup to run tests (including [Selenium](https://www.seleniumhq.org/))
  * A [mailcatcher](https://mailcatcher.me/) instance to inspect mails
  * [Redis](https://redis.io/) for caching and/or session handling
@@ -172,7 +172,8 @@ DB | Host | User | Password |
 **PostresSQL 9.3** | pgsql93 | postgres | 
 **Mysql 8** | mysql8 | root | root
 **Mysql 5.7** | mysql | root | root
-**MariaDB 10.4** | mariadb | root | root
+**MariaDB 10.5** | mariadb | root | root
+**MariaDB 10.4** | mariadb104 | root | root
 **MariaDB 10.2** | mariadb102 | root | root
 **Mssql** | mssql | SA | Totara.Mssql1
 
