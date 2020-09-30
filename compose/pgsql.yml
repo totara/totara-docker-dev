@@ -25,6 +25,7 @@ services:
       - "5496:5432"
     environment:
       PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_HOST_AUTH_METHOD: trust
     command:
       postgres -c 'config_file=/etc/postgresql/postgresql.conf'
     volumes:
