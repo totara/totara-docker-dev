@@ -6,4 +6,5 @@ mutagen.yml.lock
 /shell/*.sh
 /custom/*.yml
 /custom/*.yaml
+/tools/.update
 .idea/

@@ -4,6 +4,8 @@ script_name=$(basename "$0")
 script_path="$( cd "$(dirname $0)" || exit; pwd -P )"
 project_path="$( cd "$script_path" && cd ..; pwd -P )"
 
+source "$project_path/tools/check_for_update.sh"
+
 export $(grep -E -v '^#' "$project_path/.env" | xargs)
 
 # Handle any flags that have been specified

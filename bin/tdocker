@@ -5,6 +5,8 @@ PROJECTPATH="$( cd $SCRIPTPATH && cd ..; pwd -P )"
 
 cd $PROJECTPATH;
 
+source "$PROJECTPATH/tools/check_for_update.sh"
+
 files=(
     "docker-compose.yml"
     "compose/apache.yml"
