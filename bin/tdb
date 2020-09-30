@@ -330,7 +330,7 @@ elif [ "$db_type" == 'mysqli' ]; then
     # Restore mysql database
     elif [ "$action" == 'restore' ]; then
         db_sql_cmd "DROP DATABASE IF EXISTS $db_name"
-        db_sql_cmd "CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE $collation"
+        db_sql_cmd "CREATE DATABASE $db_name DEFAULT CHARACTER SET $character_set COLLATE $collation"
         docker cp "$backup_file_local" "$db_container":"$backup_file_remote"
         $db_command sh -c "export MYSQL_PWD=$db_password; mysql -u\"$db_user\" $db_name < $backup_file_remote" >> /dev/null
         if [ "${PIPESTATUS[0]}" == '1' ]; then
