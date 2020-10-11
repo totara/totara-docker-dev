@@ -4,6 +4,7 @@ sync:
       vcs: true
       paths:
         - ".idea"
+        - .idea
         - .DS_Store
     permissions:
       defaultFileMode: 0644
