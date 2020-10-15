@@ -5,6 +5,7 @@ services:
     image: totara/docker-dev-nginx
     container_name: totara_nginx
     environment:
+      - TZ=${TIME_ZONE}
       - REMOTE_DATA
     ports:
       - "80:80"

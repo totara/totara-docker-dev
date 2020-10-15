@@ -7,6 +7,7 @@ services:
     ports:
       - "3307:3306"
     environment:
+      TZ: ${TIME_ZONE}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PW}
     volumes:
       - mariadb-data:/var/lib/mysql
@@ -22,6 +23,7 @@ services:
     ports:
       - "3309:3306"
     environment:
+      TZ: ${TIME_ZONE}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PW}
     volumes:
       - mariadb104-data:/var/lib/mysql
@@ -37,6 +39,7 @@ services:
     ports:
       - "3302:3306"
     environment:
+      TZ: ${TIME_ZONE}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PW}
     volumes:
       - mariadb102-data:/var/lib/mysql
