@@ -7,6 +7,7 @@ services:
     ports:
       - "3308:3306"
     environment:
+      TZ: ${TIME_ZONE}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PW}
     depends_on:
       - nginx
@@ -22,6 +23,7 @@ services:
     ports:
       - "3306:3306"
     environment:
+      TZ: ${TIME_ZONE}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PW}
     depends_on:
       - nginx

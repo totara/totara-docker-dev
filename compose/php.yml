@@ -7,6 +7,7 @@ services:
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-5.3
+      TZ: ${TIME_ZONE}
       HIST_FILE: /root/.bash_history
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
@@ -25,6 +26,7 @@ services:
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-5.3-debug
+      TZ: ${TIME_ZONE}
       HOST_IP: ${HOST_IP}
       PHP_IDE_CONFIG: serverName=totara53
       HIST_FILE: /root/.bash_history
@@ -43,6 +45,7 @@ services:
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-5.4
+      TZ: ${TIME_ZONE}
       HIST_FILE: /root/.bash_history
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
@@ -61,6 +64,7 @@ services:
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-5.4-debug
+      TZ: ${TIME_ZONE}
       HOST_IP: ${HOST_IP}
       PHP_IDE_CONFIG: serverName=totara54
       HIST_FILE: /root/.bash_history
@@ -76,6 +80,8 @@ services:
   php-5.4-cron:
     image: totara/docker-dev-php54-cron
     container_name: totara_php54_cron
+    environment:
+      TZ: ${TIME_ZONE}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -89,6 +95,7 @@ services:
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-5.5
+      TZ: ${TIME_ZONE}
       HIST_FILE: /root/.bash_history
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
@@ -107,6 +114,7 @@ services:
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-5.5-debug
+      TZ: ${TIME_ZONE}
       XDEBUG_CONFIG: remote_host=${HOST_IP}
       PHP_IDE_CONFIG: serverName=totara55
       HIST_FILE: /root/.bash_history
@@ -122,6 +130,8 @@ services:
   php-5.5-cron:
     image: totara/docker-dev-php55-cron
     container_name: totara_php55_cron
+    environment:
+      TZ: ${TIME_ZONE}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -135,6 +145,7 @@ services:
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-5.6
+      TZ: ${TIME_ZONE}
       HIST_FILE: /root/.bash_history
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
@@ -153,6 +164,7 @@ services:
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-5.6-debug
+      TZ: ${TIME_ZONE}
       XDEBUG_CONFIG: remote_host=${HOST_IP}
       PHP_IDE_CONFIG: serverName=totara56
       HIST_FILE: /root/.bash_history
@@ -168,6 +180,8 @@ services:
   php-5.6-cron:
     image: totara/docker-dev-php56-cron
     container_name: totara_php56_cron
+    environment:
+      TZ: ${TIME_ZONE}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -181,6 +195,7 @@ services:
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-7.0
+      TZ: ${TIME_ZONE}
       HIST_FILE: /root/.bash_history
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
@@ -199,6 +214,7 @@ services:
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-7.0-debug
+      TZ: ${TIME_ZONE}
       XDEBUG_CONFIG: remote_host=${HOST_IP}
       PHP_IDE_CONFIG: serverName=totara70
       HIST_FILE: /root/.bash_history
@@ -214,6 +230,8 @@ services:
   php-7.0-cron:
     image: totara/docker-dev-php70-cron
     container_name: totara_php70_cron
+    environment:
+      TZ: ${TIME_ZONE}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -227,6 +245,7 @@ services:
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-7.1
+      TZ: ${TIME_ZONE}
       HIST_FILE: /root/.bash_history
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
@@ -245,6 +264,7 @@ services:
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-7.1-debug
+      TZ: ${TIME_ZONE}
       XDEBUG_CONFIG: remote_host=${HOST_IP}
       PHP_IDE_CONFIG: serverName=totara71
       HIST_FILE: /root/.bash_history
@@ -260,6 +280,8 @@ services:
   php-7.1-cron:
     image: totara/docker-dev-php71-cron
     container_name: totara_php71_cron
+    environment:
+      TZ: ${TIME_ZONE}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -273,6 +295,7 @@ services:
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-7.2
+      TZ: ${TIME_ZONE}
       HIST_FILE: /root/.bash_history
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
@@ -291,6 +314,7 @@ services:
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-7.2-debug
+      TZ: ${TIME_ZONE}
       XDEBUG_CONFIG: remote_host=${HOST_IP}
       PHP_IDE_CONFIG: serverName=totara72
       HIST_FILE: /root/.bash_history
@@ -306,6 +330,8 @@ services:
   php-7.2-cron:
     image: totara/docker-dev-php72-cron
     container_name: totara_php72_cron
+    environment:
+      TZ: ${TIME_ZONE}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -319,6 +345,7 @@ services:
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-7.3
+      TZ: ${TIME_ZONE}
       HIST_FILE: /root/.bash_history
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
@@ -337,6 +364,7 @@ services:
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-7.3-debug
+      TZ: ${TIME_ZONE}
       XDEBUG_CONFIG: remote_host=${HOST_IP}
       PHP_IDE_CONFIG: serverName=totara73
       HIST_FILE: /root/.bash_history
@@ -352,6 +380,8 @@ services:
   php-7.3-cron:
     image: totara/docker-dev-php73-cron
     container_name: totara_php73_cron
+    environment:
+      TZ: ${TIME_ZONE}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -365,6 +395,7 @@ services:
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-7.4
+      TZ: ${TIME_ZONE}
       HIST_FILE: /root/.bash_history
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
@@ -383,6 +414,7 @@ services:
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-7.4-debug
+      TZ: ${TIME_ZONE}
       XDEBUG_CONFIG: remote_host=${HOST_IP}
       PHP_IDE_CONFIG: serverName=totara74
       HIST_FILE: /root/.bash_history
@@ -398,6 +430,8 @@ services:
   php-7.4-cron:
     image: totara/docker-dev-php74-cron
     container_name: totara_php74_cron
+    environment:
+      TZ: ${TIME_ZONE}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
