@@ -7,6 +7,7 @@ services:
     environment:
       - TZ=${TIME_ZONE}
       - REMOTE_DATA
+      - REMOTE_SRC
     ports:
       - "80:80"
       - "443:443"
