@@ -1,4 +1,4 @@
-FROM php:8.0.0beta3-fpm
+FROM php:8.0-fpm
 
 ARG TIME_ZONE=Pacific/Auckland
 
@@ -67,6 +67,12 @@ RUN wget "http://security.debian.org/debian-security/pool/updates/main/o/openssl
 
 RUN echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile \
     && echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
+
+RUN pear config-set php_ini `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"` system \
+    && pecl install sqlsrv-5.9.0beta2 \
+    && pecl install pdo_sqlsrv-5.9.0beta2
+
+RUN docker-php-ext-enable sqlsrv.so && docker-php-ext-enable pdo_sqlsrv.so
 
 RUN ln -fs /usr/share/zoneinfo/${TIME_ZONE} /etc/localtime \
     && dpkg-reconfigure --frontend noninteractive tzdata
