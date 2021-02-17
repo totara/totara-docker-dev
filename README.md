@@ -54,7 +54,7 @@ Although this project started as a development environment for Totara Learn it c
 Please check out the [contribute](CONTRIBUTE.md) page for more information on how you can help us.
 
 ## Install
- 1. Clone the Totara source code (see requirements) 
+ 1. Clone the Totara source code (see requirements)
  1. Clone this project
  1. Install [mutagen](#mutagen) (optionally, recommended for Mac OS)
  1. Copy the file __.env.dist__ to __.env__ and change at least the path to your local Totara source folder (LOCAL_SRC)
@@ -82,7 +82,7 @@ Alternatively to pulling the pre-built images you can also rebuild themselves by
 
 ## Performance
 
-To speed up performance you can use a sync tool called mutagen. 
+To speed up performance you can use a sync tool called mutagen.
 
 This is especially relevant for Mac OS and Windows as the performance of mounted volumes on those platforms is really bad. If you are using Linux you can skip this as performance there is pretty good, almost native.
 
@@ -137,7 +137,7 @@ tdocker                           # shortcut to general docker-compose ... comma
 tdown                             # shutdown all containers
 tgrunt [options]                  # run grunt in container, supports running in subfolders
 tnpm [options]                    # run npm in container, supports running in subfolders
-tpull                             # pull latest images (only those which you already have locally) 
+tpull                             # pull latest images (only those which you already have locally)
 trestart [container]              # restart (all) container(s)
 tscale [container] [number]       # scale up the number of containers, i.e. `tscale selenium-chrome 6`
 tstats                            # show docker stats including container names
@@ -165,11 +165,11 @@ Alternatively, you can manually configure your databases via the following crede
 
 DB | Host | User | Password |
 --- | --- | --- | ---
-**PostresSQL 12 (latest)** | pgsql | postgres | 
-**PostresSQL 11** | pgsql11 | postgres | 
-**PostresSQL 10** | pgsql10 | postgres | 
-**PostresSQL 9.6** | pgsql96 | postgres | 
-**PostresSQL 9.3** | pgsql93 | postgres | 
+**PostgreSQL 12 (latest)** | pgsql | postgres |
+**PostgreSQL 11** | pgsql11 | postgres |
+**PostgreSQL 10** | pgsql10 | postgres |
+**PostgreSQL 9.6** | pgsql96 | postgres |
+**PostgreSQL 9.3** | pgsql93 | postgres |
 **Mysql 8** | mysql8 | root | root
 **Mysql 5.7** | mysql | root | root
 **MariaDB 10.5** | mariadb | root | root
@@ -227,7 +227,7 @@ All data directories have to be created within the `/var/www/totara/data` direct
 versionnumber = 22, 24, 25, 26, 27, 29, 9, 10, 11, 12, 13, 14
 database = pgsql, mysql, mssql
 
-To create a custom data directory just log into the nginx container (`tbash nginx`) and then create your custom folder inside `/var/www/totara/data`. 
+To create a custom data directory just log into the nginx container (`tbash nginx`) and then create your custom folder inside `/var/www/totara/data`.
 You may need to create custom directories for multiple installations. If you do this, you will also need to set the correct permissions on custom directories that you create.
 
 ```
@@ -374,14 +374,16 @@ $CFG->debugdisplay = 1;
 // If you want performance information being displayed
 $CFG->perfdebug = 15;
 
-// Prevent caching
+// Prevent caching - NOT FOR PRODUCTION SERVERS!
+// For all versions
 $CFG->langstringcache = false;
-$CFG->cachejs = false; // NOT FOR PRODUCTION SERVERS!
+
+// Only for pre-t13
+$CFG->themedesignermode = false;
+$CFG->cachejs = false;
 
 // Only for t13
-$CFG->tuidesignermode = true;
-$CFG->cache_graphql_schema = false; 
-
+$CFG->cache_graphql_schema = false;
 $CFG->forced_plugin_settings['totara_tui'] = [
     'cache_js' => false,
     'cache_scss' => true,
@@ -514,14 +516,17 @@ Open __http://localhost:8080__ to open the mailcatcher GUI.
 
 If needed, modify the local port in the docker-compose.yml file.
 
-## NodeJS, NPM and grunt 
+## NodeJS, NPM and grunt
 
 If you want to use npm you can use ```tnpm``` like this:
 ```bash
 # if your project lives in a subfolder then run the command from inside that folder
+# root directory npm commands control t13 Tui framework build commands only
 tnpm install
 tnpm run tui-dev
 tnpm run tui-watch
+# watch builds on specific plugins for speed boost
+tnpm run tui-watch tui samples theme_ventura
 ```
 
 If you want to use grunt you can use ```tgrunt``` like this:
@@ -537,9 +542,10 @@ Or you can just directly log in to the container directly run node/grunt command
 
 ```bash
 tdocker run nodejs bash
-# go to your source directory and
+# go to your source directory and enter server/ directory (separate npm install process from root directory npm)
 npm install
 ./node_modules/.bin/grunt
+# when switching branches, you may need to run `npm run ci` (clean install) in case dependencies differ between branches
 ```
 
 ## mutagen
