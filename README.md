@@ -183,8 +183,9 @@ To use the command line clients provided by the containers you can use the follo
 # PostgreSQL
 tdocker exec pgsql psql -U postgres
 
-# MySQL / MariaDB
+# MySQL / MySQL8 / MariaDB
 tdocker exec mysql mysql -u root -p"root"
+tdocker exec mysql8 mysql -u root -p"root"
 tdocker exec mariadb mysql -u root -p"root"
 
 # Microsoft SQL Server
