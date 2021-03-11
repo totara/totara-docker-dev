@@ -62,7 +62,7 @@ Please check out the [contribute](CONTRIBUTE.md) page for more information on ho
 
 __Example:__
 ```bash
-127.0.0.1   localhost totara54 totara54.debug totara54.behat totara55 totara55.debug totara55.behat totara55 totara55.debug totara56.behat totara70 totara70.debug totara70.behat totara71 totara71.debug totara71.behat totara72 totara72.debug totara72.behat totara73 totara73.debug totara73.behat totara74 totara74.debug totara74.behat
+127.0.0.1   localhost totara54 totara54.debug totara54.behat totara55 totara55.debug totara55.behat totara56 totara56.debug totara56.behat totara70 totara70.debug totara70.behat totara71 totara71.debug totara71.behat totara72 totara72.debug totara72.behat totara73 totara73.debug totara73.behat totara74 totara74.debug totara74.behat
 ```
 
 ## Upgrade
