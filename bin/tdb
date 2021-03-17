@@ -6,11 +6,23 @@ project_path="$( cd "$script_path" && cd ..; pwd -P )"
 
 export $(grep -E -v '^#' "$project_path/.env" | xargs)
 
+# Handle any flags that have been specified
+flags=(
+  "-i"
+  "--ignore-dataroot"
+  "-b"
+  "--totara-box"
+)
 ignore_dataroot=0
-if [[ "$1" == "-i" || "$1" == "--ignore-dataroot" ]]; then
+for_totara_box=0
+while [[ " ${flags[@]} " =~ " $1 " ]]; do
+  if [[ "$1" == "-i" || "$1" == "--ignore-dataroot" ]]; then
     ignore_dataroot=1
-    shift
-fi
+  elif [[ "$1" == "-b" || "$1" == "--totara-box" ]]; then
+    for_totara_box=1
+  fi
+  shift
+done
 
 # Print help info
 action=$1
@@ -39,6 +51,7 @@ Actions:
 
 Options:
   -i, --ignore-dataroot    Ignore the dataroot directory when backing up and restoring.
+  -b, --totara-box         Backup and restore the database in a format compatible with Totara box (Postgres only)
 
 Examples:
   $script_name create                                // Will create a database with the name defined in your config.php if it doesn't already exist
@@ -269,14 +282,22 @@ if [ "$db_type" == 'pgsql' ]; then
 
     # Backup pgsql database
     elif [ "$action" == 'backup' ]; then
-        $db_command pg_dump -U "$db_user" "$db_name" > "$backup_file_local"
+        if [ "$for_totara_box" == "1" ]; then
+            $db_command pg_dump -U "$db_user" "$db_name" -Fc > "$backup_file_local"
+        else
+            $db_command pg_dump -U "$db_user" "$db_name" > "$backup_file_local"
+        fi
 
     # Restore pgsql database
     elif [ "$action" == 'restore' ]; then
         docker cp "$backup_file_local" "$db_container":"$backup_file_remote"
         $db_command dropdb -U "$db_user" --if-exists "$db_name"
         $db_command createdb -U "$db_user" -T template1 -E UTF-8 "$db_name"
-        $db_command psql -U "$db_user" --dbname "$db_name" -f "$backup_file_remote" >> /dev/null
+        if [ "$for_totara_box" == "1" ]; then
+            $db_command pg_restore -d "$db_name" -U "$db_user" "$backup_file_remote" >> /dev/null
+        else
+            $db_command psql -U "$db_user" --dbname "$db_name" -f "$backup_file_remote" >> /dev/null
+        fi
         if [[ "${PIPESTATUS[0]}" == '1' || ! $? -eq 0 ]]; then
             $db_command sh -c "rm $backup_file_remote"
             echo -e "\x1B[31mThere was an error while restoring $db_host database '$db_name' from file '$backup_file_local'\x1B[0m"
