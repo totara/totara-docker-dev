@@ -166,7 +166,8 @@ Alternatively, you can manually configure your databases via the following crede
 
 DB | Host | User | Password |
 --- | --- | --- | ---
-**PostresSQL 12 (latest)** | pgsql | postgres | 
+**PostresSQL 13 (latest)** | pgsql13 | postgres |
+**PostresSQL 12 ** | pgsql | postgres | 
 **PostresSQL 11** | pgsql11 | postgres | 
 **PostresSQL 10** | pgsql10 | postgres | 
 **PostresSQL 9.6** | pgsql96 | postgres | 
