@@ -6,7 +6,7 @@ cd $REMOTE_DATA || return;
 
 echo "Creating data folders..."
 
-versions=("22" "24" "25" "26" "27" "29" "9" "10" "11" "12" "13" "14")
+versions=("22" "24" "25" "26" "27" "29" "9" "10" "11" "12" "13" "14" "15")
 
 for i in "${versions[@]}"
 do
@@ -40,6 +40,9 @@ fi
 
 # Replace the remote src variable in the nginx configuration with
 # the one defined in the environment variables
-envsubst '$REMOTE_SRC' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf
+cp /etc/nginx/totara-server.conf /tmp/temp.conf
+envsubst '$REMOTE_SRC' < /tmp/temp.conf > /etc/nginx/totara-server.conf
+rm /tmp/temp.conf
+
 # fire up nginx
 nginx -g 'daemon off;'
