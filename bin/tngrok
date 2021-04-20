@@ -1,0 +1,30 @@
+#!/bin/bash
+
+SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+PROJECTPATH="$( cd $SCRIPTPATH && cd ..; pwd -P )"
+
+export $(egrep -v '^#' $PROJECTPATH/.env | xargs)
+
+if [ -z $1 ]; then
+    echo "Helper for using ngrok with your totara site.
+
+Your ngrok directory will need to be added to the PATH variable for it to work.
+
+Usage Examples:
+  tngrok totara71                              // Creates a tunnel to your totara site for the specified host (if you don't use mutliple sites)
+  tngrok sitename.totara72                     // Creates a tunnel to your totara site called 'sitename' for the specified host (for mutliple sites)
+  tngrok sitename.totara73.debug               // Same as above, but also enables XDebug
+  tngrok sitename.totara74.debug mysubdomain   // Same as above, but the ngrok domain is static and can be accessed at https://mysubdomain.ngrok.io
+"
+    exit;
+fi
+
+if [ -z $NGROK_REGION ]; then
+    NGROK_REGION="us"
+fi
+
+if [ ! -z $2 ]; then
+    SUBDOMAIN="-subdomain=$2"
+fi
+
+ngrok http --region=$NGROK_REGION -bind-tls=true $SUBDOMAIN -host-header=rewrite "https://$1:8443"
