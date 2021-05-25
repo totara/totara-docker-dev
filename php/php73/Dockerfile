@@ -114,3 +114,10 @@ RUN git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.oh-my-zsh/
 RUN echo 'setopt +o nomatch' > ~/.zshrc
 RUN echo 'source ~/custom_shell/.zshrc' >> ~/.zshrc
 RUN cat ~/.bashrc >> ~/.zshrc
+
+# Python 3.7 for ML Recommender.
+RUN apt install -y python3.7 \
+    python3-pip \
+    python3-wheel \
+    python3-venv \
+    python3-dev

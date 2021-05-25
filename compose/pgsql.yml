@@ -7,6 +7,7 @@ services:
     ports:
       - "5493:5432"
     environment:
+      TZ: ${TIME_ZONE}
       PGDATA: /var/lib/postgresql/data/pgdata
     command:
       postgres -c 'config_file=/etc/postgresql/postgresql.conf'
@@ -24,6 +25,7 @@ services:
     ports:
       - "5496:5432"
     environment:
+      TZ: ${TIME_ZONE}
       PGDATA: /var/lib/postgresql/data/pgdata
       POSTGRES_HOST_AUTH_METHOD: trust
     command:
@@ -42,6 +44,7 @@ services:
     ports:
       - "5410:5432"
     environment:
+      TZ: ${TIME_ZONE}
       PGDATA: /var/lib/postgresql/data/pgdata
     command:
       postgres -c 'config_file=/etc/postgresql/postgresql.conf'
@@ -59,6 +62,7 @@ services:
     ports:
       - "5411:5432"
     environment:
+      TZ: ${TIME_ZONE}
       PGDATA: /var/lib/postgresql/data/pgdata
     command:
       postgres -c 'config_file=/etc/postgresql/postgresql.conf'
@@ -76,6 +80,7 @@ services:
     ports:
       - "5432:5432"
     environment:
+      TZ: ${TIME_ZONE}
       PGDATA: /var/lib/postgresql/data/pgdata
     command:
       postgres -c 'config_file=/etc/postgresql/postgresql.conf'
@@ -87,9 +92,27 @@ services:
     networks:
       - totara
 
+  pgsql13:
+    image: postgres:13.0
+    container_name: totara_pgsql13
+    ports:
+      - "5442:5432"
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+    command:
+      postgres -c 'config_file=/etc/postgresql/postgresql.conf'
+    volumes:
+      - ./pgsql/my-postgres.conf:/etc/postgresql/postgresql.conf
+      - pgsql13-data:/var/lib/postgresql/data
+    depends_on:
+      - nginx
+    networks:
+      - totara
+
 volumes:
   pgsql93-data:
   pgsql96-data:
   pgsql10-data:
   pgsql11-data:
   pgsql12-data:
+  pgsql13-data:

@@ -5,6 +5,7 @@ services:
     image: totara/docker-dev-nginx
     container_name: totara_nginx
     environment:
+      - TZ=${TIME_ZONE}
       - REMOTE_DATA
     ports:
       - "80:80"
@@ -45,6 +46,13 @@ services:
           - totara73.debug
           - totara73.behat
           - totara73.behat.totaralms.com
+          - totara74
+          - totara74.debug
+          - totara74.behat
+          - totara74.behat.totaralms.com
+          - totara80
+          - totara80.behat
+          - totara80.behat.totaralms.com
 
 volumes:
   totara-data:

@@ -23,6 +23,7 @@ php73 | 7.3 |  [Dockerfile](https://github.com/totara/totara-docker-dev/blob/mas
 php73-debug | 7.3 + xdebug 2.9.6 |  [Dockerfile](https://github.com/totara/totara-docker-dev/blob/master/php/php73-debug/Dockerfile) | [![Build status PHP 7.3 Debug](https://img.shields.io/docker/build/totara/docker-dev-php73-debug.svg)](https://hub.docker.com/r/totara/docker-dev-php73-debug/)
 php74 | 7.4 |  [Dockerfile](https://github.com/totara/totara-docker-dev/blob/master/php/php74/Dockerfile) | [![Build status PHP 7.4](https://img.shields.io/docker/build/totara/docker-dev-php74.svg)](https://hub.docker.com/r/totara/docker-dev-php74/)
 php74-debug | 7.4 + xdebug 2.9.6 |  [Dockerfile](https://github.com/totara/totara-docker-dev/blob/master/php/php74-debug/Dockerfile) | [![Build status PHP 7.4 Debug](https://img.shields.io/docker/build/totara/docker-dev-php74-debug.svg)](https://hub.docker.com/r/totara/docker-dev-php74-debug/)
+php80 | 8.0 |  [Dockerfile](https://github.com/totara/totara-docker-dev/blob/master/php/php80/Dockerfile) | [![Build status PHP 8.0](https://img.shields.io/docker/build/totara/docker-dev-php80.svg)](https://hub.docker.com/r/totara/docker-dev-php80/)
 
 # A Docker setup for local Totara Learn development
 
@@ -34,7 +35,7 @@ Although this project started as a development environment for Totara Learn it c
 
 ### What you get:
  * [NGINX](https://nginx.org/) as a webserver
- * [PHP](http://php.net/) 5.3, 5.4, 5.5, 5.6, 7.0, 7.1, 7.2, 7.3, 7.4 to test for different versions
+ * [PHP](http://php.net/) 5.3, 5.4, 5.5, 5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0 to test for different versions
  * [PostgreSQL](https://www.postgresql.org/) (9.3, 9.6, 10, 11, 12), [MariaDB](https://mariadb.org/) (10.2, 10.4 and 10.5) and [MySQL](https://www.mysql.com/) (5.7.x and 8), and [Microsoft SQL Server 2017](https://www.microsoft.com/en-us/sql-server/sql-server-2017) support
  * A [PHPUnit](https://phpunit.de/) and [Behat](http://behat.org/en/latest/) setup to run tests (including [Selenium](https://www.seleniumhq.org/))
  * A [mailcatcher](https://mailcatcher.me/) instance to inspect mails
@@ -62,7 +63,7 @@ Please check out the [contribute](CONTRIBUTE.md) page for more information on ho
 
 __Example:__
 ```bash
-127.0.0.1   localhost totara54 totara54.debug totara54.behat totara55 totara55.debug totara55.behat totara56 totara56.debug totara56.behat totara70 totara70.debug totara70.behat totara71 totara71.debug totara71.behat totara72 totara72.debug totara72.behat totara73 totara73.debug totara73.behat totara74 totara74.debug totara74.behat
+127.0.0.1   localhost totara54 totara54.debug totara54.behat totara55 totara55.debug totara55.behat totara56 totara56.debug totara56.behat totara70 totara70.debug totara70.behat totara71 totara71.debug totara71.behat totara72 totara72.debug totara72.behat totara73 totara73.debug totara73.behat totara74 totara74.debug totara74.behat totara80 totara80.behat
 ```
 
 ## Upgrade
@@ -165,7 +166,8 @@ Alternatively, you can manually configure your databases via the following crede
 
 DB | Host | User | Password |
 --- | --- | --- | ---
-**PostresSQL 12 (latest)** | pgsql | postgres | 
+**PostresSQL 13 (latest)** | pgsql13 | postgres |
+**PostresSQL 12 ** | pgsql | postgres | 
 **PostresSQL 11** | pgsql11 | postgres | 
 **PostresSQL 10** | pgsql10 | postgres | 
 **PostresSQL 9.6** | pgsql96 | postgres | 

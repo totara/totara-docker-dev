@@ -1,4 +1,4 @@
-FROM php:7.4-fpm
+FROM php:8.0-fpm
 
 ARG TIME_ZONE=Pacific/Auckland
 
@@ -21,8 +21,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         libzip-dev \
         libmemcached-dev \
         zip \
-    && docker-php-ext-install -j$(nproc) xmlrpc \
-        zip \
+    && docker-php-ext-install -j$(nproc) zip \
         intl \
         soap \
         opcache \
@@ -32,8 +31,6 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         mysqli \
         exif \
     && docker-php-ext-configure gd \
-            --with-freetype \
-            --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd
 
 RUN git clone https://github.com/tideways/php-profiler-extension.git \
@@ -43,14 +40,6 @@ RUN git clone https://github.com/tideways/php-profiler-extension.git \
     && make && make install
 
 RUN echo "extension=tideways_xhprof.so" >> /usr/local/etc/php/conf.d/tideways_xhprof.ini
-
-RUN pecl install -o -f redis \
-    &&  rm -rf /tmp/pear \
-    &&  docker-php-ext-enable redis
-
-RUN pecl install -o -f memcached \
-    &&  rm -rf /tmp/pear \
-    &&  docker-php-ext-enable memcached
 
 # we need en_US locales for MSSQL connection to work
 # we need en_AU locales for behat to work
@@ -80,8 +69,8 @@ RUN echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile \
     && echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
 
 RUN pear config-set php_ini `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"` system \
-    && pecl install sqlsrv-5.7.0preview \
-    && pecl install pdo_sqlsrv-5.7.0preview
+    && pecl install sqlsrv-5.9.0beta2 \
+    && pecl install pdo_sqlsrv-5.9.0beta2
 
 RUN docker-php-ext-enable sqlsrv.so && docker-php-ext-enable pdo_sqlsrv.so
 
@@ -104,10 +93,3 @@ RUN git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.oh-my-zsh/
 RUN echo 'setopt +o nomatch' > ~/.zshrc
 RUN echo 'source ~/custom_shell/.zshrc' >> ~/.zshrc
 RUN cat ~/.bashrc >> ~/.zshrc
-
-# Python 3.7 for ML Recommender.
-RUN apt install -y python3.7 \
-    python3-pip \
-    python3-wheel \
-    python3-venv \
-    python3-dev
