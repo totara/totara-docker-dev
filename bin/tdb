@@ -301,8 +301,8 @@ elif [ "$db_type" == 'mysqli' ]; then
         eval "$db_command sh -c 'export MYSQL_PWD=$db_password; mysql -u\"$db_user\" -e \"$1\"'"
     }
 
-    character_set='utf8'
-    collation='utf8_bin'
+    character_set='utf8mb4'
+    collation='utf8mb4_bin'
     if [[ $db_host == 'mysql8' ]]; then
         character_set='utf8mb4'
         collation='utf8mb4_0900_as_cs'
@@ -358,12 +358,12 @@ elif [ "$db_type" == 'mariadb' ]; then
 
     # Create mariadb database
     if [ "$action" == 'create' ]; then
-        eval "$db_sql_cmd -e \"CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_bin\"" || exit
+        eval "$db_sql_cmd -e \"CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin\"" || exit
 
     # Drop and create mariadb database
     elif [ "$action" == 'recreate' ]; then
         eval "$db_sql_cmd -e \"DROP DATABASE IF EXISTS $db_name\"" >> /dev/null
-        eval "$db_sql_cmd -e \"CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_bin\"" || exit
+        eval "$db_sql_cmd -e \"CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin\"" || exit
 
     # Drop mariadb database
     elif [ "$action" == 'drop' ]; then
@@ -376,7 +376,7 @@ elif [ "$db_type" == 'mariadb' ]; then
     # Restore mariadb database
     elif [ "$action" == 'restore' ]; then
         eval "$db_sql_cmd -e \"DROP DATABASE IF EXISTS $db_name\""
-        eval "$db_sql_cmd -e \"CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8 COLLATE utf8_bin\""
+        eval "$db_sql_cmd -e \"CREATE DATABASE $db_name DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_bin\""
         docker cp "$backup_file_local" "$db_container":"$backup_file_remote"
         $db_command sh -c "mysql -u\"$db_user\" -p\"$db_password\" $db_name < $backup_file_remote" >> /dev/null
         if [ "${PIPESTATUS[0]}" == '1' ]; then
