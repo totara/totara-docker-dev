@@ -80,18 +80,14 @@ php_get_version_code="
     }
 "
 totara_version=$(php -r "$php_get_version_code")
-if [[ "$totara_version" =~ '14.' || "$totara_version" =~ '14dev' ]]; then
-    php_version='7.3'
-elif [[ "$totara_version" =~ '13.' || "$totara_version" =~ '13dev' ]]; then
-    php_version='7.3'
-elif [[ "$totara_version" =~ '12.' || "$totara_version" =~ '11.' ]]; then
-    php_version='7.3'
-elif [[ "$totara_version" =~ '10.' ]]; then
-    php_version='7.2'
+if [[ "$totara_version" =~ '^2.' ]]; then
+    php_version='5.6'
 elif [[ "$totara_version" =~ '9.' ]]; then
     php_version='7.0'
+elif [[ "$totara_version" =~ '10.' ]]; then
+    php_version='7.2'
 else
-    php_version='5.6'
+    php_version='7.3'
 fi
 php_container_version=$(echo $php_version | sed 's/[^0-9]*//g')
 
