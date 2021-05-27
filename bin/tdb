@@ -243,6 +243,13 @@ if [[ $action == 'backup' || $action == 'restore' ]]; then
     fi
 fi
 
+# MySQL and MariaDB need special character sets and collation
+character_set='utf8mb4'
+collation='utf8mb4_bin'
+if [[ $db_host == 'mysql8' ]]; then
+    collation='utf8mb4_0900_as_cs'
+fi
+
 ##########################################
 #               PostgreSQL               #
 ##########################################
@@ -286,15 +293,6 @@ if [ "$db_type" == 'pgsql' ]; then
         echo -e "\x1B[2mNote: $action for $db_type isn't implemented yet.\x1B[0m"
         exit
     fi
-
-
-# MySQL and MariaDB need special character sets and collation
-character_set='utf8mb4'
-collation='utf8mb4_bin'
-if [[ $db_host == 'mysql8' ]]; then
-    collation='utf8mb4_0900_as_cs'
-fi
-
 
 ##########################################
 #                 MySQL                  #
