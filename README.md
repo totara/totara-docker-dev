@@ -523,10 +523,10 @@ If you want to use npm you can use ```tnpm``` like this:
 # if your project lives in a subfolder then run the command from inside that folder
 # root directory npm commands control t13 Tui framework build commands only
 tnpm install
-tnpm run tui-dev
-tnpm run tui-watch
+tnpm run tui-build-dev
+tnpm run tui-build-watch
 # watch builds on specific plugins for speed boost
-tnpm run tui-watch tui samples theme_ventura
+tnpm run tui-build-watch tui samples theme_ventura
 ```
 
 If you want to use grunt you can use ```tgrunt``` like this:
