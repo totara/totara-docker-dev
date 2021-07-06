@@ -137,6 +137,7 @@ tdb [options]                     # run common actions for your databases
 tdocker                           # shortcut to general docker-compose ... command
 tdown                             # shutdown all containers
 tgrunt [options]                  # run grunt in container, supports running in subfolders
+tngrok [host]                     # shortcut to running ngrok with a totara host such as totara74.debug or totara56
 tnpm [options]                    # run npm in container, supports running in subfolders
 tpull                             # pull latest images (only those which you already have locally) 
 trestart [container]              # restart (all) container(s)
@@ -288,36 +289,42 @@ $CFG->dboptions = array(
                                 //  default port
 );
 
+$is_multi_site = __DIR__ !== '/var/www/totara/src';
+$site_name = $is_multi_site ? basename(__DIR__) : 'totara';
+$has_server_dir = file_exists(__DIR__  . '/server/config.php');
+
 // This detects and sets the wwwroot dynamically so you don't have to manually change it
-if (!empty($_SERVER['SERVER_NAME']) && !empty($_SERVER['REQUEST_SCHEME'])) {
-    $dir = __DIR__;
-    $parts = explode('/', $dir);
-    $base_path = '/' . array_pop($parts);
+if (!empty($_SERVER['HTTP_X_ORIGINAL_HOST']) && strpos($_SERVER['HTTP_X_ORIGINAL_HOST'], 'ngrok.io') !== false) {
+    // using ngrok
+    $_SERVER['HTTP_HOST'] = $_SERVER['HTTP_X_ORIGINAL_HOST'];
+    $CFG->wwwroot = 'https://' . $_SERVER['HTTP_HOST'];
+} else if (!empty($_SERVER['HTTP_HOST']) && !empty($_SERVER['REQUEST_SCHEME'])) {
+    // accessing it locally via the web
+    $hostname = $_SERVER['HTTP_HOST'];
+    $hostname_parts = explode('.', $hostname);
+    $CFG->wwwroot = $_SERVER['REQUEST_SCHEME'] . '://';
 
-    if (file_exists(__DIR__.'/server/version.php')) {
-        $base_path .= '/server';
+    if (end($hostname_parts) === 'behat') {
+        // redirect if using the behat URL
+        $hostname = str_replace('.behat', '', $hostname);
     }
+    $CFG->wwwroot .= $hostname;
 
-    $parts = explode('.', $_SERVER['SERVER_NAME']);
-
-    $wwwroot = $_SERVER['REQUEST_SCHEME'] . '://';
-
-    if (count($parts) > 1) {
-        // debug or behat
-        if ($parts[1] == 'behat') {
-            $wwwroot .= $parts[0];
-        } else {
-            $wwwroot .= $_SERVER['SERVER_NAME'];
+    if ($is_multi_site && strpos($hostname, $site_name) === false) {
+        $CFG->wwwroot .= '/' . $site_name;
+        if ($has_server_dir) {
+            $CFG->wwwroot .= '/server';
         }
-    } else {
-        $wwwroot .= $parts[0];
     }
-
-    $wwwroot .= $base_path;
-    $CFG->wwwroot = $wwwroot;
 } else {
-    // Fallback for CLI
-    $CFG->wwwroot   = "http://totara73/perform/server";
+    // accessing it via CLI
+    $CFG->wwwroot = 'http://totara73';
+    if ($is_multi_site) {
+        $CFG->wwwroot .= '/' . $site_name;
+    }
+    if ($has_server_dir) {
+        $CFG->wwwroot .= '/server';
+    }
 }
 
 // Recommended behat configuration options
@@ -610,6 +617,17 @@ mutagen sync monitor totara
 ## Custom docker-compose configurations
 
 You can customise the docker compose configurations simply adding your own `.yml` or `.yaml` compose files into the `custom` folder. Any containers or other options you have will automatically override any existing default container options.
+
+### Ngrok
+
+__[Ngrok](https://ngrok.com/)__ is a useful tool for making your local totara site accessible publicly on the web.
+This is very useful when testing intergrations with Totara, such as the mobile app, or external services such as Microsoft Teams, LinkedIn Learning, or even if you simply want to make your site available for someone else to look at.
+
+You will first need to sign up for an [account](https://dashboard.ngrok.com/signup), and then install and authenticate ngrok on your machine. You will also need to make sure that the `ngrok` command can be run normally - this may require adding your ngrok installation directory to your `$PATHS` variable.
+
+Once ngrok is set up, you can use the ```tngrok``` command to use it with totara.
+
+If you have multiple sites set up, you will need to add entries into your ```/etc/hosts``` file, for each totara host such as ```totara73``` that you wish to use, you will need to add one with your desired site as the subdomain, like ```yoursite.totara73```.
 
 ## Custom shell aliases
 

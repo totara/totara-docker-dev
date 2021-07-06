@@ -7,9 +7,11 @@ services:
     environment:
       - TZ=${TIME_ZONE}
       - REMOTE_DATA
+      - REMOTE_SRC
     ports:
       - "80:80"
       - "443:443"
+      - "8443:8443" # ngrok only
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
