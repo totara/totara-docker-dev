@@ -7,6 +7,7 @@ cd $PROJECTPATH;
 
 files=(
     "docker-compose.yml"
+    "compose/apache.yml"
     "compose/mariadb.yml"
     "compose/mssql.yml"
     "compose/mysql.yml"

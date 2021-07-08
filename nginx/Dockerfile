@@ -4,7 +4,8 @@ ENV REMOTE_DATA=${REMOTE_DATA}
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     nano \
-    openssl
+    openssl \
+    gettext
 
 COPY config/default.conf /etc/nginx/conf.d/default.conf
 COPY config/server.conf /etc/nginx/totara-server.conf
