@@ -9,6 +9,7 @@ services:
       CONTAINERNAME: php-5.3
       TZ: ${TIME_ZONE}
       HIST_FILE: /root/.bash_history
+      DISABLE_AUTO_UPDATE: true # disables oh-my-zsh update message
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -30,6 +31,7 @@ services:
       HOST_IP: ${HOST_IP}
       PHP_IDE_CONFIG: serverName=totara53
       HIST_FILE: /root/.bash_history
+      DISABLE_AUTO_UPDATE: true # disables oh-my-zsh update message
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -47,6 +49,7 @@ services:
       CONTAINERNAME: php-5.4
       TZ: ${TIME_ZONE}
       HIST_FILE: /root/.bash_history
+      DISABLE_AUTO_UPDATE: true # disables oh-my-zsh update message
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -68,6 +71,7 @@ services:
       HOST_IP: ${HOST_IP}
       PHP_IDE_CONFIG: serverName=totara54
       HIST_FILE: /root/.bash_history
+      DISABLE_AUTO_UPDATE: true # disables oh-my-zsh update message
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -97,6 +101,7 @@ services:
       CONTAINERNAME: php-5.5
       TZ: ${TIME_ZONE}
       HIST_FILE: /root/.bash_history
+      DISABLE_AUTO_UPDATE: true # disables oh-my-zsh update message
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -118,6 +123,7 @@ services:
       XDEBUG_CONFIG: remote_host=${HOST_IP}
       PHP_IDE_CONFIG: serverName=totara55
       HIST_FILE: /root/.bash_history
+      DISABLE_AUTO_UPDATE: true # disables oh-my-zsh update message
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -147,6 +153,7 @@ services:
       CONTAINERNAME: php-5.6
       TZ: ${TIME_ZONE}
       HIST_FILE: /root/.bash_history
+      DISABLE_AUTO_UPDATE: true # disables oh-my-zsh update message
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -168,6 +175,7 @@ services:
       XDEBUG_CONFIG: remote_host=${HOST_IP}
       PHP_IDE_CONFIG: serverName=totara56
       HIST_FILE: /root/.bash_history
+      DISABLE_AUTO_UPDATE: true # disables oh-my-zsh update message
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -197,6 +205,7 @@ services:
       CONTAINERNAME: php-7.0
       TZ: ${TIME_ZONE}
       HIST_FILE: /root/.bash_history
+      DISABLE_AUTO_UPDATE: true # disables oh-my-zsh update message
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -218,6 +227,7 @@ services:
       XDEBUG_CONFIG: remote_host=${HOST_IP}
       PHP_IDE_CONFIG: serverName=totara70
       HIST_FILE: /root/.bash_history
+      DISABLE_AUTO_UPDATE: true # disables oh-my-zsh update message
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -247,6 +257,7 @@ services:
       CONTAINERNAME: php-7.1
       TZ: ${TIME_ZONE}
       HIST_FILE: /root/.bash_history
+      DISABLE_AUTO_UPDATE: true # disables oh-my-zsh update message
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -268,6 +279,7 @@ services:
       XDEBUG_CONFIG: remote_host=${HOST_IP}
       PHP_IDE_CONFIG: serverName=totara71
       HIST_FILE: /root/.bash_history
+      DISABLE_AUTO_UPDATE: true # disables oh-my-zsh update message
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -297,6 +309,7 @@ services:
       CONTAINERNAME: php-7.2
       TZ: ${TIME_ZONE}
       HIST_FILE: /root/.bash_history
+      DISABLE_AUTO_UPDATE: true # disables oh-my-zsh update message
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -318,6 +331,7 @@ services:
       XDEBUG_CONFIG: remote_host=${HOST_IP}
       PHP_IDE_CONFIG: serverName=totara72
       HIST_FILE: /root/.bash_history
+      DISABLE_AUTO_UPDATE: true # disables oh-my-zsh update message
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -347,6 +361,7 @@ services:
       CONTAINERNAME: php-7.3
       TZ: ${TIME_ZONE}
       HIST_FILE: /root/.bash_history
+      DISABLE_AUTO_UPDATE: true # disables oh-my-zsh update message
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -368,6 +383,7 @@ services:
       XDEBUG_CONFIG: remote_host=${HOST_IP}
       PHP_IDE_CONFIG: serverName=totara73
       HIST_FILE: /root/.bash_history
+      DISABLE_AUTO_UPDATE: true # disables oh-my-zsh update message
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -397,6 +413,7 @@ services:
       CONTAINERNAME: php-7.4
       TZ: ${TIME_ZONE}
       HIST_FILE: /root/.bash_history
+      DISABLE_AUTO_UPDATE: true # disables oh-my-zsh update message
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -418,6 +435,7 @@ services:
       XDEBUG_CONFIG: remote_host=${HOST_IP}
       PHP_IDE_CONFIG: serverName=totara74
       HIST_FILE: /root/.bash_history
+      DISABLE_AUTO_UPDATE: true # disables oh-my-zsh update message
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -446,6 +464,7 @@ services:
     environment:
       CONTAINERNAME: php-8.0
       HIST_FILE: /root/.bash_history
+      DISABLE_AUTO_UPDATE: true # disables oh-my-zsh update message
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
