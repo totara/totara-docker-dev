@@ -17,6 +17,22 @@ services:
     networks:
       - totara
 
+  mariadb106:
+    image: mariadb:10.6
+    container_name: totara_mariadb106
+    ports:
+      - "3310:3306"
+    environment:
+      TZ: ${TIME_ZONE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PW}
+    volumes:
+      - mariadb106-data:/var/lib/mysql
+      - ./mariadb:/etc/mysql/conf.d
+    depends_on:
+      - nginx
+    networks:
+      - totara
+
   mariadb104:
     image: mariadb:10.4
     container_name: totara_mariadb104
@@ -51,5 +67,6 @@ services:
 
 volumes:
   mariadb-data:
+  mariadb106-data:
   mariadb104-data:
   mariadb102-data:
