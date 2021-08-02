@@ -55,6 +55,9 @@ services:
           - totara80
           - totara80.behat
           - totara80.behat.totaralms.com
+          - totara81
+          - totara81.behat
+          - totara81.behat.totaralms.com
 
 volumes:
   totara-data:
