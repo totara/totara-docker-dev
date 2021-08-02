@@ -111,3 +111,12 @@ services:
 
   php-8.0-cron:
     build: ./php/php80-cron
+
+  php-8.1:
+    build:
+      context: ./php/php81
+      args:
+        TIME_ZONE: ${TIME_ZONE}
+
+  php-8.1-cron:
+    build: ./php/php81-cron
