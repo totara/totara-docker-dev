@@ -491,6 +491,7 @@ services:
     environment:
       CONTAINERNAME: php-8.1
       HIST_FILE: /root/.bash_history
+      DISABLE_AUTO_UPDATE: true # disables oh-my-zsh update message
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
