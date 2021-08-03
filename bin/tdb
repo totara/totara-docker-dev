@@ -10,14 +10,19 @@ export $(grep -E -v '^#' "$project_path/.env" | xargs)
 flags=(
   "-i"
   "--ignore-dataroot"
+  "-f"
+  "--force"
   "-b"
   "--totara-box"
 )
 ignore_dataroot=0
+force_backup=0
 for_totara_box=0
 while [[ " ${flags[@]} " =~ " $1 " ]]; do
   if [[ "$1" == "-i" || "$1" == "--ignore-dataroot" ]]; then
     ignore_dataroot=1
+  elif [[ "$1" == "-f" || "$1" == "--force" ]]; then
+    force_backup=1
   elif [[ "$1" == "-b" || "$1" == "--totara-box" ]]; then
     for_totara_box=1
   fi
@@ -51,6 +56,7 @@ Actions:
 
 Options:
   -i, --ignore-dataroot    Ignore the dataroot directory when backing up and restoring.
+  -f, --force              Overwrite any existing database and dataroot backups if they already exist.
   -b, --totara-box         Backup and restore the database in a format compatible with Totara box (Postgres only)
 
 Examples:
@@ -224,8 +230,8 @@ if [[ $action == 'backup' || $action == 'restore' ]]; then
         exit
     fi
     # If backing up, make sure we don't accidentally overwrite an existing backup file.
-    if [[ $action == 'backup' && -f "$backup_file_local" ]]; then
-        echo -e "\x1B[33mBackup file \x1B[0m\x1B[4m\x1B[37m$backup_file_local\x1B[0m\x1B[33m already exists. Delete it, then run this again.\x1B[0m"
+    if [[ $action == 'backup' && -f "$backup_file_local" && "$force_backup" == "0" ]]; then
+        echo -e "\x1B[33mBackup file \x1B[0m\x1B[4m\x1B[37m$backup_file_local\x1B[0m\x1B[33m already exists.\nIf you want to overwrite it, then run this command again with the -f option specified.\x1B[0m"
         exit
     # If restoring, make sure the backup file exists.
     elif [[ $action == 'restore' && ! -f "$backup_file_local" ]]; then
@@ -246,8 +252,8 @@ if [[ $action == 'backup' || $action == 'restore' ]]; then
         backup_dataroot_local="$backup_file_local$backup_dataroot_suffix"
 
         # If backing up, make sure we don't accidentally overwrite an existing dataroot zip.
-        if [[ $action == 'backup' && -f "$backup_dataroot_local" ]]; then
-            echo -e "\x1B[33mBackup dataroot zip already exists. Delete it, then run this again.\x1B[0m"
+        if [[ $action == 'backup' && -f "$backup_dataroot_local" && "$force_backup" == "0" ]]; then
+            echo -e "\x1B[33mBackup dataroot zip already exists.\nIf you want to overwrite it, then run this command again with the -f option specified.\x1B[0m"
             exit
         # If restoring, make sure the backup dataroot zip exists.
         elif [[ $action == 'restore' && ! -f "$backup_dataroot_local" ]]; then
