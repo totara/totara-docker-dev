@@ -29,6 +29,12 @@ while [[ " ${flags[@]} " =~ " $1 " ]]; do
   shift
 done
 
+if ! php --version &> /dev/null; then
+    echo "PHP must be installed locally to use the tdb command."
+    echo "(e.g. 'brew install php' or 'apt install php')"
+    exit
+fi
+
 # Print help info
 action=$1
 action_options=(
