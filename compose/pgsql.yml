@@ -98,7 +98,9 @@ services:
     ports:
       - "5442:5432"
     environment:
+      TZ: ${TIME_ZONE}
       PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_HOST_AUTH_METHOD: trust
     command:
       postgres -c 'config_file=/etc/postgresql/postgresql.conf'
     volumes:
