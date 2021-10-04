@@ -14,4 +14,8 @@ if [ ! -f "$LOCALPATH/version.php" ]; then
     TOTARASITEDIR="$REMOTE_SRC"
 fi
 
-$SCRIPTPATH/tdocker exec -w $TOTARASITEDIR "$1" /bin/bash
+if [[ "$1" =~ "php" || "$1" =~ "nginx" || "$1" =~ "apache" ]]; then
+  $SCRIPTPATH/tdocker exec -w $TOTARASITEDIR "$1" /bin/bash
+else
+  $SCRIPTPATH/tdocker exec "$1" /bin/bash
+fi
