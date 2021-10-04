@@ -4,6 +4,8 @@ mutagen.yml.lock
 !.gitkeep
 /cron.d/*.cron
 /shell/*.sh
+/shell/*.bash
+!/shell/default-aliases.sh
 /custom/*.yml
 /custom/*.yaml
 /tools/.update
