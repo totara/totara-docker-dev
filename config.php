@@ -372,7 +372,9 @@ if ($DOCKER_DEV->major_version >= 10) {
 //////////////////////////////////////////////////////////////////////////
 
 $development_mode = true;
-$frontend_development_mode = false;
+$frontend_tui_development_mode = false;
+$frontend_legacy_development_mode = false;
+
 if ($development_mode) {
     $CFG->sitetype = 'development';
 
@@ -391,10 +393,18 @@ if ($development_mode) {
 
     $CFG->langstringcache = false;
 
-    if ($frontend_development_mode) {
+    // Theme designer mode significantly deteriorates performance, so allow
+    // for separate development of Legacy front end stack with this setting
+    if ($frontend_legacy_development_mode) {
         $CFG->themedesignermode = true;
         $CFG->cachejs = false;
         $CFG->cachetemplates = false;
+        $CFG->yuicomboloading = true;
+        $CFG->yuiloglevel = 'debug';
+    }
+
+    if ($frontend_tui_development_mode) {
+        $CFG->cachejs = false;
         // The following increases page load times by quite a bit
         $CFG->cache_graphql_schema = false;
         $CFG->forced_plugin_settings['totara_tui'] = array(
@@ -403,6 +413,7 @@ if ($development_mode) {
             'development_mode' => true
         );
     }
+
 
 //    // Xhprof Profiling settings
 //    $CFG->profilingenabled = true;
