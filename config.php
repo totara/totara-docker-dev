@@ -106,7 +106,7 @@ $CFG->dataroot = "/var/www/totara/data/{$DOCKER_DEV->site_name}.{$CFG->dbhost}";
 //$CFG->dataroot = '/var/www/totara/data/mobile.mysql';
 //$CFG->dataroot = '/var/www/totara/data/engage.mssql';
 if (!is_dir($CFG->dataroot)) {
-    mkdir($CFG->dataroot) && chgrp($CFG->dataroot, 'www-data') && chown($CFG->dataroot, 'www-data');
+    @mkdir($CFG->dataroot) && @chgrp($CFG->dataroot, 'www-data') && @chown($CFG->dataroot, 'www-data');
 }
 
 $CFG->directorypermissions = 02777;
@@ -119,6 +119,7 @@ $CFG->dboptions = array('dbpersist' => false, 'dbsocket' => false, 'dbport' => '
 
 
 
+//<editor-fold desc="wwwroot Configuration">
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -165,6 +166,7 @@ if (!empty($_SERVER['HTTP_X_ORIGINAL_HOST']) && strpos($_SERVER['HTTP_X_ORIGINAL
         $CFG->wwwroot .= '/server';
     }
 }
+//</editor-fold>
 
 
 
@@ -195,7 +197,7 @@ $CFG->phpunit_prefix = 'phpu_';
  */
 $CFG->phpunit_dataroot = "/var/www/totara/data/{$DOCKER_DEV->site_name}.{$CFG->dbhost}.{$DOCKER_DEV->major_version}.phpunit";
 if (!is_dir($CFG->phpunit_dataroot)) {
-    mkdir($CFG->phpunit_dataroot) && chgrp($CFG->phpunit_dataroot, 'www-data') && chown($CFG->phpunit_dataroot, 'www-data');
+    @mkdir($CFG->phpunit_dataroot) && @chgrp($CFG->phpunit_dataroot, 'www-data') && @chown($CFG->phpunit_dataroot, 'www-data');
 }
 
 
@@ -249,9 +251,10 @@ $CFG->behat_prefix = 'bht_';
  */
 $CFG->behat_dataroot = "/var/www/totara/data/{$DOCKER_DEV->site_name}.{$CFG->dbhost}.{$DOCKER_DEV->major_version}.behat";
 if (!is_dir($CFG->behat_dataroot)) {
-    mkdir($CFG->behat_dataroot) && chgrp($CFG->behat_dataroot, 'www-data') && chown($CFG->behat_dataroot, 'www-data');
+    @mkdir($CFG->behat_dataroot) && @chgrp($CFG->behat_dataroot, 'www-data') && @chown($CFG->behat_dataroot, 'www-data');
 }
 
+//<editor-fold desc="Advanced behat setup" defaultstate="collapsed">
 /**
  * The wwwroot for behat is the same as the host, but with '.behat' added as a suffix (so 'totara73' becomes 'totara73.behat')
  * You shouldn't really need to change this.
@@ -264,7 +267,6 @@ if ($DOCKER_DEV->has_server_dir) {
     $CFG->behat_wwwroot .= '/server';
 }
 
-//<editor-fold desc="Advanced behat setup" defaultstate="collapsed">
 /**
  * This is where the behat setup get a bit complicated - here we generate the behat config that supports multiple different Totara versions.
  * You shouldn't need to change this section - but if you find this needs modification to get it working,
