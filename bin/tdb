@@ -3,8 +3,7 @@
 script_name=$(basename "$0")
 script_path="$( cd "$(dirname $0)" || exit; pwd -P )"
 project_path="$( cd "$script_path" && cd ..; pwd -P )"
-
-source "$project_path/tools/check_for_update.sh"
+helpers_path="$project_path/bin/helpers"
 
 export $(grep -E -v '^#' "$project_path/.env" | xargs)
 
@@ -88,63 +87,24 @@ else
 fi
 
 if [ ! -f "$local_dir/config.php" ]; then
-    echo -e "\x1B[33mCould not find a totara site (or a config.php)\nIf you have multiple sites, make sure you run this command from the correct directory.\x1B[0m"
+    echo -e "\x1B[33mCould not find a totara site (config.php is missing)\nIf you have multiple sites, make sure you run this command from the correct directory.\x1B[0m"
     exit
 fi
 
-# Get PHP Version to use based on totara version
-version_php_path="$local_dir/version.php"
-if [ -f "$local_dir/server/version.php" ]; then
-    version_php_path="$local_dir/server/version.php"
+# This next part gets the ID of the latest PHP container that can be used for this
+# Totara/Moodle version (from composer.json), and starts the container if it isn't already running.
+php_containers=($(php "$helpers_path/php_container.php" "$local_dir"))
+if [ -z "$php_containers" ]; then
+    echo -e "\x1B[33mUnable to determine (or start) the appropriate PHP container for this Totara version.\x1B[0m"
+    exit
 fi
-php_get_version_code="
-    \$matches=array();
-    \$totara_regex=\"/version[\s]*=[\s]*\'([^\']+)\'/\";
-    preg_match_all(\$totara_regex, file_get_contents('${version_php_path}'), \$matches);
-    if (!empty(\$matches) && isset(\$matches[1][0])) {
-        echo(\$matches[1][0]);
-        return;
-    }
-"
-totara_version=$(php -r "$php_get_version_code")
-if [[ "$totara_version" =~ '^2.' ]]; then
-    php_version='5.6'
-elif [[ "$totara_version" =~ '9.' ]]; then
-    php_version='7.0'
-elif [[ "$totara_version" =~ '10.' ]]; then
-    php_version='7.2'
-else
-    php_version='7.3'
-fi
-php_container_version=$(echo $php_version | sed 's/[^0-9]*//g')
-
-# Get running php container, or start it if it isn't running
-php_containers=($(docker ps --filter "name=php$php_container_version" --format '{{.ID}} {{.Names}}' | grep -v "_debug" | xargs))
-if [ -z $php_containers ]; then
-    tup "php-$php_version"
-    php_containers=($(docker ps --filter "name=php$php_container_version" --format '{{.ID}} {{.Names}}' | grep -v "_debug" | xargs))
-fi
-php_container=${php_containers[0]}
-php_container_name=${php_containers[1]}
+php_container=${php_containers[1]}
+php_container_name=${php_containers[0]}
 php_command="docker exec $php_container";
 
 # Get the database variables from the site config.php
-config_php_path="$remote_dir/config.php"
-if [ -f "$local_dir/server/config.php" ]; then
-    config_php_path="$remote_dir/server/config.php"
-fi
-php_get_config_vars="
-    define(\"CLI_SCRIPT\", true);
-    define(\"ABORT_AFTER_CONFIG\", true);
-    require_once(\"$config_php_path\");
-    if (!isset(\$CFG->dbtype) || !isset(\$CFG->dbhost) || !isset(\$CFG->dbname) || !isset(\$CFG->dbuser) || !isset(\$CFG->dbpass) || !isset(\$CFG->dataroot)) {
-        echo(0);
-        return;
-    }
-    echo \"1 \$CFG->dataroot \$CFG->dbtype \$CFG->dbhost \$CFG->dbname \$CFG->dbuser \$CFG->dbpass\";
-"
-
-config_output=$( eval "$php_command php -r '$php_get_config_vars'" )
+config_vars_to_get=("dataroot" "dbtype" "dbhost" "dbname" "dbuser" "dbpass")
+config_output=$( eval "$php_command /bin/zsh -i -c 'cd $remote_dir && config_var ${config_vars_to_get[@]}'" )
 
 # Show a relevant error message if there is an issue with the config php
 if [[ "$config_output" =~ "dataroot is not configured properly" ]]; then
@@ -156,26 +116,22 @@ elif [[ "$config_output" =~ "Parse error" ]]; then
 elif [[ "$config_output" =~ "Creating default object from empty value" ]]; then
     echo -e "\x1B[33mThe site config.php is is incompatible with this totara version.\nDouble check you've checked out the correct code and/or your config.php is correct.\x1B[0m"
     exit
-fi
-
-config_vars=($config_output)
-
-if [ "${config_vars[0]}" == '0' ]; then
+elif [[ -z "$config_output" ]]; then
     echo -e "\x1B[33mDatabase config variables are missing from config.php\x1B[0m"
     exit
 fi
 
-dataroot=${config_vars[1]}
-db_type=${config_vars[2]}
-db_host=${config_vars[3]}
-db_user=${config_vars[5]}
-db_password=${config_vars[6]}
+config_vars=($config_output)
+dataroot=${config_vars[0]}
+db_type=${config_vars[1]}
+db_host=${config_vars[2]}
+db_name=${config_vars[3]}
+db_user=${config_vars[4]}
+db_password=${config_vars[5]}
 
-# Get the db name. Defaults to what is defined in config.php
-if [ ! -z $2 ]; then
+# Second argument overrides the the db name
+if [[ -n $2 ]]; then
     db_name=$2
-else
-    db_name=${config_vars[4]}
 fi
 
 # Get the db container
@@ -252,7 +208,7 @@ if [[ $action == 'backup' || $action == 'restore' ]]; then
 
     # Dataroot backup functionality. For now we don't care about the phpunit/behat dataroots.
     # We only backup/restore the dataroot if we are backing up/restoring the site database.
-    if [[ "$ignore_dataroot" == "0" && "$db_name" == "${config_vars[4]}" ]]; then
+    if [[ "$ignore_dataroot" == "0" && "$db_name" == "${config_vars[3]}" ]]; then
         dataroot_name=$(basename "$dataroot")
         dataroot_dir=$(dirname "$dataroot")
         backup_dataroot_suffix=".dataroot.zip";
@@ -265,6 +221,7 @@ if [[ $action == 'backup' || $action == 'restore' ]]; then
             exit
         # If restoring, make sure the backup dataroot zip exists.
         elif [[ $action == 'restore' && ! -f "$backup_dataroot_local" ]]; then
+            ignore_dataroot="1"
             echo -e "\x1B[33mWARNING: Backup dataroot zip does not exist at '$backup_dataroot_local'\n         This may cause uploaded files, caches and other non-database objects to not work correctly.\x1B[0m"
         fi
     fi
