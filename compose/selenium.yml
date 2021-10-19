@@ -2,7 +2,7 @@ version: "3.7"
 services:
 
   selenium-hub:
-    image: selenium/hub:latest
+    image: selenium/hub:3.141.59
     container_name: totara_seleniumhub
     ports:
       - "4444:4444"
@@ -17,32 +17,36 @@ services:
       - selenium-chrome
 
   selenium-chrome:
-    image: selenium/node-chrome:3.141.59-oxygen
+    image: selenium/node-chrome:3.141.59
     environment:
       - TZ=${TIME_ZONE}
-      - HUB_PORT_4444_TCP_ADDR=selenium-hub
-      - HUB_PORT_4444_TCP_PORT=4444
-      - NODE_MAX_INSTANCES=8
-      - NODE_MAX_SESSION=8
+      - HUB_HOST=selenium-hub
+      - HUB_PORT=4444
+    volumes:
+      - /dev/shm:/dev/shm
     networks:
       - totara
 
   selenium-chrome-debug:
-    image: selenium/standalone-chrome-debug:3.141.59-oxygen
+    image: selenium/standalone-chrome-debug:3.141.59
     container_name: totara_chrome_standalone_debug
     ports:
-      - "5901:5900"
+      - "5902:5900"
     environment:
       - TZ=${TIME_ZONE}
+    volumes:
+      - /dev/shm:/dev/shm
     networks:
       - totara
 
   selenium-chrome-standalone:
-    image: selenium/standalone-chrome:3.141.59-oxygen
+    image: selenium/standalone-chrome:3.141.59
     container_name: totara_chrome_standalone
     ports:
       - "4445:4444"
     environment:
       - TZ=${TIME_ZONE}
+    volumes:
+      - /dev/shm:/dev/shm
     networks:
       - totara
