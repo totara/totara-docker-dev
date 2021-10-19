@@ -42,7 +42,7 @@ $totara_version_matches = $moodle_version_matches = array();
 preg_match("/TOTARA->version[\s]*=[\s]*'([^']+)'/", $version_file, $totara_version_matches);
 preg_match("/release[\s]*=[\s]*'([\S]+)[^']+'/", $version_file, $moodle_version_matches);
 $DOCKER_DEV->version = end($totara_version_matches) ?: end($moodle_version_matches);
-$DOCKER_DEV->major_version = preg_replace("/^(\d{2}|[1-8]\.\d).+$/", '$1', $DOCKER_DEV->version);
+$DOCKER_DEV->major_version = preg_replace("/^(\d{2}|[1-8]\.\d|9).+$/", '$1', $DOCKER_DEV->version);
 unset($version_file, $totara_version_matches, $moodle_version_matches);
 
 //</editor-fold>

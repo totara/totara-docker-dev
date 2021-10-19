@@ -50,6 +50,28 @@ site_root() {
   fi
 }
 
+# Output config.php variables
+config_var() {
+  site_root || return 1
+  local php_code="
+    define(\"CLI_SCRIPT\", true);
+    define(\"ABORT_AFTER_CONFIG\", true);
+    require(\"config.php\");
+    array_shift(\$argv);
+    \$output = array();
+    foreach (\$argv as \$arg) {
+        if (isset(\$CFG->\$arg)) {
+            \$output[] = \$CFG->\$arg;
+        } else {
+            fwrite(fopen('php://stderr', 'w'), '\$CFG->' . \$arg . ' was not found.' . PHP_EOL);
+            exit(1);
+        }
+    }
+    fwrite(fopen('php://stdout', 'w'), implode(' ', \$output));
+  "
+  php -r "$php_code" $@
+}
+
 # Get the major Totara/Moodle version, e.g. '13' or '2.9'
 totara_version() {
   local php_code="
@@ -58,9 +80,9 @@ totara_version() {
     preg_match(\"/TOTARA->version[\s]*=[\s]*'([^']+)'/\", \$version_file, \$totara_version_matches);
     preg_match(\"/release[\s]*=[\s]*'([\S]+)[^']+'/\", \$version_file, \$moodle_version_matches);
     \$version = end(\$totara_version_matches) ?: end(\$moodle_version_matches);
-    echo preg_replace(\"/^(\d{2}|[1-8]\.\d).+$/\", \"\$1\", \$version);
+    echo preg_replace(\"/^(\d{2}|[1-8]\.\d|9).+$/\", \"\$1\", \$version);
   "
-  echo `php -r "$php_code"`
+  php -r "$php_code"
 }
 
 # Perform a fresh install of Totara
@@ -167,7 +189,7 @@ behat() {
   local behat_dataroot=`php -r "$behat_dataroot_php"`
   local behat_dataroot_yml="$behat_dataroot/behat/behat.yml"
   local behat_source_yml="./behat.yml"
-  if [ -d './test/behat' ]; then
+  if [ -f './server/version.php' ]; then
     behat_dataroot_yml="$behat_dataroot/behatrun/behat/behat.yml"
     behat_source_yml="./behat_local.yml"
   fi
@@ -196,7 +218,7 @@ behat() {
   fi
 
   # If there is the new test directory (T13+), then we have to delete the old vendor directory otherwise autoloading won't work correctly
-  if [[ -d './test/behat' && -f './vendor/bin/behat' ]]; then
+  if [[ -f './server/version.php' && -f './vendor/bin/behat' ]]; then
     rm -rf './vendor'
   fi
 
@@ -207,20 +229,30 @@ behat() {
     cp "$behat_dataroot_yml" "$behat_source_yml"
   fi
 
+  # convert relative path to absolute ones
+  local args=()
+  for arg in "$@"; do
+    if [[ -f "$PWD/$arg" ]]; then
+        args+=("$PWD/$arg")
+    else
+        args+=("$arg")
+    fi
+  done
+
   # Run the actual command
   if [ $parallel_mode == '1' ]; then
     print_info "Running behat in parallel mode"
     if [[ ! "$*" =~ "--parallel" ]]; then
-      run_totara_cmd php admin/tool/behat/cli/run.php $@
+      run_totara_cmd php admin/tool/behat/cli/run.php "${args[@]}"
     else
-      run_totara_cmd php admin/tool/behat/cli/run.php --parallel=$parallel_count $@
+      run_totara_cmd php admin/tool/behat/cli/run.php --parallel=$parallel_count "${args[@]}"
     fi
   else
     print_info "Running behat in single (debug) mode"
-    if [ -d './test/behat' ]; then
-      run_cmd test/behat/vendor/bin/behat --config "$behat_dataroot_yml" $@
+    if [ -f './server/version.php' ]; then
+      run_cmd test/behat/vendor/bin/behat --config "$behat_dataroot_yml" "${args[@]}"
     else
-      run_cmd vendor/bin/behat --config "$behat_dataroot_yml" $@
+      run_cmd vendor/bin/behat --config "$behat_dataroot_yml" "${args[@]}"
     fi
   fi
 }
