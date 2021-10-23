@@ -1,21 +1,39 @@
 #!/bin/bash
 
-SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
-PROJECTPATH="$( cd $SCRIPTPATH && cd ..; pwd -P )"
+script_path="$( cd "$(dirname "$0")" ; pwd -P )"
+project_path="$( cd $script_path && cd ..; pwd -P )"
 
-export $(egrep -v '^#' $PROJECTPATH/.env | xargs)
+export $(egrep -v '^#' $project_path/.env | xargs)
 
 # If this command is called from a subdirectory which contains a project, then we automatically change to this directory
-SUBPATH="${PWD//$LOCAL_SRC/}"
-TOTARASITEDIR="$REMOTE_SRC/$SUBPATH"
-LOCALPATH="$LOCAL_SRC/$SUBPATH"
-
-if [ ! -f "$LOCALPATH/version.php" ]; then
-    TOTARASITEDIR="$REMOTE_SRC"
+sub_path="${PWD//$LOCAL_SRC/}"
+local_path="$LOCAL_SRC/$sub_path"
+remote_path="$REMOTE_SRC/$sub_path"
+if [ ! -f "$local_path/version.php" ]; then
+    remote_path="$REMOTE_SRC"
 fi
 
-if [[ "$1" =~ "php" || "$1" =~ "nginx" || "$1" =~ "apache" ]]; then
-  $SCRIPTPATH/tdocker exec -w $TOTARASITEDIR "$1" /bin/bash
-else
-  $SCRIPTPATH/tdocker exec "$1" /bin/bash
+# If the container isn't specified, then we just default to the default php container.
+container="$1"
+if [[ -z "$container" ]]; then
+    container="php"
 fi
+
+# If just 'php' is specified, then dynamically work out which one to actually use based upon the site composer.json
+if [[ "$container" == "php" ]]; then
+    if [[ ! -f "$local_path/version.php" ]]; then
+        echo "This command must be run from a Totara site directory if 'php' is specified for the container"
+        exit 1
+    fi
+    php_container=($(php "$project_path/bin/helpers/php_container.php" "$local_path"))
+    container=${php_container[0]}
+    echo -e "\x1B[2mUsing PHP Container: $container\x1B[0m"
+fi
+
+# If we are bashing into php/apache/nginx, then lets make the shell begin in the remote directory
+extra_args=""
+if [[ "$container" =~ "php" || "$container" =~ "nginx" || "$container" =~ "apache" ]]; then
+    extra_args="-w $remote_path"
+fi
+
+$script_path/tdocker exec $extra_args "$container" /bin/bash

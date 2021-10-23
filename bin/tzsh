@@ -1,17 +1,32 @@
 #!/bin/bash
 
-SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
-PROJECTPATH="$( cd $SCRIPTPATH && cd ..; pwd -P )"
+script_path="$( cd "$(dirname "$0")" ; pwd -P )"
+project_path="$( cd $script_path && cd ..; pwd -P )"
 
-export $(egrep -v '^#' $PROJECTPATH/.env | xargs)
+export $(egrep -v '^#' $project_path/.env | xargs)
 
 # If this command is called from a subdirectory which contains a project, then we automatically change to this directory
-SUBPATH="${PWD//$LOCAL_SRC/}"
-TOTARASITEDIR="$REMOTE_SRC/$SUBPATH"
-LOCALPATH="$LOCAL_SRC/$SUBPATH"
-
-if [ ! -f "$LOCALPATH/version.php" ]; then
-    TOTARASITEDIR="$REMOTE_SRC"
+sub_path="${PWD//$LOCAL_SRC/}"
+local_path="$LOCAL_SRC/$sub_path"
+remote_path="$REMOTE_SRC/$sub_path"
+if [ ! -f "$local_path/version.php" ]; then
+    remote_path="$REMOTE_SRC"
 fi
 
-$SCRIPTPATH/tdocker exec -w $TOTARASITEDIR "$1" /bin/zsh
+container="$1"
+if [[ ! "$container" =~ "php" ]]; then
+    echo "tzsh only supports php containers"
+    exit 1
+fi
+
+# If just 'php' is specified, then dynamically work out which one to actually use based upon the site composer.json
+if [[ "$container" == "php" ]]; then
+    if [[ ! -f "$local_path/version.php" ]]; then
+        echo "This command must be run from a Totara site directory if 'php' is specified for the container"
+        exit 1
+    fi
+    php_container=($(php "$project_path/bin/helpers/php_container.php" "$local_path"))
+    container=${php_container[0]}
+fi
+
+$script_path/tdocker exec -w $remote_path "$container" /bin/zsh
