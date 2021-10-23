@@ -19,6 +19,8 @@ $php_container_ids = !empty($php_container_ids) ? preg_split('/\s+/',$php_contai
 $php_container_names = trim(shell_exec('docker ps -aqf "name=^totara_php" --format "{{.Names}}"'));
 $php_container_names = !empty($php_container_names) ? preg_split('/\s+/', $php_container_names) : array();
 $php_containers_running = array_combine($php_container_ids, $php_container_names);
+asort($php_containers_running);
+$php_containers_running = array_reverse($php_containers_running);
 
 // Get all the possible containers that could be started
 $php_containers_matches = array();
