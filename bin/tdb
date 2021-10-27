@@ -287,11 +287,13 @@ if [ "$db_type" == 'pgsql' ]; then
 
     # Drop and create pgsql database
     elif [ "$action" == 'recreate' ]; then
+        $db_command psql -U "$db_user" -o /dev/null -c "SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = '$db_name'"
         $db_command dropdb -U "$db_user" --if-exists "$db_name"
         $db_command createdb -U "$db_user" -T template1 -E UTF-8 "$db_name"
 
     # Drop pgsql database
     elif [ "$action" == 'drop' ]; then
+        $db_command psql -U "$db_user" -o /dev/null -c "SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = '$db_name'"
         $db_command dropdb -U "$db_user" "$db_name"
 
     # Backup pgsql database
@@ -305,6 +307,7 @@ if [ "$db_type" == 'pgsql' ]; then
     # Restore pgsql database
     elif [ "$action" == 'restore' ]; then
         docker cp "$backup_file_local" "$db_container":"$backup_file_remote"
+        $db_command psql -U "$db_user" -o /dev/null -c "SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = '$db_name'"
         $db_command dropdb -U "$db_user" --if-exists "$db_name"
         $db_command createdb -U "$db_user" -T template1 -E UTF-8 "$db_name"
         if [ "$for_totara_box" == "1" ]; then
