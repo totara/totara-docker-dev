@@ -111,6 +111,25 @@ services:
     networks:
       - totara
 
+  pgsql14:
+    image: postgres:14.0
+    container_name: totara_pgsql14
+    ports:
+      - "5442:5432"
+    environment:
+      TZ: ${TIME_ZONE}
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_HOST_AUTH_METHOD: trust
+    command:
+      postgres -c 'config_file=/etc/postgresql/postgresql.conf'
+    volumes:
+      - ./pgsql/my-postgres.conf:/etc/postgresql/postgresql.conf
+      - pgsql14-data:/var/lib/postgresql/data
+    depends_on:
+      - nginx
+    networks:
+      - totara
+
 volumes:
   pgsql93-data:
   pgsql96-data:
@@ -118,3 +137,4 @@ volumes:
   pgsql11-data:
   pgsql12-data:
   pgsql13-data:
+  pgsql14-data:
