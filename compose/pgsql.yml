@@ -115,7 +115,7 @@ services:
     image: postgres:14.0
     container_name: totara_pgsql14
     ports:
-      - "5442:5432"
+      - "5443:5432"
     environment:
       TZ: ${TIME_ZONE}
       PGDATA: /var/lib/postgresql/data/pgdata
