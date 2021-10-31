@@ -517,9 +517,21 @@ elif [ "$action" == 'restore' ]; then
         $php_command sh -c "\
             cd $dataroot_dir && \
             rm -rf $dataroot_name && \
-            mkdir $dataroot_name && \
-            chmod 02777 $dataroot_name -R && \
-            cd $dataroot_name && \
+            mkdir $dataroot_name" >> /dev/null
+
+        # We have to chmod using PHP. If we were to export the integer value it'll get interpreted
+        # as an octal and won't work. See https://www.php.net/manual/en/function.chmod.php for more info.
+        php_chmod_code="
+            define(\"CLI_SCRIPT\", true);
+            define(\"ABORT_AFTER_CONFIG\", true);
+            require(\"config.php\");
+            \$permissions = isset(\$CFG->directorypermissions) ? \$CFG->directorypermissions : 02777;
+            chmod(\"$dataroot_dir/$dataroot_name\", \$permissions);
+        "
+        $php_command sh -c "cd $remote_dir && php -r '$php_chmod_code'"
+
+        $php_command sh -c "\
+            cd $dataroot_dir/$dataroot_name && \
             unzip $backup_dataroot_remote && \
             chown www-data:www-data . -R \
         " >> /dev/null
