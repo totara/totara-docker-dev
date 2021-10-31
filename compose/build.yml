@@ -8,7 +8,14 @@ services:
     build: ./nginx
 
   mssql:
-    build: ./mssql
+    build:
+      context: ./mssql
+      dockerfile: 2017/Dockerfile
+
+  mssql2019:
+    build:
+      context: ./mssql
+      dockerfile: 2019/Dockerfile
 
   php-5.3:
     build: ./php/php53

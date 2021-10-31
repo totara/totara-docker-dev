@@ -74,7 +74,7 @@ $CFG->dbpass = '';
 //$CFG->dbpass = 'root';
 
 /** Microsoft SQL Server */
-//$CFG->dbhost = 'mssql'; // See https://github.com/totara/totara-docker-dev/wiki/Database%20Credentials for other versions
+//$CFG->dbhost = 'mssql2019'; // See https://github.com/totara/totara-docker-dev/wiki/Database%20Credentials for other versions
 //$CFG->dbtype = PHP_MAJOR_VERSION >= 7 ? 'sqlsrv' : 'mssql'; // In PHP 7+ it is called 'sqlsrv' instead of 'mssql'.
 //$CFG->dbuser = 'SA';
 //$CFG->dbpass = 'Totara.Mssql1';
