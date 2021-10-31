@@ -98,6 +98,9 @@ $CFG->prefix = 'ttr_';
 //$CFG->prefix = 'mdl_';
 //$CFG->prefix = 'bht_';
 
+
+$CFG->directorypermissions = 02777;
+
 /**
  * Dataroot: For storing uploaded files, temporary and cache files, and other miscellaneous files created by Totara.
  */
@@ -106,10 +109,8 @@ $CFG->dataroot = "/var/www/totara/data/{$DOCKER_DEV->site_name}.{$CFG->dbhost}";
 //$CFG->dataroot = '/var/www/totara/data/mobile.mysql';
 //$CFG->dataroot = '/var/www/totara/data/engage.mssql';
 if (!is_dir($CFG->dataroot)) {
-    @mkdir($CFG->dataroot) && @chgrp($CFG->dataroot, 'www-data') && @chown($CFG->dataroot, 'www-data');
+    @mkdir($CFG->dataroot, $CFG->directorypermissions) && @chgrp($CFG->dataroot, 'www-data') && @chown($CFG->dataroot, 'www-data');
 }
-
-$CFG->directorypermissions = 02777;
 
 /**
  * You shouldn't really need to change these.
@@ -197,7 +198,7 @@ $CFG->phpunit_prefix = 'phpu_';
  */
 $CFG->phpunit_dataroot = "/var/www/totara/data/{$DOCKER_DEV->site_name}.{$CFG->dbhost}.{$DOCKER_DEV->major_version}.phpunit";
 if (!is_dir($CFG->phpunit_dataroot)) {
-    @mkdir($CFG->phpunit_dataroot) && @chgrp($CFG->phpunit_dataroot, 'www-data') && @chown($CFG->phpunit_dataroot, 'www-data');
+    @mkdir($CFG->phpunit_dataroot, $CFG->directorypermissions) && @chgrp($CFG->phpunit_dataroot, 'www-data') && @chown($CFG->phpunit_dataroot, 'www-data');
 }
 
 
@@ -251,7 +252,7 @@ $CFG->behat_prefix = 'bht_';
  */
 $CFG->behat_dataroot = "/var/www/totara/data/{$DOCKER_DEV->site_name}.{$CFG->dbhost}.{$DOCKER_DEV->major_version}.behat";
 if (!is_dir($CFG->behat_dataroot)) {
-    @mkdir($CFG->behat_dataroot) && @chgrp($CFG->behat_dataroot, 'www-data') && @chown($CFG->behat_dataroot, 'www-data');
+    @mkdir($CFG->behat_dataroot, $CFG->directorypermissions) && @chgrp($CFG->behat_dataroot, 'www-data') && @chown($CFG->behat_dataroot, 'www-data');
 }
 
 //<editor-fold desc="Advanced behat setup" defaultstate="collapsed">
