@@ -36,7 +36,7 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
     ACCEPT_EULA=Y apt-get install -y msodbcsql mssql-tools unixodbc-dev
 
 RUN mkdir /custom
-COPY ./custom /custom/
+COPY custom /custom/
 
 RUN chmod +x /custom/*.sh
 

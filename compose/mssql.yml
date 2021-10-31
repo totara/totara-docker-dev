@@ -18,5 +18,23 @@ services:
     networks:
       - totara
 
+  mssql2019:
+    image: totara/docker-dev-mssql2019
+    container_name: totara_mssql2019
+    ports:
+      - "1419:1433"
+    environment:
+      TZ: ${TIME_ZONE}
+      ACCEPT_EULA: Y
+      SA_PASSWORD: ${MSSQL_SA_PW}
+      MSSQL_PID: Developer
+    volumes:
+      - mssql2019-data:/var/opt/mssql
+    depends_on:
+      - nginx
+    networks:
+      - totara
+
 volumes:
   mssql-data:
+  mssql2019-data:
