@@ -125,17 +125,27 @@ purge() {
 
 # Initialise PHPUnit
 install_phpunit() {
-  # TODO: Add parallel support
-  run_totara_cmd php admin/tool/phpunit/cli/init.php $@
+  args=${*/parallel/processes}
+  if [[ "$args" =~ "processes" ]]; then
+    run_totara_cmd php admin/tool/phpunit/cli/parallel_init.php $args
+  else
+    run_totara_cmd php admin/tool/phpunit/cli/init.php $@
+  fi
 }
 alias installunit='install_phpunit'
 
 # Run PhpUnit
 phpunit() {
-  # TODO: Add parallel support
   site_root || return 1
+  args=${*/parallel/processes}
   if [[ -d './test/phpunit' ]]; then
-    run_cmd test/phpunit/vendor/bin/phpunit --configuration='test/phpunit/phpunit.xml' --test-suffix='test.php' $@
+    if [[ "$args" =~ "processes" ]]; then
+      run_totara_cmd php admin/tool/phpunit/cli/parallel_run.php --configuration='test/phpunit/phpunit.xml' $args
+    else
+      run_cmd test/phpunit/vendor/bin/phpunit --configuration='test/phpunit/phpunit.xml' --test-suffix='test.php' $@
+    fi
+  elif [[ "$args" =~ "processes" ]]; then
+    run_totara_cmd php admin/tool/phpunit/cli/parallel_run.php --configuration='phpunit.xml' $args
   else
     run_cmd vendor/bin/phpunit --configuration='phpunit.xml' --test-suffix='test.php' $@
   fi
