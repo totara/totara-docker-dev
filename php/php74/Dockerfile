@@ -26,6 +26,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         ghostscript \
         graphviz \
         aspell \
+        libldap2-dev \
+    && docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ \
     && docker-php-ext-install -j$(nproc) xmlrpc \
         zip \
         intl \
@@ -36,6 +38,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         pgsql \
         mysqli \
         exif \
+        ldap \
     && docker-php-ext-configure gd \
             --with-freetype \
             --with-jpeg \
@@ -52,6 +55,10 @@ RUN echo "extension=tideways_xhprof.so" >> /usr/local/etc/php/conf.d/tideways_xh
 RUN pecl install -o -f redis \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable redis
+
+RUN pecl install -o -f igbinary \
+    &&  rm -rf /tmp/pear \
+    &&  docker-php-ext-enable igbinary
 
 RUN pecl install -o -f memcached \
     &&  rm -rf /tmp/pear \
@@ -94,7 +101,7 @@ RUN ln -fs /usr/share/zoneinfo/${TIME_ZONE} /etc/localtime \
     && dpkg-reconfigure --frontend noninteractive tzdata
 
 # Python 3.7 for ML Recommender.
-RUN apt install -y python3.7 \
+RUN apt-get update && apt install -y python3.7 \
     python3-pip \
     python3-wheel \
     python3-venv \
