@@ -28,7 +28,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         ghostscript \
         graphviz \
         aspell \
-    && rm -rf /var/lib/apt/lists/* \
+        libldap2-dev \
+    && docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ \
     && docker-php-ext-install -j$(nproc) xmlrpc \
         zip \
         intl \
@@ -39,12 +40,14 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         pgsql \
         mysqli \
         exif \
+        ldap \
     && docker-php-ext-configure gd \
             --with-freetype-dir=/usr/include/ \
             --with-png-dir=/usr/include/ \
             --with-jpeg-dir=/usr/include/ \
             --with-gd \
-    && docker-php-ext-install -j$(nproc) gd
+    && docker-php-ext-install -j$(nproc) gd \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN git clone https://github.com/tideways/php-profiler-extension.git \
     && cd php-profiler-extension \
@@ -103,6 +106,13 @@ RUN docker-php-ext-enable sqlsrv.so && docker-php-ext-enable pdo_sqlsrv.so
 RUN ln -fs /usr/share/zoneinfo/${TIME_ZONE} /etc/localtime \
     && dpkg-reconfigure --frontend noninteractive tzdata
 
+# Python 3.7 for ML Recommender.
+RUN apt-get update && apt install -y python3.7 \
+    python3-pip \
+    python3-wheel \
+    python3-venv \
+    python3-dev
+
 COPY config/php.ini /usr/local/etc/php/
 COPY config/fpm.conf /usr/local/etc/php-fpm.d/zz-totara.conf
 
@@ -119,10 +129,3 @@ RUN git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.oh-my-zsh/
 RUN echo 'setopt +o nomatch' > ~/.zshrc
 RUN echo 'source ~/custom_shell/.zshrc' >> ~/.zshrc
 RUN cat ~/.bashrc >> ~/.zshrc
-
-# Python 3.7 for ML Recommender.
-RUN apt install -y python3.7 \
-    python3-pip \
-    python3-wheel \
-    python3-venv \
-    python3-dev

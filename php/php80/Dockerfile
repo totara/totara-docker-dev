@@ -26,6 +26,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         ghostscript \
         graphviz \
         aspell \
+        libldap2-dev \
+    && docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ \
     && docker-php-ext-install -j$(nproc) zip \
         intl \
         soap \
@@ -35,9 +37,10 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         pgsql \
         mysqli \
         exif \
+        ldap \
     && docker-php-ext-configure gd \
-                --with-freetype \
-                --with-jpeg \
+            --with-freetype \
+            --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd
 
 RUN git clone https://github.com/tideways/php-profiler-extension.git \
@@ -47,6 +50,18 @@ RUN git clone https://github.com/tideways/php-profiler-extension.git \
     && make && make install
 
 RUN echo "extension=tideways_xhprof.so" >> /usr/local/etc/php/conf.d/tideways_xhprof.ini
+
+RUN pecl install -o -f redis \
+    &&  rm -rf /tmp/pear \
+    &&  docker-php-ext-enable redis
+
+RUN pecl install -o -f igbinary \
+    &&  rm -rf /tmp/pear \
+    &&  docker-php-ext-enable igbinary
+
+RUN pecl install -o -f memcached \
+    &&  rm -rf /tmp/pear \
+    &&  docker-php-ext-enable memcached
 
 # we need en_US locales for MSSQL connection to work
 # we need en_AU locales for behat to work
@@ -83,6 +98,13 @@ RUN docker-php-ext-enable sqlsrv.so && docker-php-ext-enable pdo_sqlsrv.so
 
 RUN ln -fs /usr/share/zoneinfo/${TIME_ZONE} /etc/localtime \
     && dpkg-reconfigure --frontend noninteractive tzdata
+
+# Python 3.7 for ML Recommender.
+RUN apt-get update && apt install -y python3.7 \
+    python3-pip \
+    python3-wheel \
+    python3-venv \
+    python3-dev
 
 COPY config/php.ini /usr/local/etc/php/
 COPY config/fpm.conf /usr/local/etc/php-fpm.d/zz-totara.conf
