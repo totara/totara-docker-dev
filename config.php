@@ -433,6 +433,7 @@ $CFG->country = 'NZ';
 $CFG->defaultcity = 'Wellington'; // very windy!
 
 //<editor-fold desc="Paths for additional binary packages" defaultstate="collapsed">
+$CFG->py3path = '/usr/bin/python3';
 $CFG->pathtogs = '/usr/bin/gs';
 $CFG->pathtodu = '/usr/bin/du';
 $CFG->aspellpath = '/usr/bin/aspell';
