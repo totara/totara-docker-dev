@@ -1,17 +1,12 @@
 #!/bin/bash
 
+# Standard boilerplate code for getting the paths and environment variables we need.
 script_path="$( cd "$(dirname "$0")" ; pwd -P )"
 project_path="$( cd $script_path && cd ..; pwd -P )"
-
 export $(egrep -v '^#' $project_path/.env | xargs)
-
-# If this command is called from a subdirectory which contains a project, then we automatically change to this directory
 sub_path="${PWD//$LOCAL_SRC/}"
-local_path="$LOCAL_SRC/$sub_path"
 remote_path="$REMOTE_SRC/$sub_path"
-if [ ! -f "$local_path/version.php" ]; then
-    remote_path="$REMOTE_SRC"
-fi
+local_path="$LOCAL_SRC/$sub_path"
 
 container="$1"
 if [[ ! "$container" =~ "php" ]]; then

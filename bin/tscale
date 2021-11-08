@@ -1,8 +1,8 @@
 #!/bin/bash
 
-SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+script_path="$( cd "$(dirname "$0")" ; pwd -P )"
 
-CONTAINER=$1; shift
-NUMBER=$1; shift
+container=$1; shift
+number=$1; shift
 
-$SCRIPTPATH/tdocker up -d --scale $CONTAINER=$NUMBER $CONTAINER
+$script_path/tdocker up -d --scale $container=$number $container

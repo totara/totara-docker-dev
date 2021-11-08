@@ -1,13 +1,12 @@
 #!/bin/bash
 
-SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
-PROJECTPATH="$( cd $SCRIPTPATH && cd ..; pwd -P )"
-
-source "$PROJECTPATH/tools/check_for_update.sh"
+script_path="$( cd "$(dirname "$0")" ; pwd -P )"
+project_path="$( cd $script_path && cd ..; pwd -P )"
 
 if [ $# -eq 0 ] || [ $1 == 'all' ]; then
+    source "$project_path/tools/check_for_update.sh"
     # pulling all images already present from docker hub
     docker images --filter=reference='totara/docker-dev-*' --format "{{.Repository}}" | xargs -I % sh -c 'docker pull %'
 else
-    $SCRIPTPATH/tdocker pull "$@"
+    $script_path/tdocker pull "$@"
 fi

@@ -1,15 +1,11 @@
 #!/bin/bash
 
+# Standard boilerplate code for getting the paths and environment variables we need.
 script_path="$( cd "$(dirname "$0")" ; pwd -P )"
 project_path="$( cd $script_path && cd ..; pwd -P )"
 export $(egrep -v '^#' $project_path/.env | xargs)
-
-# Handle subdirectory
-local_dir="$LOCAL_SRC"
 sub_path="${PWD//$LOCAL_SRC/}"
-if [ -n "$sub_path" ]; then
-    local_dir="${LOCAL_SRC}/${sub_path}"
-fi
+local_path="$LOCAL_SRC/$sub_path"
 
 containers=("$@")
 if [ -z $containers ]; then
@@ -23,11 +19,11 @@ fi
 containers_to_start=()
 for container in "${containers[@]}"; do
     if [[ "$container" == "php" ]]; then
-        if [[ ! -f "$local_dir/version.php" ]]; then
+        if [[ ! -f "$local_path/version.php" ]]; then
             echo "tup must be run from a Totara site directory if the 'php' container is specified"
             exit 1
         fi
-        php_container=($(php "$project_path/bin/helpers/php_container.php" "$local_dir"))
+        php_container=($(php "$project_path/bin/helpers/php_container.php" "$local_path"))
         containers_to_start+=(${php_container[0]})
     else
         containers_to_start+=("$container")
@@ -42,7 +38,7 @@ fi
 $script_path/tdocker up -d "${containers_to_start[@]}"
 
 # if mutagen should be used make sure it's started
-if [ -f "$project_path/.use-mutagen" ]; then
+if [[ "$USE_MUTAGEN" == "1" || -f "$project_path/.use-mutagen" ]]; then
     # check if there's already a session
     mutagen list | grep "$REMOTE_SRC" &> /dev/null
 

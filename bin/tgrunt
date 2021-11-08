@@ -1,17 +1,15 @@
 #!/bin/bash
 
-SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
-PROJECTPATH="$( cd $SCRIPTPATH && cd ..; pwd -P )"
-
-export $(egrep -v '^#' $PROJECTPATH/.env | xargs)
-
-# If tgrunt is called from a subdirectory, then we run grunt in that subdirectory
-SUBPATH="${PWD//$LOCAL_SRC/}"
-TOTARASITEDIR="$REMOTE_SRC/$SUBPATH"
+# Standard boilerplate code for getting the paths and environment variables we need.
+script_path="$( cd "$(dirname "$0")" ; pwd -P )"
+project_path="$( cd $script_path && cd ..; pwd -P )"
+export $(egrep -v '^#' $project_path/.env | xargs)
+sub_path="${PWD//$LOCAL_SRC/}"
+remote_path="$REMOTE_SRC/$sub_path"
 
 if [[ -f "server/Gruntfile.js" ]]; then
     printf "You are running this from your project root. Try running this from your server directory instead.\n\n"
     printf "Don't forget to initiate with `tnpm init` first (inside your server directory)\n"
 else
-    $SCRIPTPATH/tdocker run --rm -w "$TOTARASITEDIR" nodejs ./node_modules/.bin/grunt "$@"
+    $script_path/tdocker run --rm -w "$remote_path" nodejs ./node_modules/.bin/grunt "$@"
 fi

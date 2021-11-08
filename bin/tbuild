@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
-PROJECTPATH="$( cd $SCRIPTPATH && cd ..; pwd -P )"
+script_path="$( cd "$(dirname "$0")" ; pwd -P )"
+project_path="$( cd $script_path && cd ..; pwd -P )"
 
-$SCRIPTPATH/tdocker build "$@"
+$script_path/tdocker build "$@"

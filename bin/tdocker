@@ -1,11 +1,12 @@
 #!/bin/bash
 
-SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
-PROJECTPATH="$( cd $SCRIPTPATH && cd ..; pwd -P )"
+script_path="$( cd "$(dirname "$0")" ; pwd -P )"
+project_path="$( cd $script_path && cd ..; pwd -P )"
+export $(egrep -v '^#' $project_path/.env | xargs)
 
-cd $PROJECTPATH;
+cd $project_path;
 
-source "$PROJECTPATH/tools/check_for_update.sh"
+source "$project_path/tools/check_for_update.sh"
 
 files=(
     "docker-compose.yml"
@@ -23,7 +24,7 @@ if [ "$1" ==  "build" ]; then
     files+=(
         "compose/build.yml"
     )
-elif [ -f "$PROJECTPATH/.use-mutagen" ]; then
+elif [[ "$USE_MUTAGEN" == "1" || -f "$project_path/.use-mutagen" ]]; then
     files+=(
         "compose/sync.yml"
     )
