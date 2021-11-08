@@ -1,0 +1,22 @@
+#!/bin/bash
+
+script_path="$( cd "$(dirname "$0")" ; pwd -P )"
+project_path="$( cd $script_path && cd ..; pwd -P )"
+
+args=("--follow" "--no-log-prefix")
+tail="--tail=20"
+container=""
+for arg in "$@"; do
+    if [[ "$arg" =~ "--tail" ]]; then
+        tail="$arg"
+    elif [[ "$arg" == "-f" || "$arg" == "--follow" || "$arg" == "--no-log-prefix" ]]; then
+        continue
+    elif [[ "$arg" == -* ]]; then
+        args+=("$arg")
+    else
+        container="$arg"
+    fi
+done
+args+=("$tail")
+
+$script_path/tdocker logs "${args[@]}" "$container"
