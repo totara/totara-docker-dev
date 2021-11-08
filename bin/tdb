@@ -1,11 +1,15 @@
 #!/bin/bash
 
-script_name=$(basename "$0")
-script_path="$( cd "$(dirname $0)" || exit; pwd -P )"
-project_path="$( cd "$script_path" && cd ..; pwd -P )"
+# Standard boilerplate code for getting the paths and environment variables we need.
+script_path="$( cd "$(dirname "$0")" ; pwd -P )"
+project_path="$( cd $script_path && cd ..; pwd -P )"
+export $(egrep -v '^#' $project_path/.env | xargs)
+sub_path="${PWD//$LOCAL_SRC/}"
+remote_path="$REMOTE_SRC/$sub_path"
+local_path="$LOCAL_SRC/$sub_path"
 helpers_path="$project_path/bin/helpers"
 
-export $(grep -E -v '^#' "$project_path/.env" | xargs)
+source "$project_path/tools/check_for_update.sh"
 
 # Handle any flags that have been specified
 flags=(
@@ -76,24 +80,14 @@ Examples:
     exit;
 fi
 
-# Handle subdirectory
-sub_path="${PWD//$LOCAL_SRC/}"
-if [ -z "$sub_path" ]; then
-    local_dir="$LOCAL_SRC"
-    remote_dir="$REMOTE_SRC"
-else
-    local_dir="${LOCAL_SRC}/${sub_path}"
-    remote_dir="${REMOTE_SRC}/${sub_path}"
-fi
-
-if [ ! -f "$local_dir/config.php" ]; then
-    echo -e "\x1B[33mCould not find a totara site (config.php is missing)\nIf you have multiple sites, make sure you run this command from the correct directory.\x1B[0m"
+if [ ! -f "$local_path/config.php" ]; then
+    echo -e "\x1B[33mCould not find a totara site (or a config.php)\nIf you have multiple sites, make sure you run this command from the correct directory.\x1B[0m"
     exit
 fi
 
 # This next part gets the ID of the latest PHP container that can be used for this
 # Totara/Moodle version (from composer.json), and starts the container if it isn't already running.
-php_containers=($(php "$helpers_path/php_container.php" "$local_dir"))
+php_containers=($(php "$helpers_path/php_container.php" "$local_path"))
 if [ -z "$php_containers" ]; then
     echo -e "\x1B[33mUnable to determine (or start) the appropriate PHP container for this Totara version.\x1B[0m"
     exit
@@ -104,7 +98,7 @@ php_command="docker exec $php_container";
 
 # Get the database variables from the site config.php
 config_vars_to_get=("dataroot" "dbtype" "dbhost" "dbname" "dbuser" "dbpass")
-config_output=$( eval "$php_command /bin/zsh -i -c 'cd $remote_dir && config_var ${config_vars_to_get[@]}'" )
+config_output=$( eval "$php_command /bin/zsh -i -c 'cd $remote_path && config_var ${config_vars_to_get[@]}'" )
 
 # Show a relevant error message if there is an issue with the config php
 if [[ "$config_output" =~ "dataroot is not configured properly" ]]; then
@@ -485,7 +479,7 @@ elif [ "$action" == 'restore' ]; then
             \$permissions = isset(\$CFG->directorypermissions) ? \$CFG->directorypermissions : 02777;
             chmod(\"$dataroot_dir/$dataroot_name\", \$permissions);
         "
-        $php_command sh -c "cd $remote_dir && php -r '$php_chmod_code'"
+        $php_command sh -c "cd $remote_path && php -r '$php_chmod_code'"
 
         $php_command sh -c "\
             cd $dataroot_dir/$dataroot_name && \

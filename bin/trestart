@@ -1,5 +1,5 @@
 #!/bin/bash
 
-SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+script_path="$( cd "$(dirname "$0")" ; pwd -P )"
 
-$SCRIPTPATH/tdocker restart "$@"
+$script_path/tdocker restart "$@"
