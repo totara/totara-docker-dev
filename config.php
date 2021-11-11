@@ -310,12 +310,17 @@ if ($DOCKER_DEV->major_version >= 10) {
                 'goog:chromeOptions' => array(
                     'args' => array(
                         '--disable-infobars',
-                        '--disable-background-throttling'
+                        '--disable-background-throttling',
+                        '--disable-background-timer-throttling',
+                        '--disable-backgrounding-occluded-windows'
                     ),
                     'prefs' => array(
                         'credentials_enable_service' => false,
                     ),
-                    'w3c' => false
+                    'w3c' => false,
+                    'excludeSwitches' => array(
+                        'enable-automation'
+                    )
                 )
             )
         )
