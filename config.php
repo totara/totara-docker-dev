@@ -380,7 +380,7 @@ if ($DOCKER_DEV->major_version >= 10) {
 //////////////////////////////////////////////////////////////////////////
 
 $development_mode = true;
-$frontend_development_mode = false;
+$frontend_development_mode = true;
 if ($development_mode) {
     $CFG->sitetype = 'development';
 
@@ -403,7 +403,7 @@ if ($development_mode) {
         $CFG->themedesignermode = true;
         $CFG->cachejs = false;
         $CFG->cachetemplates = false;
-        // The following increases page load times by quite a bit
+        // The following increases page load times by quite a bit - disable them if performance is a concern
         $CFG->cache_graphql_schema = false;
         $CFG->forced_plugin_settings['totara_tui'] = array(
             'cache_js' => false,
