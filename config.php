@@ -438,6 +438,7 @@ if ($development_mode) {
     );
 
 
+
 //    // Xhprof Profiling settings
 //    $CFG->profilingenabled = true;
 //    $CFG->profilingincluded = '*';
