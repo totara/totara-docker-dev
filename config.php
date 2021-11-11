@@ -380,7 +380,6 @@ if ($DOCKER_DEV->major_version >= 10) {
 //////////////////////////////////////////////////////////////////////////
 
 $development_mode = true;
-$frontend_development_mode = true;
 if ($development_mode) {
     $CFG->sitetype = 'development';
 
@@ -395,22 +394,48 @@ if ($development_mode) {
     $CFG->debugallowscheduledtaskoverride = true;
     $CFG->preventexecpath = false;
     $CFG->mobile_device_emulator = true;
-//    $CFG->debugstringids = true;
 
+    // Useful when changing or creating language string lookups, so
+    // that your changes are reflecting in the UI
     $CFG->langstringcache = false;
 
-    if ($frontend_development_mode) {
-        $CFG->themedesignermode = true;
-        $CFG->cachejs = false;
-        $CFG->cachetemplates = false;
-        // The following increases page load times by quite a bit - disable them if performance is a concern
-        $CFG->cache_graphql_schema = false;
-        $CFG->forced_plugin_settings['totara_tui'] = array(
-            'cache_js' => false,
-            'cache_scss' => false,
-            'development_mode' => true
-        );
-    }
+    // Helps to identify potentially missing or incorrectly named
+    // language strings in the UI
+    $CFG->debugstringids = false;
+
+    // Allow URL query parameter to change the current system Theme for
+    // the current session, handy for qualifying if changes or issues
+    // exist across different Themes
+    $CFG->allowthemechangeonurl = true;
+
+    // Theme designer mode useful for individual *legacy only* Theme file
+    // debugging by breaking out many Theme dependency files into separate
+    // <head /> entries. This creates many requests, and significantly
+    // degrades page load and readiness performance. Don't use this for
+    // Tui-only development
+    $CFG->themedesignermode = false;
+
+    // Un-cache legacy-only front end dependencies
+    $CFG->cachejs = false;
+    $CFG->cachetemplates = false;
+
+    // When working with YUI, you may need to disable PHP combo loading
+    // of dependency files for easier debugging
+    $CFG->yuicomboloading = false;
+    $CFG->yuiloglevel = 'debug';
+
+    // When you expect fresh data from GraphQL, disable the cache,
+    // otherwise expect an increase to page load and readiness times
+    $CFG->cache_graphql_schema = false;
+
+    // Tui-specific settings to turn off performance optimisations
+    // during development. They do similar things to the legacy-only
+    // settings, and can be turned off when not changing Tui code
+    $CFG->forced_plugin_settings['totara_tui'] = array(
+        'cache_js' => false,
+        'cache_scss' => false,
+        'development_mode' => true
+    );
 
 //    // Xhprof Profiling settings
 //    $CFG->profilingenabled = true;
