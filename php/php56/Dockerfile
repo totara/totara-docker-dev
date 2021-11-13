@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y \
         freetds-common \
         freetds-dev \
         nano \
+        vim \
         git \
         locales \
         tzdata \
