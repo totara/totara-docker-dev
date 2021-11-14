@@ -15,6 +15,9 @@ then
         -out /etc/nginx/ssl/domain.crt
 fi
 
+# set dataroot permissions
+chown www-data:www-data $REMOTE_DATA -R
+
 # Replace the remote src variable in the nginx configuration with
 # the one defined in the environment variables
 cp /etc/nginx/totara-server.conf /tmp/temp.conf

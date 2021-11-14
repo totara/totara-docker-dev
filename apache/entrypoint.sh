@@ -13,6 +13,9 @@ if [ ! -f "/usr/local/apache2/conf/server.crt" ]; then
         -out /usr/local/apache2/conf/server.crt
 fi
 
+# set dataroot permissions
+chown www-data:www-data $REMOTE_DATA -R
+
 # Replace the remote src variable in the apache configuration with
 # the one defined in the environment variables
 cp /usr/local/apache2/conf.d/server.conf /tmp/temp.conf
