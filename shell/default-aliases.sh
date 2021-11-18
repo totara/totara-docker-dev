@@ -275,6 +275,21 @@ behat() {
   fi
 }
 
+# Outputs the error logs for the last behat run
+behat_logs() {
+  local behat_dataroot=$(config_var behat_dataroot)
+  local parallel_count=$(behat_parallel_count)
+  if [[ $parallel_count == '0' ]]; then
+    cat $(config_var behat_dataroot)/behatrun_error.log
+  else
+    for ((i=1; i <= parallel_count; i++)); do
+      cat "$(config_var behat_dataroot)/behatrun${i}_error.log"
+    done
+  fi
+}
+alias behatlogs='behat_logs'
+alias behatlog='behat_logs'
+
 # Create a test course
 create_course() {
   run_totara_cmd php admin/tool/generator/cli/maketestcourse.php --shortname=course --size=S $@
