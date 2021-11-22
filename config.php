@@ -68,7 +68,7 @@ $CFG->dbpass = '';
 //$CFG->dbpass = 'root';
 
 /** MariaDB */
-//$CFG->dbhost = 'mariadb106'; // See https://github.com/totara/totara-docker-dev/wiki/Database%20Credentials for other versions
+//$CFG->dbhost = 'mariadb'; // See https://github.com/totara/totara-docker-dev/wiki/Database%20Credentials for other versions
 //$CFG->dbtype = 'mariadb';
 //$CFG->dbuser = 'root';
 //$CFG->dbpass = 'root';
