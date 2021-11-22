@@ -223,9 +223,15 @@ fi
 
 # MySQL and MariaDB need special character sets and collation
 character_set='utf8mb4'
-collation='utf8mb4_bin'
-if [[ $db_host == 'mysql8' ]]; then
-    collation='utf8mb4_0900_as_cs'
+collation='utf8mb4_0900_as_cs'
+if [[
+  $db_host == 'mysql' ||
+  $db_host == 'mariadb102' ||
+  $db_host == 'mariadb104' ||
+  $db_host == 'mariadb'
+]]; then
+    # Older versions of MySQL/MariaDB don't support 0900_as_cs so we fall back to this.
+    collation='utf8mb4_bin'
 fi
 
 ##########################################
