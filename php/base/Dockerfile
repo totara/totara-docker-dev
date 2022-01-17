@@ -82,9 +82,6 @@ RUN ["/bin/bash", "-c", "source /root/.phpbrew/bashrc"]
 # Make sure we have know about old PHP versions too
 RUN phpbrew update --old && phpbrew known --old
 
-# Source each .sh file found in the /shell/ folder
-RUN echo 'for f in ~/custom_shell/*.sh; do [[ -e "$f" ]] && source "$f"; done;' >> ~/.bashrc
-
 # Have the option of using the oh my zsh shell.
 RUN apt-get update && apt-get install -y zsh
 RUN sh -c "$(curl https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" --unattended
@@ -92,6 +89,8 @@ RUN git clone https://github.com/romkatv/powerlevel10k ~/.oh-my-zsh/custom/theme
 RUN git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
 RUN git clone https://github.com/zsh-users/zsh-completions ~/.oh-my-zsh/custom/plugins/zsh-completions
 RUN git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
-RUN echo 'setopt +o nomatch' > ~/.zshrc
-RUN echo 'source ~/custom_shell/.zshrc' >> ~/.zshrc
-RUN cat ~/.bashrc >> ~/.zshrc
+
+COPY entrypoint.sh /root/entrypoint.sh
+RUN chmod +x /root/entrypoint.sh
+
+ENTRYPOINT ["/bin/bash", "-c", "/root/entrypoint.sh"]
