@@ -14,9 +14,9 @@ $site_path = $argv[1];
 $silent = !empty($argv[2]) && strpos($argv[2], 'silent') !== false;
 
 // Gets the ID & Name of the latest PHP container that can be used for this Totara version
-$php_container_ids = trim(shell_exec('docker ps -aqf "name=^totara_php" --format "{{.ID}}"'));
+$php_container_ids = trim((string) shell_exec('docker ps -aqf "name=^totara_php" --format "{{.ID}}"'));
 $php_container_ids = !empty($php_container_ids) ? preg_split('/\s+/',$php_container_ids) : array();
-$php_container_names = trim(shell_exec('docker ps -aqf "name=^totara_php" --format "{{.Names}}"'));
+$php_container_names = trim((string) shell_exec('docker ps -aqf "name=^totara_php" --format "{{.Names}}"'));
 $php_container_names = !empty($php_container_names) ? preg_split('/\s+/', $php_container_names) : array();
 $php_containers_running = array_combine($php_container_ids, $php_container_names);
 asort($php_containers_running);
