@@ -121,7 +121,7 @@ services:
       PGDATA: /var/lib/postgresql/data/pgdata
       POSTGRES_HOST_AUTH_METHOD: trust
     command:
-      postgres -c 'config_file=/etc/postgresql/postgresql.conf'
+      postgres -c 'config_file=/etc/postgresql/postgresql.conf' -c 'enable_memoize=off'
     volumes:
       - ./pgsql/my-postgres.conf:/etc/postgresql/postgresql.conf
       - pgsql14-data:/var/lib/postgresql/data
