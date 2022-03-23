@@ -1,4 +1,4 @@
-FROM php:8.1.0beta1-fpm
+FROM php:8.1-fpm-buster
 
 ARG TIME_ZONE=Pacific/Auckland
 
@@ -62,13 +62,13 @@ ENV LC_ALL en_US.UTF-8
 
 # install mssql extension
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
-    && curl https://packages.microsoft.com/config/debian/8/prod.list | tee /etc/apt/sources.list.d/mssql-tools.list \
+    && curl https://packages.microsoft.com/config/debian/10/prod.list > /etc/apt/sources.list.d/mssql-release.list \
     && apt-get update && ACCEPT_EULA=Y apt-get install -y \
     msodbcsql17 \
     mssql-tools \
     unixodbc-dev
 
-# Workaround to get MSSQL connection working on Debian 9 (stretch)
+# Workaround to get MSSQL connection working on Debian 10 (buster)
 # https://emacstragic.net/2017/11/06/mssql-odbc-client-on-debian-9-stretch/
 RUN wget "http://security.debian.org/debian-security/pool/updates/main/o/openssl/libssl1.0.0_1.0.1t-1+deb8u12_amd64.deb" \
     && DEBIAN_FRONTEND=noninteractive dpkg -i ./libssl1.0.0_1.0.1t-1+deb8u12_amd64.deb
@@ -76,6 +76,11 @@ RUN wget "http://security.debian.org/debian-security/pool/updates/main/o/openssl
 RUN echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile \
     && echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
 
+RUN pear config-set php_ini `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"` system \
+    && pecl install sqlsrv-5.10.0 \
+    && pecl install pdo_sqlsrv-5.10.0
+
+RUN docker-php-ext-enable sqlsrv.so && docker-php-ext-enable pdo_sqlsrv.so
 
 RUN ln -fs /usr/share/zoneinfo/${TIME_ZONE} /etc/localtime \
     && dpkg-reconfigure --frontend noninteractive tzdata
