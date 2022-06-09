@@ -1,0 +1,24 @@
+version: "3.7"
+services:
+  ml-service:
+    build:
+      context: ${ML_TOTARA_PROJECT:?Set the path to your Totara project}/extensions/ml_service
+      target: mlbase
+    init: true
+    pull_policy: build
+    environment:
+      ML_TOTARA_KEY: ${ML_API_KEY:-totara}
+      ML_TOTARA_URL: ${ML_TOTARA_URL:?Set the URL of your Totara project}
+      ML_DEV: 1
+    volumes:
+      - "${ML_TOTARA_PROJECT}/extensions/ml_service/service:/etc/ml/service"
+      - "ml-models:/etc/ml/data/models"
+      - "ml-logs:/etc/ml/data/train_logs"
+    networks:
+      - totara
+    ports:
+      - "5000:5000"
+
+volumes:
+  ml-models:
+  ml-logs:

@@ -23,6 +23,7 @@ Although this project started as a development environment for Totara Learn it c
  * [Redis](https://redis.io/) for caching and/or session handling
  * [XHProf](https://github.com/tideways/php-xhprof-extension) for profiling
  * [XDebug](https://xdebug.org/) installed, ready for debugging with your favorite IDE
+ * A [Python](https://www.python.org/) instance to run the Totara Machine Learning service
 
 ## Installation & Usage
 
