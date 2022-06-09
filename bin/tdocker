@@ -18,6 +18,7 @@ files=(
     "compose/pgsql.yml"
     "compose/php.yml"
     "compose/selenium.yml"
+    "compose/machine-learning.yml"
 )
 
 if [ "$1" ==  "build" ]; then
