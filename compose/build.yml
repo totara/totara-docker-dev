@@ -113,6 +113,18 @@ services:
   php-7.4-cron:
     build: ./php/php74-cron
 
+  php-7.4.3:
+    build:
+      context: ./php/php74_3
+      args:
+        TIME_ZONE: ${TIME_ZONE}
+
+  php-7.4.3-debug:
+    build: ./php/php74_3-debug
+
+  php-7.4.3-cron:
+    build: ./php/php74_3-cron
+
   php-8.0:
     build:
       context: ./php/php80
