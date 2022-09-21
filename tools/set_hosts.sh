@@ -17,7 +17,7 @@ if ! sudo touch "$hosts_file" &> /dev/null; then
 fi
 
 # Create a backup of the existing hosts file in case something goes wrong
-date=$(date --iso-8601)
+date=$(date -Idate)
 backup_path="$hosts_file.pre-$date.backup"
 if ! sudo test -r "$backup_path" -a -w "$backup_path"; then
   backup_path="$HOME/hosts.pre-$date.backup"
@@ -28,14 +28,14 @@ echo -e "\x1B[2mBacked up \x1B[4m$hosts_file\x1B[0m\x1B[2m to \x1B[4m$backup_pat
 
 # Remove existing docker-dev hosts entries
 sudo sh -c "sed '/totara-docker-dev/d' $hosts_file > /tmp/hosts"
-sudo sh -c "sed -r '/totara[0-9]{2}/d' /tmp/hosts > $hosts_file"
+sudo sh -c "sed -E '/totara[0-9]{2}/d' /tmp/hosts > $hosts_file"
 sudo rm "/tmp/hosts"
 
 # Shouldn't need to change this
 host_ip="127.0.0.1"
 
 # Get all the possible php hosts from the docker compose yml file
-php_versions=($(cat "$project_path/compose/php.yml" | sed -r -n 's/.*\php-([0-9]).([0-9])[^:]*:/\1\2/p' | uniq | sort))
+php_versions=($(cat "$project_path/compose/php.yml" | sed -E -n 's/.*\php-([0-9]).([0-9])[^:]*:/\1\2/p' | uniq | sort))
 
 # Get the sub sites that we should also add host entries for
 sites=($(find "$LOCAL_SRC" -mindepth 2 -maxdepth 2 -name "version.php" -type f -exec dirname {} \; | sort | xargs -n 1 basename))
