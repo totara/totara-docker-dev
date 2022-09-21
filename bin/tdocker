@@ -2,7 +2,7 @@
 
 script_path="$( cd "$(dirname "$0")" ; pwd -P )"
 project_path="$( cd $script_path && cd ..; pwd -P )"
-export $(egrep -v '^#' $project_path/.env | xargs)
+export $(grep -E -v '^#' $project_path/.env | xargs)
 
 cd $project_path;
 

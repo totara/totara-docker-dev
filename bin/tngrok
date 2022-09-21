@@ -5,7 +5,7 @@ project_path="$( cd $script_path && cd ..; pwd -P )"
 
 source "$project_path/tools/check_for_update.sh"
 
-export $(egrep -v '^#' $project_path/.env | xargs)
+export $(grep -E -v '^#' $project_path/.env | xargs)
 
 if [ -z $1 ]; then
     echo "Helper for using ngrok with your totara site.
