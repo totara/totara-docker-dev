@@ -56,7 +56,7 @@ unset($version_file, $totara_version_matches, $moodle_version_matches);
 //////////////////////////////////////////////////////////////////////////
 
 /** PostgresSQL */
-$CFG->dbhost = 'pgsql14'; // See https://github.com/totara/totara-docker-dev/wiki/Database%20Credentials for other versions
+$CFG->dbhost = 'pgsql13'; // See https://github.com/totara/totara-docker-dev/wiki/Database%20Credentials for other versions
 $CFG->dbtype = 'pgsql';
 $CFG->dbuser = 'postgres';
 $CFG->dbpass = '';
