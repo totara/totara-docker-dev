@@ -426,7 +426,11 @@ if ($development_mode) {
 
     // When you expect fresh data from GraphQL, disable the cache,
     // otherwise expect an increase to page load and readiness times
-    $CFG->cache_graphql_schema = false;
+    //
+    // Disabling caching of the GraphQL schema has a serious performance impact
+    // thus we keep it enabled by default.
+    // Either purge caches if needed or uncomment the following line if needed.
+    // $CFG->cache_graphql_schema = false;
 
     // Tui-specific settings to turn off performance optimisations
     // during development. They do similar things to the legacy-only
