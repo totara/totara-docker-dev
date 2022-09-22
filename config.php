@@ -136,8 +136,12 @@ $CFG->dboptions = array('dbpersist' => false, 'dbsocket' => false, 'dbport' => '
  * then please contribute what you did back to the docker-dev repository :)
  */
 if (!empty($_SERVER['HTTP_X_ORIGINAL_HOST']) && strpos($_SERVER['HTTP_X_ORIGINAL_HOST'], 'ngrok.io') !== false) {
-    // using ngrok
+    // using ngrok 2.x
     $_SERVER['HTTP_HOST'] = $_SERVER['HTTP_X_ORIGINAL_HOST'];
+    $CFG->wwwroot = 'https://' . $_SERVER['HTTP_HOST'];
+} else if (!empty($_SERVER['HTTP_X_FORWARDED_HOST']) && strpos($_SERVER['HTTP_X_FORWARDED_HOST'], 'ngrok.io') !== false) {
+    // using ngrok 3.x
+    $_SERVER['HTTP_HOST'] = $_SERVER['HTTP_X_FORWARDED_HOST'];
     $CFG->wwwroot = 'https://' . $_SERVER['HTTP_HOST'];
 } else if (!empty($_SERVER['HTTP_HOST']) && !empty($_SERVER['REQUEST_SCHEME'])) {
     // accessing it locally via the web
