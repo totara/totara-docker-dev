@@ -29,4 +29,4 @@ if [ ! -z $2 ]; then
     subdomain="-subdomain=$2"
 fi
 
-ngrok http --region=$NGROK_REGION -bind-tls=true $subdomain -host-header=rewrite "https://$1:8443"
+ngrok http --region=$NGROK_REGION $subdomain --host-header=rewrite "https://$1:8443"
