@@ -9,7 +9,11 @@ services:
     environment:
       ML_TOTARA_KEY: ${ML_API_KEY:-totara}
       ML_TOTARA_URL: ${ML_TOTARA_URL:?Set the URL of your Totara project}
-      ML_DEV: 1
+      ML_RECOMMENDATION_RETRAIN_FREQ: ${ML_RECOMMENDATION_RETRAIN_FREQ:-1440}
+      ML_NUM_THREADS: ${ML_NUM_THREADS:-4}
+      ML_RECOMMENDATION_ALGORITHM: ${ML_RECOMMENDATION_ALGORITHM:-hybrid}
+      ML_DEV: ${ML_DEV:-1}
+      PYTHONUNBUFFERED: ${ML_DEV:-1}
     volumes:
       - "${ML_TOTARA_PROJECT}/extensions/ml_service/service:/etc/ml/service"
       - "ml-models:/etc/ml/data/models"
@@ -17,7 +21,7 @@ services:
     networks:
       - totara
     ports:
-      - "5000:5000"
+      - "5050:5000"
 
 volumes:
   ml-models:
