@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# Standard boilerplate code for getting the paths and environment variables we need.
+script_path="$( cd "$(dirname "$0")" ; pwd -P )"
+project_path="$( cd $script_path && cd ..; pwd -P )"
+export $(grep -E -v '^#' $project_path/.env | xargs)
+sub_path="${PWD//$LOCAL_SRC/}"
+remote_path="$REMOTE_SRC/$sub_path"
+local_path="$LOCAL_SRC/$sub_path"
+
+container="$1"
+shift
+if [[ -z "$container" ]]; then
+    echo "Container must be specified"
+    exit 1
+fi
+
+# If just 'php' is specified, then dynamically work out which one to actually use based upon the site composer.json
+if [[ "$container" == "php" ]]; then
+    if [[ ! -f "$local_path/version.php" ]]; then
+        echo "This command must be run from a Totara site directory if 'php' is specified for the container"
+        exit 1
+    fi
+    php_container=($(php "$project_path/bin/helpers/php_container.php" "$local_path"))
+    container=${php_container[0]}
+    echo -e "\x1B[2mUsing PHP Container: $container\x1B[0m"
+fi
+
+# If we are bashing into php/apache/nginx, then lets make the shell begin in the remote directory
+extra_args=""
+if [[ "$container" =~ "php" || "$container" =~ "nginx" || "$container" =~ "apache" ]]; then
+    extra_args="-w $remote_path"
+fi
+
+# Quote command to be reused as shell input
+command_str=$(printf " %q" "$@")
+
+$script_path/tdocker exec $extra_args "$container" "$command_str"
+
