@@ -466,6 +466,7 @@ $CFG->smtphosts = 'mailcatcher:25';
 
 $CFG->passwordpolicy = false;
 $CFG->tool_generator_users_password = '12345';
+$CFG->upgradekey = '';
 
 $CFG->country = 'NZ';
 $CFG->defaultcity = 'Wellington'; // very windy!
