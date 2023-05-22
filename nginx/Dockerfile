@@ -1,8 +1,8 @@
-FROM nginx:1.20
+FROM nginx:alpine
 
 ENV REMOTE_DATA=${REMOTE_DATA}
 
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+RUN apk update && apk add \
     nano \
     openssl \
     gettext
