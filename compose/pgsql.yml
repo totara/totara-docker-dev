@@ -2,7 +2,7 @@ version: "3.7"
 services:
 
   pgsql93:
-    image: postgres:9.3
+    image: postgres:9.3-alpine
     container_name: totara_pgsql93
     ports:
       - "5493:5432"
@@ -20,7 +20,7 @@ services:
       - totara
 
   pgsql96:
-    image: postgres:9.6
+    image: postgres:9.6-alpine
     container_name: totara_pgsql96
     ports:
       - "5496:5432"
@@ -39,13 +39,14 @@ services:
       - totara
 
   pgsql10:
-    image: postgres:10.6
+    image: postgres:10-alpine
     container_name: totara_pgsql10
     ports:
       - "5410:5432"
     environment:
       TZ: ${TIME_ZONE}
       PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_HOST_AUTH_METHOD: trust
     command:
       postgres -c 'config_file=/etc/postgresql/postgresql.conf'
     volumes:
@@ -57,13 +58,14 @@ services:
       - totara
 
   pgsql11:
-    image: postgres:11.6
+    image: postgres:11-alpine
     container_name: totara_pgsql11
     ports:
       - "5411:5432"
     environment:
       TZ: ${TIME_ZONE}
       PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_HOST_AUTH_METHOD: trust
     command:
       postgres -c 'config_file=/etc/postgresql/postgresql.conf'
     volumes:
@@ -75,13 +77,14 @@ services:
       - totara
 
   pgsql:
-    image: postgres:12.1
+    image: postgres:12-alpine
     container_name: totara_pgsql12
     ports:
       - "5432:5432"
     environment:
       TZ: ${TIME_ZONE}
       PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_HOST_AUTH_METHOD: trust
     command:
       postgres -c 'config_file=/etc/postgresql/postgresql.conf'
     volumes:
@@ -93,7 +96,7 @@ services:
       - totara
 
   pgsql13:
-    image: postgres:13.0
+    image: postgres:13-alpine
     container_name: totara_pgsql13
     ports:
       - "5442:5432"
@@ -112,7 +115,7 @@ services:
       - totara
 
   pgsql14:
-    image: postgres:14.0
+    image: postgres:14-alpine
     container_name: totara_pgsql14
     ports:
       - "5443:5432"
