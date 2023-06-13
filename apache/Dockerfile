@@ -1,6 +1,6 @@
-FROM httpd:2.4
+FROM httpd:2.4-alpine
 
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+RUN apk update && apk add \
     nano \
     openssl \
     gettext
