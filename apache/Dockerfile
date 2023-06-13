@@ -1,6 +1,7 @@
-FROM httpd:2.4
+ARG ARCH=amd64
+FROM $ARCH/httpd:2.4-alpine
 
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+RUN apk update && apk add \
     nano \
     openssl \
     gettext

@@ -1,8 +1,9 @@
-FROM nginx:1.20
+ARG ARCH=amd64
+FROM $ARCH/nginx:alpine
 
 ENV REMOTE_DATA=${REMOTE_DATA}
 
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+RUN apk update && apk add \
     nano \
     openssl \
     gettext

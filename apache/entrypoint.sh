@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # if there's no ssl certificate yet create it
 if [ ! -f "/usr/local/apache2/conf/server.crt" ]; then

@@ -2,5 +2,11 @@
 
 script_path="$( cd "$(dirname "$0")" ; pwd -P )"
 project_path="$( cd $script_path && cd ..; pwd -P )"
+export $(grep -E -v '^#' $project_path/.env | xargs)
 
-$script_path/tdocker build "$@"
+# Check the OS and make image for that OS
+if [ $(uname -m) == "arm64" ]; then
+  $script_path/tdocker build --build-arg ARCH="arm64v8" "$@"
+else
+  $script_path/tdocker build "$@"
+fi
