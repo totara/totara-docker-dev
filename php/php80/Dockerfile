@@ -1,36 +1,41 @@
-FROM php:8.0-fpm-bullseye
+FROM php:8.0-fpm-alpine
 
 ARG TIME_ZONE=Pacific/Auckland
 
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
-        apt-transport-https \
-        libfreetype6-dev \
-        libjpeg62-turbo-dev \
+RUN apk add --no-cache --update \
+        freetype-dev \
+        libjpeg-turbo-dev \
         libmcrypt-dev \
         libpng-dev \
         libxml2-dev \
-        libicu-dev \
+        icu-dev \
         libpq-dev \
-        gnupg2 \
+        gnupg \
         nano \
         vim \
         wget \
         openssl \
-        locales \
+        musl \
+        musl-utils \
+        musl-locales \
         tzdata \
         git \
         libzip-dev \
         libmemcached-dev \
         zip \
-        netcat \
         bc \
         ghostscript \
         graphviz \
         aspell \
-        libldap2-dev \
-        libltdl-dev \
-    && docker-php-ext-install -j$(nproc) \
-        zip \
+        libldap \
+        openldap-dev \
+        bash \
+        curl \
+        autoconf \
+        gcc \
+        make \
+        g++ \
+    && docker-php-ext-install -j$(nproc) zip \
         intl \
         soap \
         opcache \
@@ -65,44 +70,40 @@ RUN pecl install -o -f memcached \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable memcached
 
-# we need en_US locales for MSSQL connection to work
-# we need en_AU locales for behat to work
-RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
-    sed -i -e 's/# en_AU.UTF-8 UTF-8/en_AU.UTF-8 UTF-8/' /etc/locale.gen && \
-    dpkg-reconfigure --frontend=noninteractive locales && \
-    update-locale LANG=en_US.UTF-8
-
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
 
-# install mssql extension
-RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
-    && curl https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list \
-    && apt-get update && ACCEPT_EULA=Y apt-get install -y \
-    msodbcsql18 \
-    mssql-tools18 \
-    unixodbc-dev
+# taken from: https://learn.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server
+RUN curl -O https://download.microsoft.com/download/e/4/e/e4e67866-dffd-428c-aac7-8d28ddafb39b/msodbcsql17_17.10.2.1-1_amd64.apk
+RUN curl -O https://download.microsoft.com/download/e/4/e/e4e67866-dffd-428c-aac7-8d28ddafb39b/mssql-tools_17.10.1.1-1_amd64.apk
+
+RUN curl -O https://download.microsoft.com/download/e/4/e/e4e67866-dffd-428c-aac7-8d28ddafb39b/msodbcsql17_17.10.2.1-1_amd64.sig
+RUN curl -O https://download.microsoft.com/download/e/4/e/e4e67866-dffd-428c-aac7-8d28ddafb39b/mssql-tools_17.10.1.1-1_amd64.sig
+
+RUN curl https://packages.microsoft.com/keys/microsoft.asc  | gpg --import - \
+  && gpg --verify msodbcsql17_17.10.2.1-1_amd64.sig msodbcsql17_17.10.2.1-1_amd64.apk \
+  && gpg --verify mssql-tools_17.10.1.1-1_amd64.sig mssql-tools_17.10.1.1-1_amd64.apk
+
+RUN apk add --allow-untrusted msodbcsql17_17.10.2.1-1_amd64.apk mssql-tools_17.10.1.1-1_amd64.apk
+RUN apk add --no-cache --update unixodbc-dev
 
 RUN echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile \
     && echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
 
-# Workaround applied: https://github.com/microsoft/msphpsql/issues/1438#issuecomment-1444773949
 RUN pear config-set php_ini `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"` system \
-    && pecl install sqlsrv-5.10.1 pdo_sqlsrv-5.10.1 || \
-    apt-get install -y --allow-downgrades odbcinst=2.3.7 odbcinst1debian2=2.3.7 unixodbc=2.3.7 unixodbc-dev=2.3.7 && \
-    pecl install sqlsrv-5.10.1 pdo_sqlsrv-5.10.1
+    && pecl install sqlsrv-5.10.1 \
+    && pecl install pdo_sqlsrv-5.10.1
 
 RUN docker-php-ext-enable sqlsrv.so && docker-php-ext-enable pdo_sqlsrv.so
 
-RUN ln -fs /usr/share/zoneinfo/${TIME_ZONE} /etc/localtime \
-    && dpkg-reconfigure --frontend noninteractive tzdata
+RUN ln -fs /usr/share/zoneinfo/${TIME_ZONE} /etc/localtime
 
-# Python 3.7 for ML Recommender.
-RUN apt-get update && apt install -y python3 \
-    python3-pip \
-    python3-wheel \
-    python3-venv \
+# Python 3 for ML Recommender.
+RUN apk add --no-cache --update python3 \
+    py3-pip \
+    py3-wheel \
+    py3-virtualenv \
     python3-dev
 
 COPY config/php.ini /usr/local/etc/php/
@@ -112,7 +113,7 @@ COPY config/fpm.conf /usr/local/etc/php-fpm.d/zz-totara.conf
 RUN echo 'for f in ~/custom_shell/*.sh; do [[ -e "$f" ]] && source "$f"; done;' >> ~/.bashrc
 
 # Have the option of using the oh my zsh shell.
-RUN apt-get update && apt-get install -y zsh
+RUN apk add --no-cache --update zsh
 RUN sh -c "$(curl https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" --unattended
 RUN git clone https://github.com/romkatv/powerlevel10k ~/.oh-my-zsh/custom/themes/powerlevel10k
 RUN git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions

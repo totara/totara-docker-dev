@@ -54,7 +54,7 @@ POWERLEVEL9K_CUSTOM_TOTARA_FOREGROUND="black"
 zsh_dir_name(){
     local diricon='\uf07c'
     local dirfull=$(pwd)
-    local dir=$(echo "$dirfull" | grep -oP "^/var/www/totara/\K.*")
+    local dir="${dirfull/\/var\/www\/totara\//"$"}"
     if [[ -z "$dir" ]]; then
         dir="$dirfull";
     fi
