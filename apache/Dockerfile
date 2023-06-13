@@ -1,4 +1,5 @@
-FROM httpd:2.4-alpine
+ARG ARCH=amd64
+FROM $ARCH/httpd:2.4-alpine
 
 RUN apk update && apk add \
     nano \

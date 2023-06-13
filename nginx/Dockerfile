@@ -1,4 +1,5 @@
-FROM nginx:alpine
+ARG ARCH=amd64
+FROM $ARCH/nginx:alpine
 
 ENV REMOTE_DATA=${REMOTE_DATA}
 

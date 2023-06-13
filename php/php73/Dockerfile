@@ -1,4 +1,5 @@
-FROM php:7.3-fpm-buster
+ARG ARCH=amd64
+FROM $ARCH/php:7.3-fpm-buster
 
 ARG TIME_ZONE=Pacific/Auckland
 
@@ -30,7 +31,6 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         graphviz \
         aspell \
         libldap2-dev \
-    && docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ \
     && docker-php-ext-install -j$(nproc) xmlrpc \
         zip \
         intl \
@@ -83,20 +83,20 @@ ENV LC_ALL en_US.UTF-8
 
 # install mssql extension
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
-    && curl https://packages.microsoft.com/config/debian/10/prod.list > /etc/apt/sources.list.d/mssql-release.list \
+    && curl https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list \
     && apt-get update && ACCEPT_EULA=Y apt-get install -y \
-        msodbcsql17 \
-        mssql-tools \
+        msodbcsql18 \
+        mssql-tools18 \
         unixodbc-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Workaround to get MSSQL connection working on Debian 9 (stretch)
 # https://emacstragic.net/2017/11/06/mssql-odbc-client-on-debian-9-stretch/
-RUN wget "http://security.debian.org/debian-security/pool/updates/main/o/openssl/libssl1.0.0_1.0.1t-1+deb8u12_amd64.deb" \
-    && DEBIAN_FRONTEND=noninteractive dpkg -i ./libssl1.0.0_1.0.1t-1+deb8u12_amd64.deb
+#RUN wget "http://security.debian.org/debian-security/pool/updates/main/o/openssl/libssl1.0.0_1.0.1t-1+deb8u12_amd64.deb" \
+#    && DEBIAN_FRONTEND=noninteractive dpkg -i ./libssl1.0.0_1.0.1t-1+deb8u12_amd64.deb
 
-RUN echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile \
-    && echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
+RUN echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> ~/.bash_profile \
+    && echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> ~/.bashrc
 
 RUN pear config-set php_ini `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"` system \
     && pecl install sqlsrv-5.9.0 \
