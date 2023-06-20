@@ -135,13 +135,33 @@ $CFG->dboptions = array('dbpersist' => false, 'dbsocket' => false, 'dbport' => '
  * You shouldn't need to change this section - but if you find this needs modification to get it working,
  * then please contribute what you did back to the docker-dev repository :)
  */
-if (!empty($_SERVER['HTTP_X_ORIGINAL_HOST']) && strpos($_SERVER['HTTP_X_ORIGINAL_HOST'], 'ngrok.io') !== false) {
-    // using ngrok 2.x
-    $_SERVER['HTTP_HOST'] = $_SERVER['HTTP_X_ORIGINAL_HOST'];
-    $CFG->wwwroot = 'https://' . $_SERVER['HTTP_HOST'];
-} else if (!empty($_SERVER['HTTP_X_FORWARDED_HOST']) && strpos($_SERVER['HTTP_X_FORWARDED_HOST'], 'ngrok.io') !== false) {
-    // using ngrok 3.x
-    $_SERVER['HTTP_HOST'] = $_SERVER['HTTP_X_FORWARDED_HOST'];
+// Ngrok uses a few different URLs, add if a new one is used
+$ngrok_urls = [
+    'ngrok.io',
+    'ngrok-free.app'
+];
+
+// Depending on the Ngrok version its hostname is stored in different server vars
+$ngrok_server_vars = [
+    $_SERVER['HTTP_X_FORWARDED_HOST'] ?? '',
+    $_SERVER['HTTP_X_ORIGINAL_HOST'] ?? '',
+];
+
+$ngrok_hostname = '';
+foreach ($ngrok_server_vars as $server_var) {
+    if (!empty($server_var) && empty($ngrok_hostname)) {
+        foreach ($ngrok_urls as $ngrok_url) {
+            if (strpos($server_var, $ngrok_url) !== false) {
+                $ngrok_hostname = $server_var;
+                break;
+            }
+        }
+    }
+}
+
+// Turns out request came via Ngrok
+if (!empty($ngrok_hostname)) {
+    $_SERVER['HTTP_HOST'] = $ngrok_hostname;
     $CFG->wwwroot = 'https://' . $_SERVER['HTTP_HOST'];
 } else if (!empty($_SERVER['HTTP_HOST']) && !empty($_SERVER['REQUEST_SCHEME'])) {
     // accessing it locally via the web
