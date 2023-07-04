@@ -86,8 +86,7 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
 
 # Workaround to get MSSQL connection working on Debian 9 (stretch)
 # https://emacstragic.net/2017/11/06/mssql-odbc-client-on-debian-9-stretch/
-RUN wget "http://security.debian.org/debian-security/pool/updates/main/o/openssl/libssl1.0.0_1.0.1t-1+deb8u12_amd64.deb" \
-    && DEBIAN_FRONTEND=noninteractive dpkg -i ./libssl1.0.0_1.0.1t-1+deb8u12_amd64.deb
+Dockerfile
 
 RUN echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile \
     && echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
