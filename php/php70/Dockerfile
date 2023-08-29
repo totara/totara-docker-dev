@@ -2,6 +2,11 @@ FROM php:7.0-fpm
 
 ARG TIME_ZONE=Pacific/Auckland
 
+# Debian stretched moved to the archives
+RUN sed -i s/deb.debian.org/archive.debian.org/g /etc/apt/sources.list \
+    && sed -i 's|security.debian.org|archive.debian.org/|g' /etc/apt/sources.list \
+    && sed -i '/stretch-updates/d' /etc/apt/sources.list
+
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         apt-transport-https \
         libgd3 \
@@ -80,19 +85,14 @@ ENV LC_ALL en_US.UTF-8
 
 # install mssql extension
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
-    && curl https://packages.microsoft.com/config/debian/8/prod.list | tee /etc/apt/sources.list.d/mssql-tools.list \
+    && curl https://packages.microsoft.com/config/debian/9/prod.list | tee /etc/apt/sources.list.d/mssql-tools.list \
     && apt-get update && ACCEPT_EULA=Y apt-get install -y \
         unixodbc \
         libgss3 \
         unixodbc-dev \
-        msodbcsql=13.1.9.2-1 \
-        mssql-tools=14.0.7.0-1 \
+        msodbcsql17 \
+        mssql-tools \
     && rm -rf /var/lib/apt/lists/*
-
-# Workaround to get MSSQL connection working on Debian 9 (stretch)
-# https://emacstragic.net/2017/11/06/mssql-odbc-client-on-debian-9-stretch/
-RUN wget "http://security.debian.org/debian-security/pool/updates/main/o/openssl/libssl1.1_1.1.1n-0+deb10u5_amd64.deb" \
-    && DEBIAN_FRONTEND=noninteractive dpkg -i ./libssl1.1_1.1.1n-0+deb10u5_amd64.deb
 
 RUN echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile \
     && echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc

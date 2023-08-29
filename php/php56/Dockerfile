@@ -2,6 +2,11 @@ FROM php:5.6-fpm
 
 ARG TIME_ZONE=Pacific/Auckland
 
+# Debian stretched moved to the archives
+RUN sed -i s/deb.debian.org/archive.debian.org/g /etc/apt/sources.list \
+    && sed -i 's|security.debian.org|archive.debian.org/|g' /etc/apt/sources.list \
+    && sed -i '/stretch-updates/d' /etc/apt/sources.list
+
 RUN apt-get update && apt-get install -y \
         apt-transport-https \
         libfreetype6-dev \
@@ -26,6 +31,11 @@ RUN apt-get update && apt-get install -y \
         ghostscript \
         graphviz \
         aspell \
+        libsybdb5 \
+        freetds-bin \
+        unixodbc \
+        libct4 \
+        wget \
     && docker-php-ext-install -j$(nproc) xmlrpc \
         zip \
         intl \
@@ -39,19 +49,19 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install -j$(nproc) gd
 
-RUN pecl install xhprof-0.9.4 \
+COPY pecl /root/pecl
+
+# Base image is outdated and thus cannot check the certificates, added the needed pecl packages for offline installation
+RUN  pecl install --offline /root/pecl/xhprof-0.9.4.tgz \
     && docker-php-ext-enable xhprof
 
-RUN pecl install -o -f redis-4.3.0 \
-    &&  rm -rf /tmp/pear \
+RUN pecl install --offline /root/pecl/redis-4.3.0.tgz \
     &&  docker-php-ext-enable redis
 
-RUN pecl install -o -f igbinary-2.0.8 \
-    &&  rm -rf /tmp/pear \
+RUN pecl install --offline /root/pecl/igbinary-2.0.8.tgz \
     &&  docker-php-ext-enable igbinary
 
-RUN pecl install -o -f memcached-2.2.0 \
-    &&  rm -rf /tmp/pear \
+RUN pecl install --offline /root/pecl/memcached-2.2.0.tgz \
     &&  docker-php-ext-enable memcached
 
 # we need en_AU locales for behat to work
@@ -63,14 +73,6 @@ RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
-
-RUN apt-get update && apt-get install -y \
-    libsybdb5 \
-    freetds-common \
-    freetds-dev \
-    freetds-bin \
-    unixodbc \
-    libct4
 
 RUN cd /usr/lib && ln -s /usr/lib/x86_64-linux-gnu/libsybdb.a
 

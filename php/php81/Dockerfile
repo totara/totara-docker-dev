@@ -68,11 +68,6 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
     mssql-tools \
     unixodbc-dev
 
-# Workaround to get MSSQL connection working on Debian 10 (buster)
-# https://emacstragic.net/2017/11/06/mssql-odbc-client-on-debian-9-stretch/
-RUN wget "http://security.debian.org/debian-security/pool/updates/main/o/openssl/libssl1.1_1.1.1n-0+deb10u5_amd64.deb" \
-    && DEBIAN_FRONTEND=noninteractive dpkg -i ./libssl1.1_1.1.1n-0+deb10u5_amd64.deb
-
 RUN echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile \
     && echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
 
