@@ -129,15 +129,7 @@ if [[ -n $2 ]]; then
 fi
 
 # Get the db container
-if [[ "$db_host" == 'pgsql' ]]; then
-    db_container_name='totara_pgsql12'
-elif [[ "$db_host" == 'mysql' ]]; then
-    db_container_name='totara_mysql57'
-elif [[ "$db_host" == 'mariadb' ]]; then
-    db_container_name='totara_mariadb105'
-else
-    db_container_name="totara_${db_host}"
-fi
+db_container_name="totara_${db_host}"
 db_containers=($(docker ps --filter "name=$db_host" --format '{{.ID}} {{.Names}}' | grep "$db_container_name" | xargs))
 if [ -z $db_containers ]; then
     tup "$db_host"

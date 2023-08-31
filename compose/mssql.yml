@@ -1,7 +1,7 @@
 version: "3.7"
 services:
 
-  mssql:
+  mssql2017:
     image: totara/docker-dev-mssql
     # Mssql does not support multiple architectures
     platform: linux/amd64

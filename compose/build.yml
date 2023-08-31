@@ -7,7 +7,7 @@ services:
   nginx:
     build: ./nginx
 
-  mssql:
+  mssql2017:
     build:
       context: ./mssql
       dockerfile: 2017/Dockerfile
