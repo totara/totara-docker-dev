@@ -385,9 +385,16 @@ elif [ "$db_type" == 'mariadb' ]; then
 #          Microsoft SQL Server          #
 ##########################################
 elif [ "$db_type" == 'mssql' ]; then
+    # Newer PHP versions have a newer mssql-tools version
+    if [[ "$php_container_name" == 'php-5.6' || "$php_container_name" == 'php-7.0' || "$php_container_name" == 'php-7.1' || "$php_container_name" == 'php-7.2' ]]; then
+        sqlcmd="/opt/mssql-tools/bin/sqlcmd"
+    else
+        sqlcmd="/opt/mssql-tools18/bin/sqlcmd -C"
+    fi
+
     # Handles executing sql commands.
     function db_sql_cmd() {
-        command_output=$(eval "$php_command /opt/mssql-tools/bin/sqlcmd -S $db_host -U $db_user -P \"$db_password\" -q \"$1\"")
+        command_output=$(eval "$php_command $sqlcmd -S $db_host -U $db_user -P \"$db_password\" -q \"$1\"")
         error_msg=$(echo "$command_output" | grep 'Msg')
         if [ -z "$2" ]; then
             eval "$2"
@@ -426,7 +433,7 @@ elif [ "$db_type" == 'mssql' ]; then
 
     # Start mssql shell
     elif [ "$action" == 'shell' ]; then
-        docker exec -it "$db_container" /opt/mssql-tools/bin/sqlcmd -S "$db_host" -U "$db_user" -P "$db_password" -q "USE $db_name"
+        docker exec -it "$db_container" $sqlcmd -S "$db_host" -U "$db_user" -P "$db_password" -q "USE $db_name"
 
     # Handle unimplemented action
     else
