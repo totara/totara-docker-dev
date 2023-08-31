@@ -1,4 +1,4 @@
-FROM php:7.3-fpm-buster
+FROM php:7.3-fpm-bullseye
 
 ARG TIME_ZONE=Pacific/Auckland
 
@@ -30,7 +30,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         graphviz \
         aspell \
         libldap2-dev \
-    && docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ \
+        libltdl-dev \
     && docker-php-ext-install -j$(nproc) xmlrpc \
         zip \
         intl \
@@ -83,19 +83,20 @@ ENV LC_ALL en_US.UTF-8
 
 # install mssql extension
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
-    && curl https://packages.microsoft.com/config/debian/10/prod.list > /etc/apt/sources.list.d/mssql-release.list \
+    && curl https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list \
     && apt-get update && ACCEPT_EULA=Y apt-get install -y \
-        msodbcsql17 \
-        mssql-tools \
-        unixodbc-dev \
-    && rm -rf /var/lib/apt/lists/*
+    msodbcsql18 \
+    mssql-tools18 \
+    unixodbc-dev
 
 RUN echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile \
     && echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
 
+# Workaround applied: https://github.com/microsoft/msphpsql/issues/1438#issuecomment-1444773949
 RUN pear config-set php_ini `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"` system \
-    && pecl install sqlsrv-5.9.0 \
-    && pecl install pdo_sqlsrv-5.9.0
+    && pecl install sqlsrv-5.9.0 pdo_sqlsrv-5.9.0 || \
+    apt-get install -y --allow-downgrades odbcinst=2.3.7 odbcinst1debian2=2.3.7 unixodbc=2.3.7 unixodbc-dev=2.3.7 && \
+    pecl install sqlsrv-5.9.0 pdo_sqlsrv-5.9.0
 
 RUN docker-php-ext-enable sqlsrv.so && docker-php-ext-enable pdo_sqlsrv.so
 
@@ -103,7 +104,7 @@ RUN ln -fs /usr/share/zoneinfo/${TIME_ZONE} /etc/localtime \
     && dpkg-reconfigure --frontend noninteractive tzdata
 
 # Python 3.7 for ML Recommender.
-RUN apt-get update && apt install -y python3.7 \
+RUN apt-get update && apt install -y python3 \
     python3-pip \
     python3-wheel \
     python3-venv \
