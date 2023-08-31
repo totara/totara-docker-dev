@@ -29,7 +29,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         aspell \
         libldap2-dev \
         libltdl-dev \
-    && docker-php-ext-install -j$(nproc) xmlrpc \
+    && docker-php-ext-install -j$(nproc) \
         zip \
         intl \
         soap \
