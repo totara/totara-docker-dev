@@ -1,4 +1,4 @@
-FROM php:8.1-fpm-buster
+FROM php:8.1-fpm-bullseye
 
 ARG TIME_ZONE=Pacific/Auckland
 
@@ -27,7 +27,10 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         ghostscript \
         graphviz \
         aspell \
-    && docker-php-ext-install -j$(nproc) zip \
+        libldap2-dev \
+        libltdl-dev \
+    && docker-php-ext-install -j$(nproc) xmlrpc \
+        zip \
         intl \
         soap \
         opcache \
@@ -36,6 +39,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         pgsql \
         mysqli \
         exif \
+        ldap \
     && docker-php-ext-configure gd \
             --with-freetype \
             --with-jpeg \
@@ -48,6 +52,18 @@ RUN git clone https://github.com/tideways/php-profiler-extension.git \
     && make && make install
 
 RUN echo "extension=tideways_xhprof.so" >> /usr/local/etc/php/conf.d/tideways_xhprof.ini
+
+RUN pecl install -o -f redis \
+    &&  rm -rf /tmp/pear \
+    &&  docker-php-ext-enable redis
+
+RUN pecl install -o -f igbinary \
+    &&  rm -rf /tmp/pear \
+    &&  docker-php-ext-enable igbinary
+
+RUN pecl install -o -f memcached \
+    &&  rm -rf /tmp/pear \
+    &&  docker-php-ext-enable memcached
 
 # we need en_US locales for MSSQL connection to work
 # we need en_AU locales for behat to work
@@ -62,23 +78,32 @@ ENV LC_ALL en_US.UTF-8
 
 # install mssql extension
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
-    && curl https://packages.microsoft.com/config/debian/10/prod.list > /etc/apt/sources.list.d/mssql-release.list \
+    && curl https://packages.microsoft.com/config/debian/11/prod.list > /etc/apt/sources.list.d/mssql-release.list \
     && apt-get update && ACCEPT_EULA=Y apt-get install -y \
-    msodbcsql17 \
-    mssql-tools \
+    msodbcsql18 \
+    mssql-tools18 \
     unixodbc-dev
 
 RUN echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile \
     && echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
 
+# Workaround applied: https://github.com/microsoft/msphpsql/issues/1438#issuecomment-1444773949
 RUN pear config-set php_ini `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"` system \
-    && pecl install sqlsrv-5.10.0 \
-    && pecl install pdo_sqlsrv-5.10.0
+    && pecl install sqlsrv-5.10.1 pdo_sqlsrv-5.10.1 || \
+    apt-get install -y --allow-downgrades odbcinst=2.3.7 odbcinst1debian2=2.3.7 unixodbc=2.3.7 unixodbc-dev=2.3.7 && \
+    pecl install sqlsrv-5.10.1 pdo_sqlsrv-5.10.1
 
 RUN docker-php-ext-enable sqlsrv.so && docker-php-ext-enable pdo_sqlsrv.so
 
 RUN ln -fs /usr/share/zoneinfo/${TIME_ZONE} /etc/localtime \
     && dpkg-reconfigure --frontend noninteractive tzdata
+
+# Python 3.7 for ML Recommender.
+RUN apt-get update && apt install -y python3 \
+    python3-pip \
+    python3-wheel \
+    python3-venv \
+    python3-dev
 
 COPY config/php.ini /usr/local/etc/php/
 COPY config/fpm.conf /usr/local/etc/php-fpm.d/zz-totara.conf
