@@ -17,7 +17,7 @@ services:
     networks:
       - totara
 
-  mysql:
+  mysql57:
     # MySQL 5.7 does not support multiple architectures. (MySQL 8.0 works fine)
     platform: linux/amd64
     image: mysql:5.7
