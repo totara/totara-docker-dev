@@ -8,6 +8,10 @@ sub_path="${PWD//$LOCAL_SRC/}"
 remote_path="$REMOTE_SRC/$sub_path"
 local_path="$LOCAL_SRC/$sub_path"
 
+if [ ! -f "$local_path/version.php" ]; then
+    remote_path="$REMOTE_SRC"
+fi
+
 container="$1"
 if [[ ! "$container" =~ "php" ]]; then
     echo "tzsh only supports php containers"
