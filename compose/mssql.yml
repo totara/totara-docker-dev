@@ -3,6 +3,8 @@ services:
 
   mssql:
     image: totara/docker-dev-mssql
+    # Mssql does not support multiple architectures
+    platform: linux/amd64
     container_name: totara_mssql
     ports:
       - "1433:1433"
@@ -20,6 +22,8 @@ services:
 
   mssql2019:
     image: totara/docker-dev-mssql2019
+    # Mssql does not support multiple architectures
+    platform: linux/amd64
     container_name: totara_mssql2019
     ports:
       - "1419:1433"
