@@ -18,8 +18,8 @@ services:
       - totara
 
   mysql:
-    # The mysql 5.7 image does not work on m1 macs. (mysql 8.0 works fine)
-    platform: linux/x86_64
+    # MySQL 5.7 does not support multiple architectures. (MySQL 8.0 works fine)
+    platform: linux/amd64
     image: mysql:5.7
     container_name: totara_mysql57
     ports:
