@@ -16,7 +16,10 @@ Although this project started as a development environment for Totara Learn it c
  * [NGINX](https://nginx.org/) as a webserver
  * [Apache](https://httpd.apache.org/) as a webserver
  * [PHP](http://php.net/) 5.3, 5.4, 5.5, 5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0, 8.1 to test for different versions
- * [PostgreSQL](https://www.postgresql.org/) (9.3, 9.6, 10, 11, 12, 13, 14), [MariaDB](https://mariadb.org/) (10.2, 10.3, 10.4, 10.5, 10.6, 10.7, 10.8), [MySQL](https://www.mysql.com/) (5.7, 8), and Microsoft SQL Server ([2017](https://www.microsoft.com/en-us/sql-server/sql-server-2017), [2019](https://www.microsoft.com/en-us/sql-server/sql-server-2019)) support
+ * [PostgreSQL](https://www.postgresql.org/) (9.3, 9.6, 10, 11, 12, 13, 14, 15), 
+ * [MariaDB](https://mariadb.org/) (10.2, 10.3, 10.4, 10.5, 10.6, 10.7, 10.8, 10.11), 
+ * [MySQL](https://www.mysql.com/) (5.7, 8), 
+ * Microsoft SQL Server ([2017](https://www.microsoft.com/en-us/sql-server/sql-server-2017), [2019](https://www.microsoft.com/en-us/sql-server/sql-server-2019))
  * [NodeJS](https://nodejs.org/) for building, developing and testing frontend code
  * A [PHPUnit](https://phpunit.de/) and [Behat](http://behat.org/en/latest/) setup to run tests (including [Selenium](https://www.seleniumhq.org/))
  * A [mailcatcher](https://mailcatcher.me/) instance to view sent emails
@@ -24,6 +27,7 @@ Although this project started as a development environment for Totara Learn it c
  * [XHProf](https://github.com/tideways/php-xhprof-extension) for profiling
  * [XDebug](https://xdebug.org/) installed, ready for debugging with your favorite IDE
  * A [Python](https://www.python.org/) instance to run the Totara Machine Learning service
+ * Optimised for [Apple Silicon](../../wiki/Apple-Silicon-support)
 
 ## Installation & Usage
 
