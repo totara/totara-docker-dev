@@ -33,25 +33,24 @@ RUN apk add --no-cache --update \
         tzdata \
         vim \
         wget \
-        zip \
-    && apk add --no-cache --virtual build-dependencies \
+        zip
+
+RUN apk add --no-cache --update --virtual build-dependencies \
         curl-dev \
         freetype-dev \
         freetds-dev \
         libjpeg-turbo-dev \
         libmcrypt-dev \
-        libmemcached-dev \
         libpng-dev \
         libpq-dev \
         libxml2-dev \
         libzip-dev \
         icu-dev \
         openldap-dev \
-        unixodbc-dev \
         gcc \
         make \
-        g++ \
-    && docker-php-ext-install -j$(nproc) zip \
+        g++ && \
+    docker-php-ext-install -j$(nproc) zip \
         intl \
         soap \
         opcache \
@@ -61,31 +60,36 @@ RUN apk add --no-cache --update \
         mysqli \
         exif \
         ldap \
-        pdo_dblib \
-    && docker-php-ext-configure gd \
+        pdo_dblib && \
+    docker-php-ext-configure gd \
             --with-freetype \
-            --with-jpeg \
-    && docker-php-ext-install -j$(nproc) gd
+            --with-jpeg && \
+    docker-php-ext-install -j$(nproc) gd && \
+    apk del build-dependencies
 
-RUN git clone https://github.com/tideways/php-profiler-extension.git \
-    && cd php-profiler-extension \
-    && phpize \
-    && ./configure \
-    && make && make install
+RUN apk add --no-cache --update --virtual build-dependencies \
+        gcc \
+        make \
+        g++ \
+        libmemcached-dev \
+        libzip-dev \
+        pkgconfig && \
+    git clone https://github.com/tideways/php-profiler-extension.git && \
+    cd php-profiler-extension && \
+    phpize && \
+    ./configure && \
+    make && make install && \
+    pecl install -o -f redis && \
+    pecl install -o -f igbinary && \
+    pecl install -o -f memcached && \
+    rm -rf /tmp/pear && \
+    apk del build-dependencies
 
 RUN echo "extension=tideways_xhprof.so" >> /usr/local/etc/php/conf.d/tideways_xhprof.ini
 
-RUN pecl install -o -f redis \
-    &&  rm -rf /tmp/pear \
-    &&  docker-php-ext-enable redis
-
-RUN pecl install -o -f igbinary \
-    &&  rm -rf /tmp/pear \
-    &&  docker-php-ext-enable igbinary
-
-RUN pecl install -o -f memcached \
-    &&  rm -rf /tmp/pear \
-    &&  docker-php-ext-enable memcached
+RUN docker-php-ext-enable redis && \
+    docker-php-ext-enable igbinary && \
+    docker-php-ext-enable memcached
 
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
@@ -107,12 +111,19 @@ RUN curl https://packages.microsoft.com/keys/microsoft.asc  | gpg --import - && 
 RUN apk add --allow-untrusted msodbcsql18_18.3.1.1-1_$TARGETARCH.apk && \
     apk add --allow-untrusted mssql-tools18_18.3.1.1-1_$TARGETARCH.apk
 
-RUN echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> ~/.bash_profile \
-    && echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> ~/.bashrc
+RUN echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> ~/.bash_profile && \
+    echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> ~/.bashrc
 
-RUN pear config-set php_ini `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"` system \
-    && pecl install sqlsrv \
-    && pecl install pdo_sqlsrv
+RUN apk add --no-cache --update --virtual build-dependencies \
+      gcc \
+      make \
+      g++ \
+      unixodbc-dev && \
+    pear config-set php_ini `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"` system && \
+    pecl install sqlsrv && \
+    pecl install pdo_sqlsrv && \
+    rm -rf /tmp/pear && \
+    apk del build-dependencies
 
 RUN docker-php-ext-enable sqlsrv.so && docker-php-ext-enable pdo_sqlsrv.so
 
@@ -124,9 +135,6 @@ RUN apk add --no-cache --update python3 \
     py3-wheel \
     py3-virtualenv \
     python3-dev
-
-# Remove build dependencies
-RUN apk del build-dependencies
 
 COPY config/php.ini /usr/local/etc/php/
 COPY config/fpm.conf /usr/local/etc/php-fpm.d/zz-totara.conf
