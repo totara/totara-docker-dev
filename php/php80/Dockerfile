@@ -1,37 +1,53 @@
 FROM php:8.0-fpm-alpine
 
+ARG TARGETARCH
 ARG TIME_ZONE=Pacific/Auckland
 
 RUN apk add --no-cache --update \
-        freetype-dev \
-        libjpeg-turbo-dev \
-        libmcrypt-dev \
-        libpng-dev \
-        libxml2-dev \
-        icu-dev \
-        libpq-dev \
+        linux-headers \
+        aspell \
+        autoconf \
+        bash \
+        bc \
+        curl \
+        icu \
+        icu-data-full \
+        freetds \
+        freetype \
+        ghostscript \
+        git \
         gnupg \
-        nano \
-        vim \
-        wget \
-        openssl \
+        graphviz \
+        libldap \
+        libjpeg \
+        libmcrypt \
+        libmemcached \
+        libpng \
+        libpq \
         musl \
         musl-utils \
         musl-locales \
+        musl-locales-lang \
+        nano \
+        openssl \
         tzdata \
-        git \
-        libzip-dev \
-        libmemcached-dev \
+        vim \
+        wget \
         zip \
-        bc \
-        ghostscript \
-        graphviz \
-        aspell \
-        libldap \
+    && apk add --no-cache --virtual build-dependencies \
+        curl-dev \
+        freetype-dev \
+        freetds-dev \
+        libjpeg-turbo-dev \
+        libmcrypt-dev \
+        libmemcached-dev \
+        libpng-dev \
+        libpq-dev \
+        libxml2-dev \
+        libzip-dev \
+        icu-dev \
         openldap-dev \
-        bash \
-        curl \
-        autoconf \
+        unixodbc-dev \
         gcc \
         make \
         g++ \
@@ -45,6 +61,7 @@ RUN apk add --no-cache --update \
         mysqli \
         exif \
         ldap \
+        pdo_dblib \
     && docker-php-ext-configure gd \
             --with-freetype \
             --with-jpeg \
@@ -74,26 +91,28 @@ ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
 ENV LC_ALL en_US.UTF-8
 
-# taken from: https://learn.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server
-RUN curl -O https://download.microsoft.com/download/e/4/e/e4e67866-dffd-428c-aac7-8d28ddafb39b/msodbcsql17_17.10.2.1-1_amd64.apk
-RUN curl -O https://download.microsoft.com/download/e/4/e/e4e67866-dffd-428c-aac7-8d28ddafb39b/mssql-tools_17.10.1.1-1_amd64.apk
+# Taken from https://learn.microsoft.com/en-us/sql/connect/odbc/linux-mac/installing-the-microsoft-odbc-driver-for-sql-server
+RUN curl -O https://download.microsoft.com/download/3/5/5/355d7943-a338-41a7-858d-53b259ea33f5/msodbcsql18_18.3.1.1-1_$TARGETARCH.apk && \
+    curl -O https://download.microsoft.com/download/3/5/5/355d7943-a338-41a7-858d-53b259ea33f5/mssql-tools18_18.3.1.1-1_$TARGETARCH.apk
 
-RUN curl -O https://download.microsoft.com/download/e/4/e/e4e67866-dffd-428c-aac7-8d28ddafb39b/msodbcsql17_17.10.2.1-1_amd64.sig
-RUN curl -O https://download.microsoft.com/download/e/4/e/e4e67866-dffd-428c-aac7-8d28ddafb39b/mssql-tools_17.10.1.1-1_amd64.sig
+#(Optional) Verify signature, if 'gpg' is missing install it using 'apk add gnupg':
+RUN curl -O https://download.microsoft.com/download/3/5/5/355d7943-a338-41a7-858d-53b259ea33f5/msodbcsql18_18.3.1.1-1_$TARGETARCH.sig && \
+    curl -O https://download.microsoft.com/download/3/5/5/355d7943-a338-41a7-858d-53b259ea33f5/mssql-tools18_18.3.1.1-1_$TARGETARCH.sig
 
-RUN curl https://packages.microsoft.com/keys/microsoft.asc  | gpg --import - \
-  && gpg --verify msodbcsql17_17.10.2.1-1_amd64.sig msodbcsql17_17.10.2.1-1_amd64.apk \
-  && gpg --verify mssql-tools_17.10.1.1-1_amd64.sig mssql-tools_17.10.1.1-1_amd64.apk
+RUN curl https://packages.microsoft.com/keys/microsoft.asc  | gpg --import - && \
+    gpg --verify msodbcsql18_18.3.1.1-1_$TARGETARCH.sig msodbcsql18_18.3.1.1-1_$TARGETARCH.apk && \
+    gpg --verify mssql-tools18_18.3.1.1-1_$TARGETARCH.sig mssql-tools18_18.3.1.1-1_$TARGETARCH.apk
 
-RUN apk add --allow-untrusted msodbcsql17_17.10.2.1-1_amd64.apk mssql-tools_17.10.1.1-1_amd64.apk
-RUN apk add --no-cache --update unixodbc-dev
+# Install the package(s)
+RUN apk add --allow-untrusted msodbcsql18_18.3.1.1-1_$TARGETARCH.apk && \
+    apk add --allow-untrusted mssql-tools18_18.3.1.1-1_$TARGETARCH.apk
 
-RUN echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile \
-    && echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
+RUN echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> ~/.bash_profile \
+    && echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> ~/.bashrc
 
 RUN pear config-set php_ini `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"` system \
-    && pecl install sqlsrv-5.10.1 \
-    && pecl install pdo_sqlsrv-5.10.1
+    && pecl install sqlsrv \
+    && pecl install pdo_sqlsrv
 
 RUN docker-php-ext-enable sqlsrv.so && docker-php-ext-enable pdo_sqlsrv.so
 
@@ -105,6 +124,9 @@ RUN apk add --no-cache --update python3 \
     py3-wheel \
     py3-virtualenv \
     python3-dev
+
+# Remove build dependencies
+RUN apk del build-dependencies
 
 COPY config/php.ini /usr/local/etc/php/
 COPY config/fpm.conf /usr/local/etc/php-fpm.d/zz-totara.conf
