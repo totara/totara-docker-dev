@@ -8,7 +8,7 @@ services:
   # docker-compose -f docker-compose.yml -f compose/nginx.yml -f compose/pgsql.yml -f compose/php.yml up -d pgsql php-7.3
 
   nodejs:
-    image: node:16
+    image: node:16-alpine
     container_name: totara_nodejs
     environment:
       TZ: ${TIME_ZONE}
@@ -28,7 +28,7 @@ services:
       - totara
 
   redis:
-    image: redis
+    image: redis:alpine
     # activate persistency
     command: "redis-server --appendonly yes"
     environment:
@@ -39,7 +39,7 @@ services:
       - totara
 
   memcached:
-    image: memcached
+    image: memcached:alpine
     environment:
       TZ: ${TIME_ZONE}
     networks:
