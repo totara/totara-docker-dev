@@ -560,6 +560,56 @@ services:
     networks:
       - totara
 
+  php-8.2:
+    image: totara/docker-dev-php82
+    container_name: totara_php82
+    working_dir: ${REMOTE_SRC}
+    environment:
+      CONTAINERNAME: php-8.2
+      HIST_FILE: /root/.bash_history
+      DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+      - $HOME/.bash_history:/root/.bash_history
+      - zsh-history:/root/.zsh_history
+      - ./shell:/root/custom_shell
+    depends_on:
+      - php-8.2-debug
+    networks:
+      - totara
+
+  php-8.2-cron:
+    image: totara/docker-dev-php82-cron
+    container_name: totara_php82_cron
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+      - ./cron.d:/etc/cron.d
+    networks:
+      - totara
+
+  php-8.2-debug:
+    image: totara/docker-dev-php82-debug
+    container_name: totara_php82_debug
+    working_dir: ${REMOTE_SRC}
+    environment:
+      CONTAINERNAME: php-8.2-debug
+      TZ: ${TIME_ZONE}
+      XDEBUG_CONFIG: client_host=${HOST_IP}
+      XDEBUG_SESSION: totara82
+      PHP_IDE_CONFIG: serverName=totara82
+      HIST_FILE: /root/.bash_history
+      DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+      - $HOME/.bash_history:/root/.bash_history
+      - zsh-history:/root/.zsh_history
+      - ./shell:/root/custom_shell
+    networks:
+      - totara
+
 volumes:
   totara-data:
   zsh-history:
