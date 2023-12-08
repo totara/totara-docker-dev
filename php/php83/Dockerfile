@@ -1,4 +1,4 @@
-FROM php:8.3-rc-fpm-bullseye
+FROM php:8.3-fpm-bullseye
 
 ARG TIME_ZONE=Pacific/Auckland
 
