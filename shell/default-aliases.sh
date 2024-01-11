@@ -89,8 +89,15 @@ totara_version() {
     preg_match(\"/release[\s]*=[\s]*'([\S]+)[^']+'/\", \$version_file, \$moodle_version_matches);
     \$version = end(\$totara_version_matches) ?: end(\$moodle_version_matches);
   "
+
+  version=$(php -r "$php_code echo \$version;")
+
   if [[ "$1" == "major" ]]; then
-    php -r "$php_code echo preg_replace(\"/^(\d{2}|[1-8]\.\d|9).+$/\", \"\$1\", \$version);"
+    if [[ "$version" =~ ^evergreen ]]; then
+      print "evergreen"
+    else
+      php -r "$php_code echo preg_replace(\"/^(\d{2}|[1-8]\.\d|9).+$/\", \"\$1\", \$version);"
+    fi
   else
     php -r "$php_code echo \$version;"
   fi
@@ -171,8 +178,10 @@ behat_parallel_count() {
 install_behat() {
   site_root || return 1
 
+  version=$(totara_version major)
+
   # Make sure this is a supported Totara version
-  if [[ $(echo "$(totara_version major) <= 2.5" | bc -l) == '1' ]]; then
+  if [[ $(echo "$version <= 2.5 && $version != \"evergreen\"" | bc -l) == '1' ]]; then
     print_error "This script doesn't currently support Totara 2.5 or earlier."
     print_info "If you know how to make it work, please contribute a solution."
     return 1
@@ -196,8 +205,10 @@ alias installbehat='install_behat'
 behat() {
   site_root || return 1
 
+  version=$(totara_version major)
+
   # Make sure this is a supported Totara version
-  if [[ $(echo "$(totara_version major) <= 2.5" | bc -l) == '1' ]]; then
+  if [[ $(echo "$version <= 2.5 && $version != \"evergreen\"" | bc -l) == '1' ]]; then
     print_error "This script doesn't currently support Totara 2.5 or earlier."
     print_info "If you know how to make it work, please contribute a solution."
     return 1
