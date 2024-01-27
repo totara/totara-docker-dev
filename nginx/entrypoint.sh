@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 # if there's no ssl certificate yet create it
 if [ ! -f "/etc/nginx/ssl/domain.crt" ]

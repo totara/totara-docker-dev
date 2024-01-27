@@ -13,12 +13,14 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get install apt-transport-https && \
     curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
     curl https://packages.microsoft.com/config/ubuntu/16.04/mssql-server-2017.list | tee /etc/apt/sources.list.d/mssql-server.list && \
-    apt-get update
+    rm -rf /var/lib/apt/lists/*
 
 # Install SQL Server which a prerequisite for the optional packages below.
 # Install full text search addons
 RUN export DEBIAN_FRONTEND=noninteractive && \
-    apt-get install -y mssql-server mssql-server-ha mssql-server-fts
+    apt-get update && \
+    apt-get install -y mssql-server mssql-server-ha mssql-server-fts && \
+    rm -rf /var/lib/apt/lists/*
 
 # we need en_US locales for MSSQL connection to work
 RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
@@ -33,7 +35,8 @@ RUN export DEBIAN_FRONTEND=noninteractive && \
     curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \
     curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list | tee /etc/apt/sources.list.d/msprod.list && \
     apt-get update && \
-    ACCEPT_EULA=Y apt-get install -y msodbcsql mssql-tools unixodbc-dev
+    ACCEPT_EULA=Y apt-get install -y msodbcsql mssql-tools unixodbc-dev && \
+    rm -rf /var/lib/apt/lists/*
 
 RUN mkdir /custom
 COPY custom /custom/
