@@ -1,4 +1,5 @@
 # Example compose file override
+version: "3.7"
 
 services:
   nginx:

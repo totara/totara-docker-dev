@@ -1,3 +1,4 @@
+version: "3.7"
 services:
 
   # this file only contains a small part of the container definitions
