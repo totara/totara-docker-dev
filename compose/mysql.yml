@@ -17,6 +17,22 @@ services:
     networks:
       - totara
 
+  mysql84:
+    image: mysql:8.4
+    container_name: totara_mysql84
+    ports:
+      - "3309:3306"
+    environment:
+      TZ: ${TIME_ZONE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PW}
+    depends_on:
+      - nginx
+    volumes:
+      - mysql84-data:/var/lib/mysql
+      - ./mysql84:/etc/mysql/conf.d
+    networks:
+      - totara
+
   mysql57:
     # MySQL 5.7 does not support multiple architectures. (MySQL 8.0 works fine)
     platform: linux/amd64
@@ -37,3 +53,4 @@ services:
 volumes:
   mysql-data:
   mysql80-data:
+  mysql84-data:
