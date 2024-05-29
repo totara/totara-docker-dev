@@ -136,3 +136,27 @@ services:
   php-8.1-debug:
     build: ./php/php81-debug
 
+  php-8.2:
+    build:
+      context: ./php/php82
+      args:
+        TIME_ZONE: ${TIME_ZONE}
+
+  php-8.2-cron:
+    build: ./php/php82-cron
+
+  php-8.2-debug:
+    build: ./php/php82-debug
+
+  php-8.3:
+    build:
+      context: ./php/php83
+      args:
+        TIME_ZONE: ${TIME_ZONE}
+
+  php-8.3-cron:
+    build: ./php/php83-cron
+
+  php-8.3-debug:
+    build: ./php/php83-debug
+
