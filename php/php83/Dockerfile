@@ -89,9 +89,9 @@ RUN echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile \
 
 # Workaround applied: https://github.com/microsoft/msphpsql/issues/1438#issuecomment-1444773949
 RUN pear config-set php_ini `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"` system \
-    && pecl install sqlsrv-5.10.1 pdo_sqlsrv-5.10.1 || \
+    && pecl install sqlsrv-5.12.0 pdo_sqlsrv-5.12.0 || \
     apt-get install -y --allow-downgrades odbcinst=2.3.7 odbcinst1debian2=2.3.7 unixodbc=2.3.7 unixodbc-dev=2.3.7 && \
-    pecl install sqlsrv-5.10.1 pdo_sqlsrv-5.10.1
+    pecl install sqlsrv-5.12.0 pdo_sqlsrv-5.12.0
 
 RUN docker-php-ext-enable sqlsrv.so && docker-php-ext-enable pdo_sqlsrv.so
 
