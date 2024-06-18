@@ -1,4 +1,3 @@
-version: "3.7"
 services:
 
   pgsql93:
@@ -149,6 +148,25 @@ services:
     networks:
       - totara
 
+  pgsql16:
+    image: postgres:16-alpine
+    container_name: totara_pgsql16
+    ports:
+      - "5445:5432"
+    environment:
+      TZ: ${TIME_ZONE}
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_HOST_AUTH_METHOD: trust
+    command:
+      postgres -c 'config_file=/etc/postgresql/postgresql.conf'
+    volumes:
+      - ./pgsql/my-postgres.conf:/etc/postgresql/postgresql.conf
+      - pgsql16-data:/var/lib/postgresql/data
+    depends_on:
+      - nginx
+    networks:
+      - totara
+
 volumes:
   pgsql93-data:
   pgsql96-data:
@@ -158,3 +176,4 @@ volumes:
   pgsql13-data:
   pgsql14-data:
   pgsql15-data:
+  pgsql16-data:

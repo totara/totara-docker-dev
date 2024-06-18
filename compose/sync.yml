@@ -1,4 +1,3 @@
-version: "3.7"
 services:
 
   nginx:
@@ -134,6 +133,30 @@ services:
       - totara-www-sync:${REMOTE_SRC}:nocopy
 
   php-8.1-debug:
+    volumes:
+      - totara-www-sync:${REMOTE_SRC}:nocopy
+
+  php-8.2:
+    volumes:
+      - totara-www-sync:${REMOTE_SRC}:nocopy
+
+  php-8.2-cron:
+    volumes:
+      - totara-www-sync:${REMOTE_SRC}:nocopy
+
+  php-8.2-debug:
+    volumes:
+      - totara-www-sync:${REMOTE_SRC}:nocopy
+
+  php-8.3:
+    volumes:
+      - totara-www-sync:${REMOTE_SRC}:nocopy
+
+  php-8.3-cron:
+    volumes:
+      - totara-www-sync:${REMOTE_SRC}:nocopy
+
+  php-8.3-debug:
     volumes:
       - totara-www-sync:${REMOTE_SRC}:nocopy
 
