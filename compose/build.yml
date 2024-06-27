@@ -16,6 +16,11 @@ services:
       context: ./mssql
       dockerfile: 2019/Dockerfile
 
+  mssql2022:
+    build:
+      context: ./mssql
+      dockerfile: 2022/Dockerfile
+
   php-5.3:
     build: ./php/php53
 

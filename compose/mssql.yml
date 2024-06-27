@@ -38,6 +38,26 @@ services:
     networks:
       - totara
 
+  mssql2022:
+    image: totara/docker-dev-mssql2022
+    # Mssql does not support multiple architectures
+    platform: linux/amd64
+    container_name: totara_mssql2022
+    ports:
+      - "1420:1433"
+    environment:
+      TZ: ${TIME_ZONE}
+      ACCEPT_EULA: Y
+      MSSQL_SA_PASSWORD: ${MSSQL_SA_PW}
+      MSSQL_PID: Developer
+    volumes:
+      - mssql2022-data:/var/opt/mssql
+    depends_on:
+      - nginx
+    networks:
+      - totara
+
 volumes:
   mssql-data:
   mssql2019-data:
+  mssql2022-data:
