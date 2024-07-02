@@ -30,9 +30,11 @@ RUN apt-get update && \
 # Copy the config across
 RUN mkdir -p /usr/config
 COPY 2022/custom /usr/config
-RUN chmod +x /usr/config/*.sh
+
+RUN chmod +x /usr/config/entrypoint.sh
+RUN chmod +x /usr/config/setup.sh
 
 WORKDIR /usr/config
 
 # Run SQL Server process
-CMD /bin/bash /usr/config/entrypoint.sh
+ENTRYPOINT ["./entrypoint.sh"]
