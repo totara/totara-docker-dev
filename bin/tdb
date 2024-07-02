@@ -331,7 +331,14 @@ elif [ "$db_type" == 'mysqli' ]; then
 #                MariaDB                 #
 ##########################################
 elif [ "$db_type" == 'mariadb' ]; then
-    db_sql_cmd="$db_command mysql -u\"$db_user\" -p\"$db_password\""
+    if [[ "$db_host" == 'mariadb1104' ]]; then
+        db_maria_cmd="mariadb"
+        db_maria_backup_cmd="mariadb-dump"
+    else
+        db_maria_cmd="mysql"
+        db_maria_backup_cmd="mysqldump"        
+    fi
+    db_sql_cmd="$db_command $db_maria_cmd -u\"$db_user\" -p\"$db_password\""
 
     # Create mariadb database
     if [ "$action" == 'create' ]; then
@@ -348,14 +355,14 @@ elif [ "$db_type" == 'mariadb' ]; then
 
     # Backup mariadb database
     elif [ "$action" == 'backup' ]; then
-        eval "$db_command mysqldump -u\"$db_user\" -p\"$db_password\" $db_name" > "$backup_file_local" || exit
+        eval "$db_command $db_maria_backup_cmd -u\"$db_user\" -p\"$db_password\" $db_name" > "$backup_file_local" || exit
 
     # Restore mariadb database
     elif [ "$action" == 'restore' ]; then
         eval "$db_sql_cmd -e \"DROP DATABASE IF EXISTS $db_name\""
         eval "$db_sql_cmd -e \"CREATE DATABASE $db_name DEFAULT CHARACTER SET $character_set COLLATE $collation\""
         docker cp "$backup_file_local" "$db_container":"$backup_file_remote"
-        $db_command sh -c "mysql -u\"$db_user\" -p\"$db_password\" $db_name < $backup_file_remote" >> /dev/null
+        $db_command sh -c "$db_maria_cmd -u\"$db_user\" -p\"$db_password\" $db_name < $backup_file_remote" >> /dev/null
         if [ "${PIPESTATUS[0]}" == '1' ]; then
             $db_command sh -c "rm $backup_file_remote"
             echo -e "\x1B[31mThere was an error while restoring $db_host database '$db_name' from file '$backup_file_local'\x1B[0m"
@@ -365,7 +372,7 @@ elif [ "$db_type" == 'mariadb' ]; then
 
     # Start mariadb shell
     elif [ "$action" == 'shell' ]; then
-        docker exec -it "$db_container" sh -c "mysql -u\"$db_user\" -p\"$db_password\" -A $db_name"
+        docker exec -it "$db_container" sh -c "$db_maria_cmd -u\"$db_user\" -p\"$db_password\" -A $db_name"
 
     # Handle unimplemented action
     else
