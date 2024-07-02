@@ -381,7 +381,7 @@ elif [ "$db_type" == 'mssql' ]; then
     if [[ "$php_container_name" == 'php-5.6' || "$php_container_name" == 'php-7.0' || "$php_container_name" == 'php-7.1' || "$php_container_name" == 'php-7.2' ]]; then
         sqlcmd="/opt/mssql-tools/bin/sqlcmd"
     else
-        sqlcmd="/opt/mssql-tools18/bin/sqlcmd -C"
+        sqlcmd="/opt/mssql-tools18/bin/sqlcmd -No -C"
     fi
 
     # Handles executing sql commands.

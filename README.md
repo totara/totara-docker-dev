@@ -19,7 +19,7 @@ Although this project started as a development environment for Totara Learn it c
  * [PostgreSQL](https://www.postgresql.org/) (9.3, 9.6, 10, 11, 12, 13, 14, 15, 16), 
  * [MariaDB](https://mariadb.org/) (10.2, 10.3, 10.4, 10.5, 10.6, 10.7, 10.8, 10.11), 
  * [MySQL](https://www.mysql.com/) (5.7, 8.0, 8.4), 
- * Microsoft SQL Server ([2017](https://www.microsoft.com/en-us/sql-server/sql-server-2017), [2019](https://www.microsoft.com/en-us/sql-server/sql-server-2019))
+ * Microsoft SQL Server ([2017](https://www.microsoft.com/en-us/sql-server/sql-server-2017), [2019](https://www.microsoft.com/en-us/sql-server/sql-server-2019), [2022](https://www.microsoft.com/en-us/sql-server/sql-server-2022))
  * [NodeJS](https://nodejs.org/) for building, developing and testing frontend code
  * A [PHPUnit](https://phpunit.de/) and [Behat](http://behat.org/en/latest/) setup to run tests (including [Selenium](https://www.seleniumhq.org/))
  * A [mailcatcher](https://mailcatcher.me/) instance to view sent emails
