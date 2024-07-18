@@ -45,7 +45,7 @@ for file in custom/*.yaml; do
     [[ -e "$file" ]] && files+=($file)
 done;
 
-command="docker-compose "
+command="docker compose "
 for file in "${files[@]}"; do
     command+=" -f ${file}"
 done
