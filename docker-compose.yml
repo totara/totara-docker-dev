@@ -4,7 +4,7 @@ services:
   # please check the compose files in the 'compose' folder
   # you should use the built in bin/ scripts to run commands as it makes your life easier
   # otherwise you need to run something like:
-  # docker-compose -f docker-compose.yml -f compose/nginx.yml -f compose/pgsql.yml -f compose/php.yml up -d pgsql php-7.3
+  # docker compose -f docker-compose.yml -f compose/nginx.yml -f compose/pgsql.yml -f compose/php.yml up -d pgsql php-7.3
 
   nodejs:
     image: node:20
