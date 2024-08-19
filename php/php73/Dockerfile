@@ -114,7 +114,7 @@ COPY config/php.ini /usr/local/etc/php/
 COPY config/fpm.conf /usr/local/etc/php-fpm.d/zz-totara.conf
 
 # Source each .sh file found in the /shell/ folder, always source the default_aliases.sh file first
-RUN echo 'if [[ -e "/root/custom_shell/default-aliases.sh" ]] then source "/root/custom_shell/default-aliases.sh"; fi' >> ~/.bashrc && \
+RUN echo 'if [[ -e "/root/custom_shell/default-aliases.sh" ]]; then source "/root/custom_shell/default-aliases.sh"; fi' >> ~/.bashrc && \
   echo 'for f in /root/custom_shell/*.sh; do [[ "$f" != "/root/custom_shell/default-aliases.sh" && -e "$f" ]] && source "$f"; done;' >> ~/.bashrc
 
 # Have the option of using the oh my zsh shell.
