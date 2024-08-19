@@ -34,8 +34,6 @@ elif [[ "$USE_MUTAGEN" == "1" || -f "$project_path/.use-mutagen" ]]; then
     files+=(
         "compose/sync.yml"
     )
-
-    printf "\e[1;33mWarning:\e[0m \033[0;33mBuilt-in Mutagen integration is deprecated and will be removed in a future version. Please use the new Docker Desktop extension: https://github.com/totara/totara-docker-dev/wiki/Mutagen\033[0m";
 fi
 
 for file in custom/*.yml; do
