@@ -138,7 +138,8 @@ $CFG->dboptions = array('dbpersist' => false, 'dbsocket' => false, 'dbport' => '
 // Ngrok uses a few different URLs, add if a new one is used
 $ngrok_urls = [
     'ngrok.io',
-    'ngrok-free.app'
+    'ngrok-free.app',
+    'ngrok.app',
 ];
 
 // Depending on the Ngrok version its hostname is stored in different server vars
