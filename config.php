@@ -311,15 +311,34 @@ if ($DOCKER_DEV->behat_parallel) {
     }
 }
 
-if ($DOCKER_DEV->major_version >= 10) {
+if ($DOCKER_DEV->major_version > 18) {
+    // Behat config for Totara 19 and higher
+    $CFG->behat_profiles['default'] = array(
+        'browser' => 'chrome',
+        'wd_host' => "http://$DOCKER_DEV->behat_host:4444/wd/hub",
+        'capabilities' => array(
+            'extra_capabilities' => array(
+                'goog:chromeOptions' => array(
+                    'args' => array(
+                        '--disable-background-timer-throttling',
+                        '--disable-backgrounding-occluded-windows'
+                    ),
+                    'excludeSwitches' => array(
+                        'enable-automation'
+                    ),
+                    'prefs' => array(
+                        'credentials_enable_service' => false,
+                    ),
+                )
+            )
+        )
+    );
+} else if ($DOCKER_DEV->major_version >= 10) {
     // Behat config for Totara 10+
     $CFG->behat_profiles['default'] = array(
         'browser' => 'chrome',
         'wd_host' => "http://$DOCKER_DEV->behat_host:4444/wd/hub",
         'capabilities' => array(
-            'browserName' => 'chrome',
-            'browserVersion' => '106.0',
-            'platform' => 'Linux',
             'extra_capabilities' => array(
                 'chromeOptions' => array(
                     'args' => array(
@@ -362,7 +381,7 @@ if ($DOCKER_DEV->major_version >= 10) {
                         'wd_host' => "http://$DOCKER_DEV->behat_host:4444/wd/hub",
                         'capabilities' => array(
                             'version' => '',
-                            'platform' => 'LINUX'
+                            'platform' => 'LINUX',
                         )
                     )
                 )
