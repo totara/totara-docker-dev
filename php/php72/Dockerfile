@@ -50,13 +50,16 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     && docker-php-ext-install -j$(nproc) gd \
     && rm -rf /var/lib/apt/lists/*
 
-RUN git clone https://github.com/tideways/php-profiler-extension.git \
-    && cd php-profiler-extension \
+RUN git clone https://github.com/longxinH/xhprof.git ./xhprof \
+    && cd xhprof \
+    && git checkout v2.3.10 \
+    && cd extension/ \
     && phpize \
     && ./configure \
     && make && make install
 
-RUN echo "extension=tideways_xhprof.so" >> /usr/local/etc/php/conf.d/tideways_xhprof.ini
+RUN echo "extension=xhprof.so" >> /usr/local/etc/php/conf.d/xhprof.ini \
+    && echo "xhprof.output_dir = /tmp/xhprof" >> /usr/local/etc/php/conf.d/xhprof.ini
 
 RUN pecl install -o -f redis \
     &&  rm -rf /tmp/pear \
@@ -113,7 +116,7 @@ COPY config/php.ini /usr/local/etc/php/
 COPY config/fpm.conf /usr/local/etc/php-fpm.d/zz-totara.conf
 
 # Source each .sh file found in the /shell/ folder, always source the default_aliases.sh file first
-RUN echo 'if [[ -e "/root/custom_shell/default-aliases.sh" ]] then source "/root/custom_shell/default-aliases.sh"; fi' >> ~/.bashrc && \
+RUN echo 'if [[ -e "/root/custom_shell/default-aliases.sh" ]]; then source "/root/custom_shell/default-aliases.sh"; fi' >> ~/.bashrc && \
   echo 'for f in /root/custom_shell/*.sh; do [[ "$f" != "/root/custom_shell/default-aliases.sh" && -e "$f" ]] && source "$f"; done;' >> ~/.bashrc
 
 # Have the option of using the oh my zsh shell.

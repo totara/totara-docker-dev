@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Standard boilerplate code for getting the paths and environment variables we need.
+script_path="$( cd "$(dirname "$0")" ; pwd -P )"
+project_path="$( cd $script_path && cd ..; pwd -P )"
+export $(grep -E -v '^#' $project_path/.env | xargs)
+
+if [[ -z "$1" ]]; then
+    $script_path/texec php "${INTERACTIVE_SHELL:-zsh}"
+else
+    # Quote command to be reused as shell input
+    command_str=$(printf " %q" "$@")
+    # Handle being called with a php script instead of a command
+    if [[ $1 == *.php ]]; then
+        command_str="php $command_str"
+    fi
+    $script_path/texec php bash -ic "$command_str"
+fi
