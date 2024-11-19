@@ -31,12 +31,14 @@ services:
       PHP_IDE_CONFIG: serverName=totara53
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
+      XDEBUG_MODE: debug # Change to profile to enable the profiler
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
+      - /tmp/profiler-out/:/tmp
     networks:
       - totara
 
@@ -71,12 +73,14 @@ services:
       PHP_IDE_CONFIG: serverName=totara54
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
+      XDEBUG_MODE: debug # Change to profile to enable the profiler
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
+      - /tmp/profiler-out/:/tmp
     networks:
       - totara
 
@@ -123,12 +127,14 @@ services:
       PHP_IDE_CONFIG: serverName=totara55
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
+      XDEBUG_MODE: debug # Change to profile to enable the profiler
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
+      - /tmp/profiler-out/:/tmp
     networks:
       - totara
 
@@ -175,12 +181,14 @@ services:
       PHP_IDE_CONFIG: serverName=totara56
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
+      XDEBUG_MODE: debug # Change to profile to enable the profiler
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
+      - /tmp/profiler-out/:/tmp
     networks:
       - totara
 
@@ -227,12 +235,14 @@ services:
       PHP_IDE_CONFIG: serverName=totara70
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
+      XDEBUG_MODE: debug # Change to profile to enable the profiler
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
+      - /tmp/profiler-out/:/tmp
     networks:
       - totara
 
@@ -279,12 +289,14 @@ services:
       PHP_IDE_CONFIG: serverName=totara71
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
+      XDEBUG_MODE: debug # Change to profile to enable the profiler
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
+      - /tmp/profiler-out/:/tmp
     networks:
       - totara
 
@@ -332,12 +344,14 @@ services:
       PHP_IDE_CONFIG: serverName=totara72
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
+      XDEBUG_MODE: debug # Change to profile to enable the profiler
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
+      - /tmp/profiler-out/:/tmp
     networks:
       - totara
 
@@ -385,12 +399,14 @@ services:
       PHP_IDE_CONFIG: serverName=totara73
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
+      XDEBUG_MODE: debug # Change to profile to enable the profiler
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
+      - /tmp/profiler-out/:/tmp
     networks:
       - totara
 
@@ -438,12 +454,14 @@ services:
       PHP_IDE_CONFIG: serverName=totara74
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
+      XDEBUG_MODE: debug # Change to profile to enable the profiler
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
+      - /tmp/profiler-out/:/tmp
     networks:
       - totara
 
@@ -490,12 +508,14 @@ services:
       PHP_IDE_CONFIG: serverName=totara80
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
+      XDEBUG_MODE: debug # Change to profile to enable the profiler
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
+      - /tmp/profiler-out/:/tmp
     networks:
       - totara
 
@@ -550,12 +570,14 @@ services:
       PHP_IDE_CONFIG: serverName=totara81
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
+      XDEBUG_MODE: debug # Change to profile to enable the profiler
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
+      - /tmp/profiler-out/:/tmp
     networks:
       - totara
 
@@ -600,12 +622,14 @@ services:
       PHP_IDE_CONFIG: serverName=totara82
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
+      XDEBUG_MODE: debug # Change to profile to enable the profiler
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
+      - /tmp/profiler-out/:/tmp
     networks:
       - totara
 
@@ -650,12 +674,14 @@ services:
       PHP_IDE_CONFIG: serverName=totara83
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
+      XDEBUG_MODE: debug # Change to profile to enable the profiler
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - $HOME/.bash_history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
+      - /tmp/profiler-out/:/tmp
     networks:
       - totara
 
