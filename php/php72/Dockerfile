@@ -61,11 +61,11 @@ RUN git clone https://github.com/longxinH/xhprof.git ./xhprof \
 RUN echo "extension=xhprof.so" >> /usr/local/etc/php/conf.d/xhprof.ini \
     && echo "xhprof.output_dir = /tmp/xhprof" >> /usr/local/etc/php/conf.d/xhprof.ini
 
-RUN pecl install -o -f redis \
+RUN pecl install -o -f redis-6.0.2 \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable redis
 
-RUN pecl install -o -f igbinary \
+RUN pecl install -o -f igbinary-3.1.6 \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable igbinary
 
