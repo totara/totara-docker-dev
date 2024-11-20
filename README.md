@@ -2,7 +2,7 @@
 
 [![Release](https://img.shields.io/github/v/release/totara/totara-docker-dev)](../../releases)
 [![Release Date](https://img.shields.io/github/release-date/totara/totara-docker-dev)](../../releases)
-[![Build Status](https://travis-ci.com/totara/totara-docker-dev.svg?branch=master)](https://travis-ci.com/totara/totara-docker-dev)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/totara/totara-docker-dev/release.yml)](../../actions/workflows/release.yml)
 [![Issues](https://img.shields.io/github/issues/totara/totara-docker-dev)](../../issues)
 [![License](https://img.shields.io/github/license/totara/totara-docker-dev)](../../LICENCE)
 
