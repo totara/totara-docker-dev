@@ -36,37 +36,35 @@ jobs:
     secrets: inherit
 
   build-php-images:
-    name: Build PHP base images
+    name: Build PHP images
+    uses: ./.github/workflows/build-php-images.yml
     strategy:
+      fail-fast: false
       matrix:
-        version: [53, 54, 55, 56, 70, 71, 72, 73, 80, 81, 82, 83]
-    uses: ./.github/workflows/build-image.yml
+        version: [73, 74, 80, 81, 82, 83]
     with:
-      image: php${{ matrix.version }}
-      context: ./php/php${{ matrix.version }}
+      version: ${{ matrix.version }}
     secrets: inherit
 
-  build-php-debug-images:
-    name: Build PHP debug images
-    needs: build-php-images
-    strategy:
-      matrix:
-        version: [53, 54, 55, 56, 70, 71, 72, 73, 80, 81, 82, 83]
+  build-legacy-php-base-image:
+    name: Build legacy PHP base image
     uses: ./.github/workflows/build-image.yml
     with:
-      image: php${{ matrix.version }}-debug
-      context: ./php/php${{ matrix.version }}-debug
+      image: php-base
+      context: ./php/base
+      multiarch: false
     secrets: inherit
 
-  build-php-cron-images:
-    name: Build PHP cron images
-    needs: build-php-images
+  build-legacy-php-images:
+    name: Build legacy PHP images
+    needs: build-legacy-php-base-image
+    uses: ./.github/workflows/build-php-images.yml
     strategy:
+      fail-fast: false
       matrix:
-        # Note: no cron container for v5.3
-        version: [54, 55, 56, 70, 71, 72, 73, 80, 81, 82, 83]
-    uses: ./.github/workflows/build-image.yml
+        version: [53, 54, 55, 56, 70, 71, 72]
     with:
-      image: php${{ matrix.version }}-cron
-      context: ./php/php${{ matrix.version }}-cron
+      version: ${{ matrix.version }}
+      cron: ${{ matrix.version != 53 }} # 5.3 doesn't have a cron container
+      multiarch: false
     secrets: inherit
