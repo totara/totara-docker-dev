@@ -12,7 +12,7 @@ services:
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
-      - $HOME/.bash_history:/root/.bash_history
+      - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
     depends_on:
@@ -34,7 +34,7 @@ services:
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
-      - $HOME/.bash_history:/root/.bash_history
+      - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
     networks:
@@ -52,7 +52,7 @@ services:
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
-      - $HOME/.bash_history:/root/.bash_history
+      - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
     depends_on:
@@ -74,7 +74,7 @@ services:
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
-      - $HOME/.bash_history:/root/.bash_history
+      - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
     networks:
@@ -104,7 +104,7 @@ services:
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
-      - $HOME/.bash_history:/root/.bash_history
+      - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
     depends_on:
@@ -126,7 +126,7 @@ services:
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
-      - $HOME/.bash_history:/root/.bash_history
+      - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
     networks:
@@ -156,7 +156,7 @@ services:
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
-      - $HOME/.bash_history:/root/.bash_history
+      - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
     depends_on:
@@ -178,7 +178,7 @@ services:
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
-      - $HOME/.bash_history:/root/.bash_history
+      - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
     networks:
@@ -208,7 +208,7 @@ services:
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
-      - $HOME/.bash_history:/root/.bash_history
+      - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
     depends_on:
@@ -230,7 +230,7 @@ services:
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
-      - $HOME/.bash_history:/root/.bash_history
+      - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
     networks:
@@ -260,7 +260,7 @@ services:
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
-      - $HOME/.bash_history:/root/.bash_history
+      - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
     depends_on:
@@ -282,7 +282,7 @@ services:
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
-      - $HOME/.bash_history:/root/.bash_history
+      - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
     networks:
@@ -312,7 +312,7 @@ services:
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
-      - $HOME/.bash_history:/root/.bash_history
+      - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
     depends_on:
@@ -335,7 +335,7 @@ services:
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
-      - $HOME/.bash_history:/root/.bash_history
+      - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
     networks:
@@ -365,7 +365,7 @@ services:
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
-      - $HOME/.bash_history:/root/.bash_history
+      - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
     depends_on:
@@ -388,7 +388,7 @@ services:
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
-      - $HOME/.bash_history:/root/.bash_history
+      - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
     networks:
@@ -418,7 +418,7 @@ services:
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
-      - $HOME/.bash_history:/root/.bash_history
+      - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
     depends_on:
@@ -441,7 +441,7 @@ services:
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
-      - $HOME/.bash_history:/root/.bash_history
+      - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
     networks:
@@ -470,7 +470,7 @@ services:
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
-      - $HOME/.bash_history:/root/.bash_history
+      - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
     depends_on:
@@ -493,7 +493,7 @@ services:
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
-      - $HOME/.bash_history:/root/.bash_history
+      - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
     networks:
@@ -520,7 +520,7 @@ services:
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
-      - $HOME/.bash_history:/root/.bash_history
+      - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
     depends_on:
@@ -553,7 +553,7 @@ services:
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
-      - $HOME/.bash_history:/root/.bash_history
+      - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
     networks:
@@ -570,7 +570,7 @@ services:
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
-      - $HOME/.bash_history:/root/.bash_history
+      - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
     depends_on:
@@ -603,7 +603,7 @@ services:
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
-      - $HOME/.bash_history:/root/.bash_history
+      - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
     networks:
@@ -620,7 +620,7 @@ services:
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
-      - $HOME/.bash_history:/root/.bash_history
+      - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
     depends_on:
@@ -653,7 +653,7 @@ services:
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
-      - $HOME/.bash_history:/root/.bash_history
+      - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
     networks:
@@ -661,4 +661,5 @@ services:
 
 volumes:
   totara-data:
+  bash-history:
   zsh-history:
