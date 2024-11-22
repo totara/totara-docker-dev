@@ -10,3 +10,6 @@ mutagen.yml.lock
 /custom/*.yaml
 /tools/.update
 .idea/
+.vscode/
+.DS_Store
+Thumbs.db
