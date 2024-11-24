@@ -136,17 +136,13 @@ $CFG->dboptions = array('dbpersist' => false, 'dbsocket' => false, 'dbport' => '
  * then please contribute what you did back to the docker-dev repository :)
  */
 // Ngrok uses a few different URLs, add if a new one is used
-$ngrok_urls = [
-    'ngrok.io',
-    'ngrok-free.app',
-    'ngrok.app',
-];
+$ngrok_urls = array('ngrok-free.app', 'ngrok.app');
 
 // Depending on the Ngrok version its hostname is stored in different server vars
-$ngrok_server_vars = [
-    $_SERVER['HTTP_X_FORWARDED_HOST'] ?? '',
-    $_SERVER['HTTP_X_ORIGINAL_HOST'] ?? '',
-];
+$ngrok_server_vars = array(
+    $_SERVER['HTTP_X_FORWARDED_HOST'] ?: '',
+    $_SERVER['HTTP_X_ORIGINAL_HOST'] ?: '',
+);
 
 $ngrok_hostname = '';
 foreach ($ngrok_server_vars as $server_var) {
