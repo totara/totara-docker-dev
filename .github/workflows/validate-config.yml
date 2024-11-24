@@ -1,0 +1,27 @@
+name: Validate that the example config.php has valid syntax
+
+on:
+  pull_request:
+    paths:
+      - 'config.php'
+
+jobs:
+  validate-config:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 1
+      - name: Set up PHP 8
+        uses: shivammathur/setup-php@c541c155eee45413f5b09a52248675b1a2575231 # v2.31.1
+        with:
+          php-version: 8.3
+      - name: Validate config.php syntax is compatible with PHP 8
+        run: php -l ./config.php
+      - name: Set up PHP 5.3
+        uses: shivammathur/setup-php@c541c155eee45413f5b09a52248675b1a2575231 # v2.31.1
+        with:
+          php-version: 5.3
+      - name: Validate config.php syntax is compatible with PHP 5.3
+        run: php -l ./config.php
