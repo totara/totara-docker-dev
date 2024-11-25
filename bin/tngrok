@@ -21,12 +21,8 @@ Usage Examples:
     exit;
 fi
 
-if [ -z $NGROK_REGION ]; then
-    NGROK_REGION="us"
-fi
-
 if [ ! -z $2 ]; then
     subdomain="-subdomain=$2"
 fi
 
-ngrok http --region=$NGROK_REGION $subdomain --host-header=rewrite "https://$1:8443"
+ngrok http $subdomain --host-header=rewrite "https://$1:8443"
