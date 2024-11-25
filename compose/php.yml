@@ -27,7 +27,7 @@ services:
     environment:
       CONTAINERNAME: php-5.3-debug
       TZ: ${TIME_ZONE}
-      HOST_IP: ${HOST_IP}
+      HOST_IP: ${HOST_IP:-host.docker.internal}
       PHP_IDE_CONFIG: serverName=totara53
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
@@ -39,6 +39,8 @@ services:
       - ./shell:/root/custom_shell
     networks:
       - totara
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
   php-5.4:
     image: totara/docker-dev-php54
@@ -67,7 +69,7 @@ services:
     environment:
       CONTAINERNAME: php-5.4-debug
       TZ: ${TIME_ZONE}
-      HOST_IP: ${HOST_IP}
+      HOST_IP: ${HOST_IP:-host.docker.internal}
       PHP_IDE_CONFIG: serverName=totara54
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
@@ -79,6 +81,8 @@ services:
       - ./shell:/root/custom_shell
     networks:
       - totara
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
   php-5.4-cron:
     image: totara/docker-dev-php54-cron
@@ -119,7 +123,7 @@ services:
     environment:
       CONTAINERNAME: php-5.5-debug
       TZ: ${TIME_ZONE}
-      XDEBUG_CONFIG: remote_host=${HOST_IP}
+      XDEBUG_CONFIG: remote_host=${HOST_IP:-host.docker.internal}
       PHP_IDE_CONFIG: serverName=totara55
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
@@ -131,6 +135,8 @@ services:
       - ./shell:/root/custom_shell
     networks:
       - totara
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
   php-5.5-cron:
     image: totara/docker-dev-php55-cron
@@ -171,7 +177,7 @@ services:
     environment:
       CONTAINERNAME: php-5.6-debug
       TZ: ${TIME_ZONE}
-      XDEBUG_CONFIG: remote_host=${HOST_IP}
+      XDEBUG_CONFIG: remote_host=${HOST_IP:-host.docker.internal}
       PHP_IDE_CONFIG: serverName=totara56
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
@@ -183,6 +189,8 @@ services:
       - ./shell:/root/custom_shell
     networks:
       - totara
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
   php-5.6-cron:
     image: totara/docker-dev-php56-cron
@@ -223,7 +231,7 @@ services:
     environment:
       CONTAINERNAME: php-7.0-debug
       TZ: ${TIME_ZONE}
-      XDEBUG_CONFIG: remote_host=${HOST_IP}
+      XDEBUG_CONFIG: remote_host=${HOST_IP:-host.docker.internal}
       PHP_IDE_CONFIG: serverName=totara70
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
@@ -235,6 +243,8 @@ services:
       - ./shell:/root/custom_shell
     networks:
       - totara
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
   php-7.0-cron:
     image: totara/docker-dev-php70-cron
@@ -275,7 +285,7 @@ services:
     environment:
       CONTAINERNAME: php-7.1-debug
       TZ: ${TIME_ZONE}
-      XDEBUG_CONFIG: remote_host=${HOST_IP}
+      XDEBUG_CONFIG: remote_host=${HOST_IP:-host.docker.internal}
       PHP_IDE_CONFIG: serverName=totara71
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
@@ -287,6 +297,8 @@ services:
       - ./shell:/root/custom_shell
     networks:
       - totara
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
   php-7.1-cron:
     image: totara/docker-dev-php71-cron
@@ -327,7 +339,7 @@ services:
     environment:
       CONTAINERNAME: php-7.2-debug
       TZ: ${TIME_ZONE}
-      XDEBUG_CONFIG: client_host=${HOST_IP}
+      XDEBUG_CONFIG: client_host=${HOST_IP:-host.docker.internal}
       XDEBUG_SESSION: totara72
       PHP_IDE_CONFIG: serverName=totara72
       HIST_FILE: /root/.bash_history
@@ -340,6 +352,8 @@ services:
       - ./shell:/root/custom_shell
     networks:
       - totara
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
   php-7.2-cron:
     image: totara/docker-dev-php72-cron
@@ -380,7 +394,7 @@ services:
     environment:
       CONTAINERNAME: php-7.3-debug
       TZ: ${TIME_ZONE}
-      XDEBUG_CONFIG: client_host=${HOST_IP}
+      XDEBUG_CONFIG: client_host=${HOST_IP:-host.docker.internal}
       XDEBUG_SESSION: totara73
       PHP_IDE_CONFIG: serverName=totara73
       HIST_FILE: /root/.bash_history
@@ -393,6 +407,8 @@ services:
       - ./shell:/root/custom_shell
     networks:
       - totara
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
   php-7.3-cron:
     image: totara/docker-dev-php73-cron
@@ -433,7 +449,7 @@ services:
     environment:
       CONTAINERNAME: php-7.4-debug
       TZ: ${TIME_ZONE}
-      XDEBUG_CONFIG: client_host=${HOST_IP}
+      XDEBUG_CONFIG: client_host=${HOST_IP:-host.docker.internal}
       XDEBUG_SESSION: totara74
       PHP_IDE_CONFIG: serverName=totara74
       HIST_FILE: /root/.bash_history
@@ -446,6 +462,8 @@ services:
       - ./shell:/root/custom_shell
     networks:
       - totara
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
   php-7.4-cron:
     image: totara/docker-dev-php74-cron
@@ -485,7 +503,7 @@ services:
     environment:
       CONTAINERNAME: php-8.0-debug
       TZ: ${TIME_ZONE}
-      XDEBUG_CONFIG: client_host=${HOST_IP}
+      XDEBUG_CONFIG: client_host=${HOST_IP:-host.docker.internal}
       XDEBUG_SESSION: totara80
       PHP_IDE_CONFIG: serverName=totara80
       HIST_FILE: /root/.bash_history
@@ -498,6 +516,8 @@ services:
       - ./shell:/root/custom_shell
     networks:
       - totara
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
   php-8.0-cron:
     image: totara/docker-dev-php80-cron
@@ -545,7 +565,7 @@ services:
     environment:
       CONTAINERNAME: php-8.1-debug
       TZ: ${TIME_ZONE}
-      XDEBUG_CONFIG: client_host=${HOST_IP}
+      XDEBUG_CONFIG: client_host=${HOST_IP:-host.docker.internal}
       XDEBUG_SESSION: totara81
       PHP_IDE_CONFIG: serverName=totara81
       HIST_FILE: /root/.bash_history
@@ -558,6 +578,8 @@ services:
       - ./shell:/root/custom_shell
     networks:
       - totara
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
   php-8.2:
     image: totara/docker-dev-php82
@@ -595,7 +617,7 @@ services:
     environment:
       CONTAINERNAME: php-8.2-debug
       TZ: ${TIME_ZONE}
-      XDEBUG_CONFIG: client_host=${HOST_IP}
+      XDEBUG_CONFIG: client_host=${HOST_IP:-host.docker.internal}
       XDEBUG_SESSION: totara82
       PHP_IDE_CONFIG: serverName=totara82
       HIST_FILE: /root/.bash_history
@@ -608,6 +630,8 @@ services:
       - ./shell:/root/custom_shell
     networks:
       - totara
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
   php-8.3:
     image: totara/docker-dev-php83
@@ -645,7 +669,7 @@ services:
     environment:
       CONTAINERNAME: php-8.3-debug
       TZ: ${TIME_ZONE}
-      XDEBUG_CONFIG: client_host=${HOST_IP}
+      XDEBUG_CONFIG: client_host=${HOST_IP:-host.docker.internal}
       XDEBUG_SESSION: totara83
       PHP_IDE_CONFIG: serverName=totara83
       HIST_FILE: /root/.bash_history
@@ -658,6 +682,8 @@ services:
       - ./shell:/root/custom_shell
     networks:
       - totara
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
 volumes:
   totara-data:
