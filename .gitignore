@@ -1,4 +1,5 @@
 .use-mutagen
+use-mutagen
 mutagen.yml.lock
 .env
 !.gitkeep
