@@ -16,7 +16,7 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
     depends_on:
-      - mailcatcher
+      - maildev
     networks:
       totara:
         aliases:

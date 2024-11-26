@@ -484,7 +484,7 @@ if ($development_mode) {
 //////////////////////////////////////////////////////////////////////////
 
 // Redirects any emails sent by the server
-$CFG->smtphosts = 'mailcatcher:25';
+$CFG->smtphosts = 'maildev:1025';
 
 $CFG->passwordpolicy = false;
 $CFG->tool_generator_users_password = '12345';

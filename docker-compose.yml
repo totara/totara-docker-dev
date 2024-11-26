@@ -17,6 +17,17 @@ services:
       - totara-data:${REMOTE_DATA}
     working_dir: ${REMOTE_SRC}
 
+  maildev:
+    image: maildev/maildev
+    container_name: totara_maildev
+    ports:
+      - "1080:1080"
+    environment:
+      TZ: ${TIME_ZONE}
+    networks:
+      - totara
+
+  # Deprecated - use maildev instead
   mailcatcher:
     image: tophfr/mailcatcher
     container_name: totara_mailcatcher
