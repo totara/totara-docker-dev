@@ -41,7 +41,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: [73, 74, 80, 81, 82, 83]
+        version: [73, 74, 80, 81, 82, 83, 84]
     with:
       version: ${{ matrix.version }}
     secrets: inherit
