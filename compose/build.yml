@@ -165,3 +165,15 @@ services:
   php-8.3-debug:
     build: ./php/php83-debug
 
+  php-8.4:
+    build:
+      context: ./php/php84
+      args:
+        TIME_ZONE: ${TIME_ZONE}
+
+  php-8.4-cron:
+    build: ./php/php84-cron
+
+  php-8.4-debug:
+    build: ./php/php84-debug
+
