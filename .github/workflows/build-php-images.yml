@@ -4,14 +4,6 @@ on:
       version:
         required: true
         type: string
-      debug:
-        required: false
-        type: boolean
-        default: true
-      cron:
-        required: false
-        type: boolean
-        default: true
       multiarch:
         required: false
         type: boolean
@@ -29,7 +21,6 @@ jobs:
 
   build-php-debug-image:
     name: Build PHP ${{ inputs.version }} debug image
-    if: ${{ inputs.debug == true }}
     needs: build-php-image
     uses: ./.github/workflows/build-image.yml
     with:
@@ -40,7 +31,6 @@ jobs:
 
   build-php-cron-image:
     name: Build cron image
-    if: ${{ inputs.cron == true }}
     needs: build-php-image
     uses: ./.github/workflows/build-image.yml
     with:

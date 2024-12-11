@@ -21,21 +21,6 @@ services:
       context: ./mssql
       dockerfile: 2022/Dockerfile
 
-  php-5.3:
-    build: ./php/php53
-
-  php-5.3-debug:
-    build: ./php/php53-debug
-
-  php-5.4:
-    build: ./php/php54
-
-  php-5.4-debug:
-    build: ./php/php54-debug
-
-  php-5.4-cron:
-    build: ./php/php54-cron
-
   php-5.5:
     build: ./php/php55
 

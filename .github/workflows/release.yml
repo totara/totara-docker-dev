@@ -46,25 +46,14 @@ jobs:
       version: ${{ matrix.version }}
     secrets: inherit
 
-  build-legacy-php-base-image:
-    name: Build legacy PHP base image
-    uses: ./.github/workflows/build-image.yml
-    with:
-      image: php-base
-      context: ./php/base
-      multiarch: false
-    secrets: inherit
-
   build-legacy-php-images:
     name: Build legacy PHP images
-    needs: build-legacy-php-base-image
     uses: ./.github/workflows/build-php-images.yml
     strategy:
       fail-fast: false
       matrix:
-        version: [53, 54, 55, 56, 70, 71, 72]
+        version: [55, 56, 70, 71, 72]
     with:
       version: ${{ matrix.version }}
-      cron: ${{ matrix.version != 53 }} # 5.3 doesn't have a cron container
       multiarch: false
     secrets: inherit
