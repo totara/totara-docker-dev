@@ -3,6 +3,7 @@ services:
   mariadb1104:
     image: mariadb:11.4
     container_name: totara_mariadb1104
+    restart: ${RESTART_POLICY:-no}
     ports:
       - "3316:3306"
     environment:
@@ -19,6 +20,7 @@ services:
   mariadb1011:
     image: mariadb:10.11
     container_name: totara_mariadb1011
+    restart: ${RESTART_POLICY:-no}
     ports:
       - "3315:3306"
     environment:
@@ -35,6 +37,7 @@ services:
   mariadb108:
     image: mariadb:10.8
     container_name: totara_mariadb108
+    restart: ${RESTART_POLICY:-no}
     ports:
       - "3312:3306"
     environment:
@@ -51,6 +54,7 @@ services:
   mariadb107:
     image: mariadb:10.7
     container_name: totara_mariadb107
+    restart: ${RESTART_POLICY:-no}
     ports:
       - "3311:3306"
     environment:
@@ -67,6 +71,7 @@ services:
   mariadb106:
     image: mariadb:10.6
     container_name: totara_mariadb106
+    restart: ${RESTART_POLICY:-no}
     ports:
       - "3310:3306"
     environment:
@@ -83,6 +88,7 @@ services:
   mariadb105:
     image: mariadb:10.5
     container_name: totara_mariadb105
+    restart: ${RESTART_POLICY:-no}
     ports:
       - "3307:3306"
     environment:
@@ -99,6 +105,7 @@ services:
   mariadb104:
     image: mariadb:10.4
     container_name: totara_mariadb104
+    restart: ${RESTART_POLICY:-no}
     ports:
       - "3309:3306"
     environment:
@@ -115,6 +122,7 @@ services:
   mariadb103:
     image: mariadb:10.3
     container_name: totara_mariadb103
+    restart: ${RESTART_POLICY:-no}
     ports:
       - "3305:3306"
     environment:
@@ -131,6 +139,7 @@ services:
   mariadb102:
     image: mariadb:10.2
     container_name: totara_mariadb102
+    restart: ${RESTART_POLICY:-no}
     ports:
       - "3302:3306"
     environment:

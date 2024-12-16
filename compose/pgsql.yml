@@ -3,6 +3,7 @@ services:
   pgsql93:
     image: postgres:9.3-alpine
     container_name: totara_pgsql93
+    restart: ${RESTART_POLICY:-no}
     ports:
       - "5493:5432"
     environment:
@@ -21,6 +22,7 @@ services:
   pgsql96:
     image: postgres:9.6-alpine
     container_name: totara_pgsql96
+    restart: ${RESTART_POLICY:-no}
     ports:
       - "5496:5432"
     environment:
@@ -40,6 +42,7 @@ services:
   pgsql10:
     image: postgres:10-alpine
     container_name: totara_pgsql10
+    restart: ${RESTART_POLICY:-no}
     ports:
       - "5410:5432"
     environment:
@@ -58,6 +61,7 @@ services:
   pgsql11:
     image: postgres:11-alpine
     container_name: totara_pgsql11
+    restart: ${RESTART_POLICY:-no}
     ports:
       - "5411:5432"
     environment:
@@ -76,6 +80,7 @@ services:
   pgsql12:
     image: postgres:12-alpine
     container_name: totara_pgsql12
+    restart: ${RESTART_POLICY:-no}
     ports:
       - "5432:5432"
     environment:
@@ -94,6 +99,7 @@ services:
   pgsql13:
     image: postgres:13-alpine
     container_name: totara_pgsql13
+    restart: ${RESTART_POLICY:-no}
     ports:
       - "5442:5432"
     environment:
@@ -113,6 +119,7 @@ services:
   pgsql14:
     image: postgres:14-alpine
     container_name: totara_pgsql14
+    restart: ${RESTART_POLICY:-no}
     ports:
       - "5443:5432"
     environment:
@@ -132,6 +139,7 @@ services:
   pgsql15:
     image: postgres:15-alpine
     container_name: totara_pgsql15
+    restart: ${RESTART_POLICY:-no}
     ports:
       - "5444:5432"
     environment:
@@ -151,6 +159,7 @@ services:
   pgsql16:
     image: postgres:16-alpine
     container_name: totara_pgsql16
+    restart: ${RESTART_POLICY:-no}
     ports:
       - "5445:5432"
     environment:
