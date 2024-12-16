@@ -3,6 +3,7 @@ services:
   apache:
     image: totara/docker-dev-apache
     container_name: totara_apache
+    restart: ${RESTART_POLICY:-no}
     environment:
       - TZ=${TIME_ZONE}
       - REMOTE_DATA

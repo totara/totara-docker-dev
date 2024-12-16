@@ -3,6 +3,7 @@ services:
     build:
       context: ${ML_TOTARA_PROJECT:?Set the path to your Totara project}/extensions/ml_service
       target: mlbase
+    restart: ${RESTART_POLICY:-no}
     init: true
     pull_policy: build
     environment:

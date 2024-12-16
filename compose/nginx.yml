@@ -3,6 +3,7 @@ services:
   nginx:
     image: totara/docker-dev-nginx
     container_name: totara_nginx
+    restart: ${RESTART_POLICY:-no}
     environment:
       - TZ=${TIME_ZONE}
       - REMOTE_DATA

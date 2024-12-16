@@ -5,6 +5,7 @@ services:
     # Mssql does not support multiple architectures
     platform: linux/amd64
     container_name: totara_mssql
+    restart: ${RESTART_POLICY:-no}
     ports:
       - "1433:1433"
     environment:
@@ -24,6 +25,7 @@ services:
     # Mssql does not support multiple architectures
     platform: linux/amd64
     container_name: totara_mssql2019
+    restart: ${RESTART_POLICY:-no}
     ports:
       - "1419:1433"
     environment:
@@ -43,6 +45,7 @@ services:
     # Mssql does not support multiple architectures
     platform: linux/amd64
     container_name: totara_mssql2022
+    restart: ${RESTART_POLICY:-no}
     ports:
       - "1420:1433"
     environment:

@@ -9,6 +9,7 @@ services:
   nodejs:
     image: node:20
     container_name: totara_nodejs
+    restart: ${RESTART_POLICY:-no}
     environment:
       TZ: ${TIME_ZONE}
     volumes:
@@ -19,6 +20,7 @@ services:
   mailcatcher:
     image: tophfr/mailcatcher
     container_name: totara_mailcatcher
+    restart: ${RESTART_POLICY:-no}
     ports:
       - "8080:80"
     environment:
@@ -28,6 +30,7 @@ services:
 
   redis:
     image: redis
+    restart: ${RESTART_POLICY:-no}
     # activate persistency
     command: "redis-server --appendonly yes"
     environment:
@@ -39,6 +42,7 @@ services:
 
   memcached:
     image: memcached
+    restart: ${RESTART_POLICY:-no}
     environment:
       TZ: ${TIME_ZONE}
     networks:
