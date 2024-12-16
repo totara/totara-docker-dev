@@ -163,6 +163,7 @@ services:
   sync:
     image: alpine:latest
     container_name: totara_sync
+    restart: ${RESTART_POLICY:-no}
     command: tail -f /dev/null
     volumes:
       - totara-www-sync:${REMOTE_SRC}:nocopy

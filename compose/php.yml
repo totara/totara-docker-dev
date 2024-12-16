@@ -3,6 +3,7 @@ services:
   php-5.3:
     image: totara/docker-dev-php53
     container_name: totara_php53
+    restart: ${RESTART_POLICY:-no}
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-5.3
@@ -23,6 +24,7 @@ services:
   php-5.3-debug:
     image: totara/docker-dev-php53-debug
     container_name: totara_php53_debug
+    restart: ${RESTART_POLICY:-no}
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-5.3-debug
@@ -43,6 +45,7 @@ services:
   php-5.4:
     image: totara/docker-dev-php54
     container_name: totara_php54
+    restart: ${RESTART_POLICY:-no}
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-5.4
@@ -63,6 +66,7 @@ services:
   php-5.4-debug:
     image: totara/docker-dev-php54-debug
     container_name: totara_php54_debug
+    restart: ${RESTART_POLICY:-no}
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-5.4-debug
@@ -83,6 +87,7 @@ services:
   php-5.4-cron:
     image: totara/docker-dev-php54-cron
     container_name: totara_php54_cron
+    restart: ${RESTART_POLICY:-no}
     environment:
       TZ: ${TIME_ZONE}
     volumes:
@@ -95,6 +100,7 @@ services:
   php-5.5:
     image: totara/docker-dev-php55
     container_name: totara_php55
+    restart: ${RESTART_POLICY:-no}
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-5.5
@@ -115,6 +121,7 @@ services:
   php-5.5-debug:
     image: totara/docker-dev-php55-debug
     container_name: totara_php55_debug
+    restart: ${RESTART_POLICY:-no}
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-5.5-debug
@@ -135,6 +142,7 @@ services:
   php-5.5-cron:
     image: totara/docker-dev-php55-cron
     container_name: totara_php55_cron
+    restart: ${RESTART_POLICY:-no}
     environment:
       TZ: ${TIME_ZONE}
     volumes:
@@ -147,6 +155,7 @@ services:
   php-5.6:
     image: totara/docker-dev-php56
     container_name: totara_php56
+    restart: ${RESTART_POLICY:-no}
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-5.6
@@ -167,6 +176,7 @@ services:
   php-5.6-debug:
     image: totara/docker-dev-php56-debug
     container_name: totara_php56_debug
+    restart: ${RESTART_POLICY:-no}
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-5.6-debug
@@ -187,6 +197,7 @@ services:
   php-5.6-cron:
     image: totara/docker-dev-php56-cron
     container_name: totara_php56_cron
+    restart: ${RESTART_POLICY:-no}
     environment:
       TZ: ${TIME_ZONE}
     volumes:
@@ -199,6 +210,7 @@ services:
   php-7.0:
     image: totara/docker-dev-php70
     container_name: totara_php70
+    restart: ${RESTART_POLICY:-no}
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-7.0
@@ -219,6 +231,7 @@ services:
   php-7.0-debug:
     image: totara/docker-dev-php70-debug
     container_name: totara_php70_debug
+    restart: ${RESTART_POLICY:-no}
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-7.0-debug
@@ -239,6 +252,7 @@ services:
   php-7.0-cron:
     image: totara/docker-dev-php70-cron
     container_name: totara_php70_cron
+    restart: ${RESTART_POLICY:-no}
     environment:
       TZ: ${TIME_ZONE}
     volumes:
@@ -251,6 +265,7 @@ services:
   php-7.1:
     image: totara/docker-dev-php71
     container_name: totara_php71
+    restart: ${RESTART_POLICY:-no}
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-7.1
@@ -271,6 +286,7 @@ services:
   php-7.1-debug:
     image: totara/docker-dev-php71-debug
     container_name: totara_php71_debug
+    restart: ${RESTART_POLICY:-no}
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-7.1-debug
@@ -291,6 +307,7 @@ services:
   php-7.1-cron:
     image: totara/docker-dev-php71-cron
     container_name: totara_php71_cron
+    restart: ${RESTART_POLICY:-no}
     environment:
       TZ: ${TIME_ZONE}
     volumes:
@@ -303,6 +320,7 @@ services:
   php-7.2:
     image: totara/docker-dev-php72
     container_name: totara_php72
+    restart: ${RESTART_POLICY:-no}
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-7.2
@@ -323,6 +341,7 @@ services:
   php-7.2-debug:
     image: totara/docker-dev-php72-debug
     container_name: totara_php72_debug
+    restart: ${RESTART_POLICY:-no}
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-7.2-debug
@@ -344,6 +363,7 @@ services:
   php-7.2-cron:
     image: totara/docker-dev-php72-cron
     container_name: totara_php72_cron
+    restart: ${RESTART_POLICY:-no}
     environment:
       TZ: ${TIME_ZONE}
     volumes:
@@ -356,6 +376,7 @@ services:
   php-7.3:
     image: totara/docker-dev-php73
     container_name: totara_php73
+    restart: ${RESTART_POLICY:-no}
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-7.3
@@ -376,6 +397,7 @@ services:
   php-7.3-debug:
     image: totara/docker-dev-php73-debug
     container_name: totara_php73_debug
+    restart: ${RESTART_POLICY:-no}
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-7.3-debug
@@ -397,6 +419,7 @@ services:
   php-7.3-cron:
     image: totara/docker-dev-php73-cron
     container_name: totara_php73_cron
+    restart: ${RESTART_POLICY:-no}
     environment:
       TZ: ${TIME_ZONE}
     volumes:
@@ -409,6 +432,7 @@ services:
   php-7.4:
     image: totara/docker-dev-php74
     container_name: totara_php74
+    restart: ${RESTART_POLICY:-no}
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-7.4
@@ -429,6 +453,7 @@ services:
   php-7.4-debug:
     image: totara/docker-dev-php74-debug
     container_name: totara_php74_debug
+    restart: ${RESTART_POLICY:-no}
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-7.4-debug
@@ -450,6 +475,7 @@ services:
   php-7.4-cron:
     image: totara/docker-dev-php74-cron
     container_name: totara_php74_cron
+    restart: ${RESTART_POLICY:-no}
     environment:
       TZ: ${TIME_ZONE}
     volumes:
@@ -462,6 +488,7 @@ services:
   php-8.0:
     image: totara/docker-dev-php80
     container_name: totara_php80
+    restart: ${RESTART_POLICY:-no}
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-8.0
@@ -481,6 +508,7 @@ services:
   php-8.0-debug:
     image: totara/docker-dev-php80-debug
     container_name: totara_php80_debug
+    restart: ${RESTART_POLICY:-no}
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-8.0-debug
@@ -502,6 +530,7 @@ services:
   php-8.0-cron:
     image: totara/docker-dev-php80-cron
     container_name: totara_php80_cron
+    restart: ${RESTART_POLICY:-no}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -512,6 +541,7 @@ services:
   php-8.1:
     image: totara/docker-dev-php81
     container_name: totara_php81
+    restart: ${RESTART_POLICY:-no}
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-8.1
@@ -531,6 +561,7 @@ services:
   php-8.1-cron:
     image: totara/docker-dev-php81-cron
     container_name: totara_php81_cron
+    restart: ${RESTART_POLICY:-no}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -541,6 +572,7 @@ services:
   php-8.1-debug:
     image: totara/docker-dev-php81-debug
     container_name: totara_php81_debug
+    restart: ${RESTART_POLICY:-no}
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-8.1-debug
@@ -562,6 +594,7 @@ services:
   php-8.2:
     image: totara/docker-dev-php82
     container_name: totara_php82
+    restart: ${RESTART_POLICY:-no}
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-8.2
@@ -581,6 +614,7 @@ services:
   php-8.2-cron:
     image: totara/docker-dev-php82-cron
     container_name: totara_php82_cron
+    restart: ${RESTART_POLICY:-no}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -591,6 +625,7 @@ services:
   php-8.2-debug:
     image: totara/docker-dev-php82-debug
     container_name: totara_php82_debug
+    restart: ${RESTART_POLICY:-no}
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-8.2-debug
@@ -612,6 +647,7 @@ services:
   php-8.3:
     image: totara/docker-dev-php83
     container_name: totara_php83
+    restart: ${RESTART_POLICY:-no}
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-8.3
@@ -631,6 +667,7 @@ services:
   php-8.3-cron:
     image: totara/docker-dev-php83-cron
     container_name: totara_php83_cron
+    restart: ${RESTART_POLICY:-no}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -641,6 +678,7 @@ services:
   php-8.3-debug:
     image: totara/docker-dev-php83-debug
     container_name: totara_php83_debug
+    restart: ${RESTART_POLICY:-no}
     working_dir: ${REMOTE_SRC}
     environment:
       CONTAINERNAME: php-8.3-debug
