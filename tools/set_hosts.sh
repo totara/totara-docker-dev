@@ -42,7 +42,7 @@ host_ip="127.0.0.1"
 php_versions=($(cat "$project_path/compose/php.yml" | sed -E -n 's/.*\php-([0-9]).([0-9])[^:]*:/\1\2/p' | uniq | sort))
 
 # Get the sub sites that we should also add host entries for
-sites=($(find "$LOCAL_SRC" -mindepth 2 -maxdepth 2 -name "version.php" -type f -exec dirname {} \; | sort | xargs -n 1 basename))
+sites=($(find "$LOCAL_SRC" -mindepth 2 -maxdepth 2 -name "config.php" -type f -exec dirname {} \; | sort | xargs -n 1 basename))
 
 hosts=""
 
