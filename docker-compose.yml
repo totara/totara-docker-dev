@@ -20,6 +20,7 @@ services:
   maildev:
     image: maildev/maildev
     container_name: totara_maildev
+    restart: ${RESTART_POLICY:-no}
     ports:
       - "1080:1080"
     environment:
