@@ -1,14 +1,14 @@
 # [![Totara](https://raw.githubusercontent.com/wiki/totara/totara-docker-dev/images/totara-small.png)](https://totaralearning.com) _Totara Docker Dev:_ A Totara Development Environment
 
-[![Release](https://img.shields.io/github/v/release/totara/totara-docker-dev)](../../releases)
-[![Release Date](https://img.shields.io/github/release-date/totara/totara-docker-dev)](../../releases)
+[![Release](https://img.shields.io/github/v/release/totara/totara-docker-dev)](https://github.com/totara/totara-docker-dev/releases)
+[![Release Date](https://img.shields.io/github/release-date/totara/totara-docker-dev)](https://github.com/totara/totara-docker-dev/releases)
 [![Build Status](https://img.shields.io/github/actions/workflow/status/totara/totara-docker-dev/release.yml)](../../actions/workflows/release.yml)
-[![Issues](https://img.shields.io/github/issues/totara/totara-docker-dev)](../../issues)
-[![License](https://img.shields.io/github/license/totara/totara-docker-dev)](../../LICENCE)
+[![Issues](https://img.shields.io/github/issues/totara/totara-docker-dev)](https://github.com/totara/totara-docker-dev/issues)
+[![License](https://img.shields.io/github/license/totara/totara-docker-dev)](LICENCE)
 
 This project aims to provide an easy way to start developing for Totara by providing a Docker setup.
 
-This setup was created and tested extensively on MacOS and Linux. It also works on Windows via WSL2.
+This setup was created and tested extensively on MacOS (Both Intel & Apple Silicon), Linux, and Windows via WSL2.
 
 Although this project started as a development environment for Totara Learn it can be adapted for use in any other PHP project.
 
@@ -31,7 +31,7 @@ Although this project started as a development environment for Totara Learn it c
 
 ## Installation & Usage
 
-**[See the wiki](../../wiki) for detailed documentation on installation and usage.**
+**[See the wiki](https://github.com/totara/totara-docker-dev/wiki) for detailed documentation on installation and usage.**
 
 ## Contribute
 
