@@ -180,13 +180,6 @@ install_behat() {
 
   version=$(totara_version major)
 
-  # Make sure this is a supported Totara version
-  if [[ $(echo "$version <= 2.5 && $version != \"evergreen\"" | bc -l) == '1' ]]; then
-    print_error "This script doesn't currently support Totara 2.5 or earlier."
-    print_info "If you know how to make it work, please contribute a solution."
-    return 1
-  fi
-
   local parallel_count=$(behat_parallel_count)
   if [[ $parallel_count != '0' || "$*" =~ "--parallel" ]]; then
     print_info "Initialising behat in parallel mode"
@@ -206,13 +199,6 @@ behat() {
   site_root || return 1
 
   version=$(totara_version major)
-
-  # Make sure this is a supported Totara version
-  if [[ $(echo "$version <= 2.5 && $version != \"evergreen\"" | bc -l) == '1' ]]; then
-    print_error "This script doesn't currently support Totara 2.5 or earlier."
-    print_info "If you know how to make it work, please contribute a solution."
-    return 1
-  fi
 
   # Behat.yml variables
   local behat_dataroot=$(config_var behat_dataroot)
