@@ -57,7 +57,7 @@ if [[ "$current_version_hash" == "$latest_version_hash" ]]; then
     return &> /dev/null || exit
 fi
 
-read -p "There is a newer version of totara-docker-dev available. Would you like to update? [Y/n] " confirm
+read -p "There is a newer version of totara-docker-dev available. Updating will stop all running containers. Would you like to update? [Y/n] " confirm
 if [[ "$confirm" == "y" || "$confirm" == "Y" ]]; then
     source "$project_path/tools/update.sh"
     # Containers have been stopped, so should quit out and not continue running whatever the command was.
