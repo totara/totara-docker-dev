@@ -2,7 +2,7 @@
 
 script_path=$( cd "$(dirname $0)" || exit; pwd -P )
 project_path=$( cd "$script_path" && cd ..; pwd -P )
-export $(grep -E -v '^#' "$project_path/.env" | xargs)
+set -a; source "$project_path/.env"; set +a
 
 # If this is being run inside WSL, then we need to modify the /etc/hosts file on Windows
 if [[ -f "/mnt/c/Windows/System32/drivers/etc/hosts" ]]; then

@@ -3,7 +3,7 @@
 if [[ -z "$LOCAL_SRC" ]]; then
     script_path=$( cd "$(dirname "$0")" || exit; pwd -P )
     project_path=$( cd "$script_path" && cd ..; pwd -P )
-    export $(grep -E -v '^#' "$project_path/.env" | xargs)
+    set -a; source "$project_path/.env"; set +a
 fi
 
 # We don't want to update it if:

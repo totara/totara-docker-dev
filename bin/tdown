@@ -3,7 +3,7 @@
 script_path="$( cd "$(dirname "$0")" ; pwd -P )"
 project_path="$( cd $script_path && cd ..; pwd -P )"
 
-export $(grep -E -v '^#' $project_path/.env | xargs)
+set -a; source "$project_path/.env"; set +a
 
 $script_path/tdocker down
 
