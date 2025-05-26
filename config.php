@@ -475,6 +475,11 @@ if ($development_mode) {
         'development_mode' => true
     );
 
+    // External API debug mode
+    $CFG->forced_plugin_settings['totara_api'] = array(
+        'response_debug' => 2, // 0 = None, 1 = Normal, 2 = Developer
+    );
+
 //    // Xhprof Profiling settings
 //    $CFG->profilingenabled = true;
 //    $CFG->profilingincluded = '*';
