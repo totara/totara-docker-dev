@@ -29,6 +29,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         aspell \
         libldap2-dev \
         libltdl-dev \
+        libpspell-dev \
     && docker-php-ext-install -j$(nproc) \
         zip \
         intl \
@@ -40,6 +41,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         mysqli \
         exif \
         ldap \
+        pspell \
     && docker-php-ext-configure gd \
             --with-freetype \
             --with-jpeg \
