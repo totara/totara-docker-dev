@@ -26,7 +26,7 @@ Although this project started as a development environment for Totara Learn it c
  * [Redis](https://redis.io/) for caching and/or session handling
  * [XHProf](https://github.com/tideways/php-xhprof-extension) for profiling
  * [XDebug](https://xdebug.org/) installed, ready for debugging with your favorite IDE
- * [Excimer](https://www.mediawiki.org/wiki/Excimer/) installed, for discovering performance problems.
+ * [Excimer](https://www.mediawiki.org/wiki/Excimer) installed, for discovering performance problems
  * A [Python](https://www.python.org/) instance to run the Totara Machine Learning service
  * Optimised for [Apple Silicon](../../wiki/Apple-Silicon-support)
 
