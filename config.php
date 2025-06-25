@@ -137,7 +137,7 @@ $CFG->dboptions = array('dbpersist' => false, 'dbsocket' => false, 'dbport' => '
  */
 
 // Matches URL with ngrok.app or ngrok-free.app
-$ngrok_hostname_regex = '/\b(?:ngrok-free\.app|ngrok\.app)\b/';
+$ngrok_hostname_regex = '/\b(?:ngrok-free\.app|ngrok\.app|ngrok\.pizza)\b/';
 if (!empty($_SERVER['HTTP_X_FORWARDED_HOST']) && preg_match($ngrok_hostname_regex, $_SERVER['HTTP_X_FORWARDED_HOST'])) {
     // Request came via ngrok
     $_SERVER['HTTP_HOST'] = $_SERVER['HTTP_X_FORWARDED_HOST'];
