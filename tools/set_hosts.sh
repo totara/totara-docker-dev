@@ -2,7 +2,7 @@
 
 script_path=$( cd "$(dirname $0)" || exit; pwd -P )
 project_path=$( cd "$script_path" && cd ..; pwd -P )
-export $(grep -E -v '^#' "$project_path/.env" | xargs)
+set -a; source "$project_path/.env"; set +a
 
 # If this is being run inside WSL, then we need to modify the /etc/hosts file on Windows
 if [[ -f "/mnt/c/Windows/System32/drivers/etc/hosts" ]]; then
@@ -11,8 +11,10 @@ else
   hosts_file="/etc/hosts"
 fi
 
+echo "Sudo access is required to update the hosts file"
+
 if ! sudo touch "$hosts_file" &> /dev/null; then
-  echo -e "\x1B[33m$hosts_file is not writable!\x1B[0m"
+  echo -e "\x1B[33mSudo access denied or the $hosts_file is not writable!\x1B[0m"
   exit
 fi
 

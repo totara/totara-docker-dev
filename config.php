@@ -118,6 +118,14 @@ if (!is_dir($CFG->dataroot)) {
 $CFG->dblibrary = 'native';
 $CFG->dboptions = array('dbpersist' => false, 'dbsocket' => false, 'dbport' => '');
 
+/**
+ * If using the docker dev SQL Server images, the servers are configured with self issued SSL certs
+ * They can be ignored/trusted for dev environments only.
+ */
+if ($CFG->dbtype == 'sqlsrv' || $CFG->dbtype == 'mssql') {
+    $CFG->dboptions['trustservercertificate'] = true;
+    $CFG->dboptions['encrypt'] = true;
+}
 
 
 //<editor-fold desc="wwwroot Configuration">
@@ -465,6 +473,11 @@ if ($development_mode) {
         'cache_js' => false,
         'cache_scss' => false,
         'development_mode' => true
+    );
+
+    // External API debug mode
+    $CFG->forced_plugin_settings['totara_api'] = array(
+        'response_debug' => 2, // 0 = None, 1 = Normal, 2 = Developer
     );
 
 //    // Xhprof Profiling settings

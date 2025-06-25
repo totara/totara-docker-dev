@@ -33,6 +33,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         libc-client-dev \
         libkrb5-dev \
         libssl-dev \
+        libpspell-dev \
     && docker-php-ext-install -j$(nproc) \
         zip \
         intl \
@@ -44,6 +45,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         mysqli \
         exif \
         ldap \
+        pspell \
     && docker-php-ext-configure gd \
             --with-freetype \
             --with-jpeg \
@@ -80,6 +82,10 @@ RUN pecl channel-update pecl.php.net && \
     pecl install -o -f imap \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable imap
+
+RUN pecl install -o -f excimer \
+    &&  rm -rf /tmp/pear \
+    &&  docker-php-ext-enable excimer
 
 # we need en_US locales for MSSQL connection to work
 # we need en_AU locales for behat to work

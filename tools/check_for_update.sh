@@ -3,7 +3,7 @@
 if [[ -z "$LOCAL_SRC" ]]; then
     script_path=$( cd "$(dirname "$0")" || exit; pwd -P )
     project_path=$( cd "$script_path" && cd ..; pwd -P )
-    export $(grep -E -v '^#' "$project_path/.env" | xargs)
+    set -a; source "$project_path/.env"; set +a
 fi
 
 # We don't want to update it if:
@@ -57,7 +57,7 @@ if [[ "$current_version_hash" == "$latest_version_hash" ]]; then
     return &> /dev/null || exit
 fi
 
-read -p "There is a newer version of totara-docker-dev available. Would you like to update? [Y/n] " confirm
+read -p "There is a newer version of totara-docker-dev available. Updating will stop all running containers. Would you like to update? [Y/n] " confirm
 if [[ "$confirm" == "y" || "$confirm" == "Y" ]]; then
     source "$project_path/tools/update.sh"
     # Containers have been stopped, so should quit out and not continue running whatever the command was.
