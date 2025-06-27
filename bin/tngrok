@@ -24,4 +24,8 @@ fi
 site="$1"
 shift
 
+if [[ ! $site == *.localhost ]]; then
+  site="$site.localhost"
+fi
+
 ngrok http --host-header=rewrite "$@" "https://$site:8443"
