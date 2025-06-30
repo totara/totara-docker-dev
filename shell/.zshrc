@@ -14,12 +14,20 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 
-POWERLEVEL9K_MODE='nerdfont-complete'
+if [ "${USE_ZSH_NERDFONT}" = "1" ]; then
+    POWERLEVEL9K_MODE='nerdfont-complete'
+else
+    POWERLEVEL9K_MODE=powerline
+fi
 
 # Shows logo and php version of the container
 zsh_php_container_name(){
-    local phpicon='\ue608'
-    echo -n "${phpicon} ${CONTAINERNAME}"
+    if [ "${USE_ZSH_NERDFONT}" = "1" ]; then
+        local phpicon='\ue608'
+        echo -n "${phpicon} ${CONTAINERNAME}"
+    else
+        echo -n "$CONTAINERNAME"
+    fi
 }
 POWERLEVEL9K_CUSTOM_CONTAINER="zsh_php_container_name"
 POWERLEVEL9K_CUSTOM_CONTAINER_BACKGROUND="103"
@@ -33,8 +41,12 @@ zsh_db_host(){
         print_error 'Incompatible PHP version or invalid config.php!'
         exit
     fi
-    local dbicon='\uf1c0'
-    echo -n "${dbicon} ${dbhost}"
+    if [ "${USE_ZSH_NERDFONT}" = "1" ]; then
+        local dbicon='\uf1c0'
+        echo -n "${dbicon} ${dbhost}"
+    else
+        echo -n "$dbhost";
+    fi
 }
 POWERLEVEL9K_CUSTOM_DB="zsh_db_host"
 POWERLEVEL9K_CUSTOM_DB_BACKGROUND="043"
@@ -43,8 +55,12 @@ POWERLEVEL9K_CUSTOM_DB_FOREGROUND="black"
 # Shows the totara site version if there is a config.php/version.php in the directory.
 zsh_totara_version(){
     is_site_root || exit
-    local totaraicon='\uf829'
-    echo -n "${totaraicon} $(totara_version)"
+    if [ "${USE_ZSH_NERDFONT}" = "1" ]; then
+        local totaraicon='\uf829'
+        echo -n "${totaraicon} $(totara_version)"
+    else
+        echo -n "$(totara_version)"
+    fi
 }
 POWERLEVEL9K_CUSTOM_TOTARA="zsh_totara_version"
 POWERLEVEL9K_CUSTOM_TOTARA_BACKGROUND="106"
@@ -58,7 +74,11 @@ zsh_dir_name(){
     if [[ -z "$dir" ]]; then
         dir="$dirfull";
     fi
-    echo -n "${diricon} ${dir}"
+    if [ "${USE_ZSH_NERDFONT}" = "1" ]; then
+        echo -n "${diricon} ${dir}"
+    else
+        echo -n "${dir}"
+    fi
 }
 POWERLEVEL9K_CUSTOM_DIR="zsh_dir_name"
 POWERLEVEL9K_CUSTOM_DIR_BACKGROUND="031"
