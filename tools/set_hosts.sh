@@ -4,6 +4,8 @@ script_path=$( cd "$(dirname $0)" || exit; pwd -P )
 project_path=$( cd "$script_path" && cd ..; pwd -P )
 set -a; source "$project_path/.env"; set +a
 
+echo -e "\x1B[31mNote: This script is deprecated and will be removed in a future version.\nPlease instead visit your sites by adding .localhost to the domain.\nFor example: http://integration.totara83.localhost\x1B[0m\n"
+
 # If this is being run inside WSL, then we need to modify the /etc/hosts file on Windows
 if [[ -f "/mnt/c/Windows/System32/drivers/etc/hosts" ]]; then
   hosts_file="/mnt/c/Windows/System32/drivers/etc/hosts"
