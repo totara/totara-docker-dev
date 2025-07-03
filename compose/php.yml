@@ -10,7 +10,7 @@ services:
       TZ: ${TIME_ZONE}
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
-      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT}
+      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT:-0}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -34,7 +34,7 @@ services:
       PHP_IDE_CONFIG: serverName=totara53
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
-      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT}
+      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT:-0}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -54,7 +54,7 @@ services:
       TZ: ${TIME_ZONE}
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
-      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT}
+      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT:-0}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -78,7 +78,7 @@ services:
       PHP_IDE_CONFIG: serverName=totara54
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
-      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT}
+      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT:-0}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -111,7 +111,7 @@ services:
       TZ: ${TIME_ZONE}
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
-      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT}
+      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT:-0}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -135,7 +135,7 @@ services:
       PHP_IDE_CONFIG: serverName=totara55
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
-      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT}
+      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT:-0}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -168,7 +168,7 @@ services:
       TZ: ${TIME_ZONE}
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
-      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT}
+      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT:-0}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -192,7 +192,7 @@ services:
       PHP_IDE_CONFIG: serverName=totara56
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
-      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT}
+      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT:-0}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -225,7 +225,7 @@ services:
       TZ: ${TIME_ZONE}
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
-      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT}
+      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT:-0}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -249,7 +249,7 @@ services:
       PHP_IDE_CONFIG: serverName=totara70
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
-      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT}
+      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT:-0}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -282,7 +282,7 @@ services:
       TZ: ${TIME_ZONE}
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
-      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT}
+      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT:-0}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -306,7 +306,7 @@ services:
       PHP_IDE_CONFIG: serverName=totara71
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
-      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT}
+      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT:-0}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -339,7 +339,7 @@ services:
       TZ: ${TIME_ZONE}
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
-      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT}
+      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT:-0}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -364,7 +364,7 @@ services:
       PHP_IDE_CONFIG: serverName=totara72
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
-      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT}
+      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT:-0}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -397,7 +397,7 @@ services:
       TZ: ${TIME_ZONE}
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
-      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT}
+      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT:-0}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -422,7 +422,7 @@ services:
       PHP_IDE_CONFIG: serverName=totara73
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
-      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT}
+      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT:-0}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -455,7 +455,7 @@ services:
       TZ: ${TIME_ZONE}
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
-      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT}
+      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT:-0}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -480,7 +480,7 @@ services:
       PHP_IDE_CONFIG: serverName=totara74
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
-      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT}
+      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT:-0}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -512,7 +512,7 @@ services:
       CONTAINERNAME: php-8.0
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
-      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT}
+      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT:-0}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -537,7 +537,7 @@ services:
       PHP_IDE_CONFIG: serverName=totara80
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
-      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT}
+      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT:-0}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -567,7 +567,7 @@ services:
       CONTAINERNAME: php-8.1
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
-      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT}
+      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT:-0}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -603,7 +603,7 @@ services:
       PHP_IDE_CONFIG: serverName=totara81
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
-      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT}
+      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT:-0}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -622,7 +622,7 @@ services:
       CONTAINERNAME: php-8.2
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
-      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT}
+      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT:-0}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -658,7 +658,7 @@ services:
       PHP_IDE_CONFIG: serverName=totara82
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
-      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT}
+      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT:-0}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -677,7 +677,7 @@ services:
       CONTAINERNAME: php-8.3
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
-      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT}
+      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT:-0}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -713,7 +713,7 @@ services:
       PHP_IDE_CONFIG: serverName=totara83
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
-      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT}
+      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT:-0}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -732,7 +732,7 @@ services:
       CONTAINERNAME: php-8.4
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
-      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT}
+      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT:-0}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -766,7 +766,7 @@ services:
       PHP_IDE_CONFIG: serverName=totara84
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
-      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT}
+      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT:-0}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
