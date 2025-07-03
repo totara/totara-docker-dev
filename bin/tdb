@@ -11,28 +11,40 @@ helpers_path="$project_path/bin/helpers"
 
 source "$project_path/tools/check_for_update.sh"
 
-# Handle any flags that have been specified
-flags=(
-  "-i"
-  "--ignore-dataroot"
-  "-f"
-  "--force"
-  "-b"
-  "--totara-box"
-)
+# Initialize flags
 ignore_dataroot=0
 force_backup=0
 for_totara_box=0
-while [[ " ${flags[@]} " =~ " $1 " ]]; do
-  if [[ "$1" == "-i" || "$1" == "--ignore-dataroot" ]]; then
-    ignore_dataroot=1
-  elif [[ "$1" == "-f" || "$1" == "--force" ]]; then
-    force_backup=1
-  elif [[ "$1" == "-b" || "$1" == "--totara-box" ]]; then
-    for_totara_box=1
-  fi
-  shift
+
+# Parse arguments
+positional=()
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -i|--ignore-dataroot)
+      ignore_dataroot=1
+      shift
+      ;;
+    -f|--force)
+      force_backup=1
+      shift
+      ;;
+    -b|--totara-box)
+      for_totara_box=1
+      shift
+      ;;
+    -*)
+      echo "Unknown option: $1"
+      exit 1
+      ;;
+    *)
+      positional+=("$1")
+      shift
+      ;;
+  esac
 done
+
+# Restore positional arguments
+set -- "${positional[@]}"
 
 if ! php --version &> /dev/null; then
     echo "PHP must be installed locally to use the tdb command."
@@ -40,8 +52,8 @@ if ! php --version &> /dev/null; then
     exit
 fi
 
-# Print help info
-action=$1
+# Define valid actions
+action="${1:-}"
 action_options=(
     create
     recreate
@@ -50,6 +62,12 @@ action_options=(
     restore
     shell
 )
+if [[ ! " ${action_options[*]} " =~ " ${action} " ]]; then
+  echo -e "\x1B[33mError: Invalid action '${action}'. Must be one of: ${action_options[*]}\x1B[0m"
+  exit 1
+fi
+
+# Print help info
 if [[ -z $action || ! " ${action_options[@]} " =~ " ${action} " ]]; then
     echo "Helper for interacting with your totara database.
 It detects your database engine via your config.php, so if you have multiple sites
@@ -73,7 +91,7 @@ Options:
 Examples:
   $script_name create                                // Will create a database with the name defined in your config.php if it doesn't already exist
   $script_name drop unt_totara13                     // Will drop the database with the name 'unt_totara13'
-  $script_name -i backup                             // Will backup the database but not the dataroot to backup directory specified in the .env file
+  $script_name backup --ignore-dataroot              // Will backup the database but not the dataroot to backup directory specified in the .env file
   $script_name backup mydatabasename myalias         // Will backup the database 'mydatabasename' and use 'myalias' as a name for the backup files
   $script_name restore totara13 myalias              // Will restore the database dumped with the alias 'myalias' into the 'totara13' database
 "
@@ -249,7 +267,7 @@ if [ "$db_type" == 'pgsql' ]; then
 
     # Restore pgsql database
     elif [ "$action" == 'restore' ]; then
-        docker cp "$backup_file_local" "$db_container":"$backup_file_remote"
+        docker cp --quiet "$backup_file_local" "$db_container":"$backup_file_remote"
         $db_command psql -U "$db_user" -o /dev/null -c "SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname = '$db_name'"
         $db_command dropdb -U "$db_user" --if-exists "$db_name"
         $db_command createdb -U "$db_user" -T template1 -E UTF-8 "$db_name"
@@ -301,14 +319,14 @@ elif [ "$db_type" == 'mysqli' ]; then
     # Backup mysql database
     elif [ "$action" == 'backup' ]; then
         eval "$db_command sh -c 'export MYSQL_PWD=$db_password; mysqldump -u\"$db_user\" $db_name > $backup_file_remote'" || exit
-        docker cp "$db_container":"$backup_file_remote" "$backup_file_local"
+        docker cp --quiet "$db_container":"$backup_file_remote" "$backup_file_local"
         $db_command sh -c "rm $backup_file_remote"
 
     # Restore mysql database
     elif [ "$action" == 'restore' ]; then
         db_sql_cmd "DROP DATABASE IF EXISTS $db_name"
         db_sql_cmd "CREATE DATABASE $db_name DEFAULT CHARACTER SET $character_set COLLATE $collation"
-        docker cp "$backup_file_local" "$db_container":"$backup_file_remote"
+        docker cp --quiet "$backup_file_local" "$db_container":"$backup_file_remote"
         $db_command sh -c "export MYSQL_PWD=$db_password; mysql -u\"$db_user\" $db_name < $backup_file_remote" >> /dev/null
         if [ "${PIPESTATUS[0]}" == '1' ]; then
             $db_command sh -c "rm $backup_file_remote"
@@ -361,7 +379,7 @@ elif [ "$db_type" == 'mariadb' ]; then
     elif [ "$action" == 'restore' ]; then
         eval "$db_sql_cmd -e \"DROP DATABASE IF EXISTS $db_name\""
         eval "$db_sql_cmd -e \"CREATE DATABASE $db_name DEFAULT CHARACTER SET $character_set COLLATE $collation\""
-        docker cp "$backup_file_local" "$db_container":"$backup_file_remote"
+        docker cp --quiet "$backup_file_local" "$db_container":"$backup_file_remote"
         $db_command sh -c "$db_maria_cmd -u\"$db_user\" -p\"$db_password\" $db_name < $backup_file_remote" >> /dev/null
         if [ "${PIPESTATUS[0]}" == '1' ]; then
             $db_command sh -c "rm $backup_file_remote"
@@ -422,12 +440,12 @@ elif [ "$db_type" == 'mssql' ]; then
     # Backup mssql database
     elif [ "$action" == 'backup' ]; then
         db_sql_cmd "BACKUP DATABASE $db_name TO DISK='$backup_file_remote'" || exit
-        docker cp "$db_container":"$backup_file_remote" "$backup_file_local"
+        docker cp --quiet "$db_container":"$backup_file_remote" "$backup_file_local"
         $db_command sh -c "rm $backup_file_remote"
 
     # Restore mssql database
     elif [ "$action" == 'restore' ]; then
-        docker cp "$backup_file_local" "$db_container":"$backup_file_remote"
+        docker cp --quiet "$backup_file_local" "$db_container":"$backup_file_remote"
         db_sql_cmd "RESTORE DATABASE $db_name FROM DISK='$backup_file_remote' WITH REPLACE" "$db_command sh -c \"rm $backup_file_remote\"" || exit
 
     # Start mssql shell
@@ -461,7 +479,7 @@ elif [ "$action" == 'backup' ]; then
 
     if [ "$ignore_dataroot" == "0" ]; then
         $php_command sh -c "cd $dataroot && zip -0 -r $backup_dataroot_remote ." >> /dev/null
-        docker cp "$php_container":"$backup_dataroot_remote" "$backup_dataroot_local"
+        docker cp --quiet "$php_container":"$backup_dataroot_remote" "$backup_dataroot_local"
         $php_command sh -c "rm $backup_dataroot_remote"
         echo -e "\x1B[2mSuccessfully backed up dataroot to \x1B[0m\x1B[4m\x1B[37m$backup_dataroot_local\x1B[0m"
     fi
@@ -470,7 +488,7 @@ elif [ "$action" == 'restore' ]; then
     echo -e "\x1B[0m\x1B[32mSuccessfully restored \x1B[36m$db_host\x1B[32m database \x1B[34m$db_name\x1B[32m from \x1B[39m\x1B[4m$backup_file_local\x1B[0m"
 
     if [ "$ignore_dataroot" == "0" ]; then
-        docker cp "$backup_dataroot_local" "$php_container":"$backup_dataroot_remote"
+        docker cp --quiet "$backup_dataroot_local" "$php_container":"$backup_dataroot_remote"
         $php_command sh -c "\
             cd $dataroot_dir && \
             rm -rf $dataroot_name && \
