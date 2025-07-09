@@ -349,12 +349,12 @@ elif [ "$db_type" == 'mysqli' ]; then
 #                MariaDB                 #
 ##########################################
 elif [ "$db_type" == 'mariadb' ]; then
-    if [[ "$db_host" == 'mariadb1104' ]]; then
-        db_maria_cmd="mariadb"
-        db_maria_backup_cmd="mariadb-dump"
-    else
+    if [[ "$db_host" == mariadb10* ]]; then
         db_maria_cmd="mysql"
-        db_maria_backup_cmd="mysqldump"        
+        db_maria_backup_cmd="mysqldump"
+    else
+        db_maria_cmd="mariadb"
+        db_maria_backup_cmd="mariadb-dump"        
     fi
     db_sql_cmd="$db_command $db_maria_cmd -u\"$db_user\" -p\"$db_password\""
 

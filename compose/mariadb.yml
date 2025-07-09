@@ -1,5 +1,22 @@
 services:
 
+  mariadb1108:
+    image: mariadb:11.8
+    container_name: totara_mariadb1108
+    restart: ${RESTART_POLICY:-no}
+    ports:
+      - "3317:3306"
+    environment:
+      TZ: ${TIME_ZONE}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PW}
+    volumes:
+      - mariadb1108-data:/var/lib/mysql
+      - ./mariadb:/etc/mysql/conf.d
+    depends_on:
+      - nginx
+    networks:
+      - totara
+
   mariadb1104:
     image: mariadb:11.4
     container_name: totara_mariadb1104
@@ -155,6 +172,7 @@ services:
 
 volumes:
   mariadb-data:
+  mariadb1108-data:
   mariadb1104-data:
   mariadb1011-data:
   mariadb108-data:
