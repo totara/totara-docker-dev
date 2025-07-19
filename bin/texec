@@ -17,7 +17,7 @@ fi
 
 # If just 'php' is specified, then dynamically work out which one to actually use based upon the site composer.json
 if [[ "$container" == "php" ]]; then
-    if [[ ! -f "$local_path/version.php" ]]; then
+    if [[ ! -f "$local_path/config.php" ]]; then
         echo "This command must be run from a Totara site directory if 'php' is specified for the container"
         exit 1
     fi

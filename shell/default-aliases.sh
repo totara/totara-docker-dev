@@ -32,7 +32,7 @@ run_totara_cmd() {
 
 # Is this directory the root of a Totara/Moodle site?
 is_site_root() {
-  [[ -f './config.php' && -f './version.php' ]] && return 0 || return 1
+  [[ -f './config.php' ]] && return 0 || return 1
 }
 
 # cd into the root directory of the Totara site, or print an error message if it couldn't be found.

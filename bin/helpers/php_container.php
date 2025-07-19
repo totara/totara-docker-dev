@@ -37,7 +37,7 @@ $php_containers_available = array_reverse($php_containers_available);
 
 // Get the versions to use from the site composer.json (if it exists)
 $matches = array();
-$composer_json = json_decode(file_get_contents("$site_path/composer.json"));
+$composer_json = json_decode(@file_get_contents("$site_path/composer.json"));
 if (isset($composer_json->require->php)) {
     // Extract the PHP versions we can use for Totara
     $versions = $composer_json->require->php;
@@ -51,7 +51,7 @@ if (isset($composer_json->require->php)) {
     $min_comparator = '>=';
     $min_version = '7.1';
     $max_comparator = '<=';
-    $max_version = '7.3';
+    $max_version = '7.4';
 }
 
 // See if any supported containers are currently running - it's faster to just use what is available than upping a new container.

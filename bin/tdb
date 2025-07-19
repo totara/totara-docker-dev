@@ -49,6 +49,7 @@ action_options=(
     backup
     restore
     shell
+    cmd
 )
 if [[ -z $action || ! " ${action_options[@]} " =~ " ${action} " ]]; then
     echo "Helper for interacting with your totara database.
@@ -64,6 +65,7 @@ Actions:
   backup       Dump database to a backup file
   restore      Restore database from a backup file
   shell        Start a tty session for a database
+  cmd          Pipe input directly to database
 
 Options:
   -i, --ignore-dataroot    Ignore the dataroot directory when backing up and restoring.
@@ -133,7 +135,7 @@ db_container_name="totara_${db_host}"
 db_containers=($(docker ps --filter "name=$db_host" --format '{{.ID}} {{.Names}}' | grep "$db_container_name" | xargs))
 if [ -z $db_containers ]; then
     tup "$db_host"
-    echo -e "\x1B[2mWaiting 10 seconds for dbms to start up\x1B[0m"
+    echo -e "\x1B[2mWaiting 10 seconds for dbms $db_host to start up\x1B[0m"
     sleep 10
     db_containers=($(docker ps --filter "name=$db_host" --format '{{.ID}} {{.Names}}' | grep "$db_container_name" | xargs))
 fi
@@ -321,6 +323,10 @@ elif [ "$db_type" == 'mysqli' ]; then
     elif [ "$action" == 'shell' ]; then
         docker exec -it "$db_container" sh -c "export MYSQL_PWD=$db_password; mysql -u\"$db_user\" -A $db_name"
 
+    # Start mysql command
+    elif [ "$action" == 'cmd' ]; then
+        docker exec -i "$db_container" sh -c "export MYSQL_PWD=$db_password; mysql -u\"$db_user\" -A $db_name"
+
     # Handle unimplemented action
     else
         echo -e "\x1B[2mNote: $action for $db_type isn't implemented yet.\x1B[0m"
@@ -373,6 +379,10 @@ elif [ "$db_type" == 'mariadb' ]; then
     # Start mariadb shell
     elif [ "$action" == 'shell' ]; then
         docker exec -it "$db_container" sh -c "$db_maria_cmd -u\"$db_user\" -p\"$db_password\" -A $db_name"
+
+    # Start mariadb command
+        elif [ "$action" == 'cmd' ]; then
+            docker exec -i "$db_container" sh -c "$db_maria_cmd -u\"$db_user\" -p\"$db_password\" -A $db_name"
 
     # Handle unimplemented action
     else
