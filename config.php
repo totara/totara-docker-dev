@@ -417,9 +417,17 @@ $development_mode = true;
 if ($development_mode) {
     $CFG->sitetype = 'development';
 
-    @error_reporting(E_ALL | E_STRICT);
+    if (PHP_MAJOR_VERSION >= 8) {
+        @error_reporting(E_ALL);
+        $CFG->debug = E_ALL;
+    } else {
+        // STRICT error level is only used before PHP 8
+        // avoid string search for constant name in server/index.php
+        $estrict = constant('E_' . 'STRICT');
+        @error_reporting(E_ALL | $estrict);
+        $CFG->debug = (E_ALL | $estrict);
+    }
     @ini_set('display_errors', '1');
-    $CFG->debug = (E_ALL | E_STRICT & ~E_DEPRECATED);
     $CFG->debugdisplay = 1;
     $CFG->perfdebug = 15;
     define('GRAPHQL_DEVELOPMENT_MODE', true);
