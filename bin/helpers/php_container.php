@@ -46,6 +46,12 @@ if (isset($composer_json->require->php)) {
     $min_version = $matches[2][0];
     $max_comparator = $matches[3][0];
     $max_version = $matches[4][0];
+
+    // Hard-limit, temporary, remove once 8.4 support fully lands
+    if ($max_version == '8.5') {
+        $max_comparator = '<';
+        $max_version = '8.4';
+    }
 } else {
     // There isn't a composer json - this means moodle is running.
     $min_comparator = '>=';
