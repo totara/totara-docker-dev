@@ -20,7 +20,7 @@ $php_container_names = trim((string) shell_exec('docker ps -aaf "name=^totara_ph
 $php_container_names = !empty($php_container_names) ? preg_split('/\s+/', $php_container_names) : array();
 $php_containers_running = array_combine($php_container_ids, $php_container_names);
 asort($php_containers_running);
-$php_containers_running = array_filter(array_reverse($php_containers_running), function ($container_name) {
+$php_containers_running = array_filter($php_containers_running, function ($container_name) {
     return strpos($container_name, 'debug') === false && strpos($container_name, 'cron') === false;
 });
 
@@ -33,7 +33,6 @@ if (empty($php_containers_matches)) {
 }
 $php_containers_available = array_unique($php_containers_matches[1]);
 asort($php_containers_available);
-$php_containers_available = array_reverse($php_containers_available);
 
 // Get the versions to use from the site composer.json (if it exists)
 $matches = array();
