@@ -36,7 +36,14 @@ asort($php_containers_available);
 
 // Get the versions to use from the site composer.json (if it exists)
 $matches = array();
-$composer_json = json_decode(file_get_contents("$site_path/composer.json"));
+
+// First check for the server/composer.json file, then fall back to root/composer.json file
+$composer_path = "$site_path/composer.json";
+if (file_exists("$site_path/server/composer.json")) {
+    $composer_path = "$site_path/server/composer.json";
+}
+
+$composer_json = json_decode(file_get_contents($composer_path));
 if (isset($composer_json->require->php)) {
     // Extract the PHP versions we can use for Totara
     $versions = $composer_json->require->php;
