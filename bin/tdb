@@ -62,10 +62,6 @@ action_options=(
     restore
     shell
 )
-if [[ ! " ${action_options[*]} " =~ " ${action} " ]]; then
-  echo -e "\x1B[33mError: Invalid action '${action}'. Must be one of: ${action_options[*]}\x1B[0m"
-  exit 1
-fi
 
 # Print help info
 if [[ -z $action || ! " ${action_options[@]} " =~ " ${action} " ]]; then
