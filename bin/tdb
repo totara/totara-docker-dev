@@ -61,6 +61,7 @@ action_options=(
     backup
     restore
     shell
+    list
 )
 
 # Print help info
@@ -78,6 +79,7 @@ Actions:
   backup       Dump database to a backup file
   restore      Restore database from a backup file
   shell        Start a tty session for a database
+  list         List available backups for this database family
 
 Options:
   -i, --ignore-dataroot    Ignore the dataroot directory when backing up and restoring.
@@ -90,6 +92,7 @@ Examples:
   $script_name backup --ignore-dataroot              // Will backup the database but not the dataroot to backup directory specified in the .env file
   $script_name backup mydatabasename myalias         // Will backup the database 'mydatabasename' and use 'myalias' as a name for the backup files
   $script_name restore totara13 myalias              // Will restore the database dumped with the alias 'myalias' into the 'totara13' database
+  $script_name list                                  // Will list all the database backups compatible with the database family
 "
     exit;
 fi
@@ -160,7 +163,7 @@ if [ "$db_type" == 'sqlsrv' ]; then
 fi
 
 # Get the backup file path. Defaults to a new backup folder in the users's home directory.
-if [[ $action == 'backup' || $action == 'restore' ]]; then
+if [[ $action == 'backup' || $action == 'restore' || $action == 'list' ]]; then
     backup_folder_remote='/tdb_backups'
     if [ -z "$TDB_BACKUP_PATH" ]; then
         backup_folder_local="${HOME}${backup_folder_remote}"
@@ -176,7 +179,7 @@ if [[ $action == 'backup' || $action == 'restore' ]]; then
         fi
     fi
 
-    if [ -z "$3" ]; then
+    if [[ -z "$3" && $action != 'list' ]]; then
         backup_file_remote="$backup_folder_remote/${db_name}.${db_type}"
         backup_file_local="$backup_folder_local/${db_name}.${db_type}"
         backup_file_name=$(basename "$backup_file_local")
@@ -232,6 +235,36 @@ character_set='utf8mb4'
 collation='utf8mb4_bin'
 if [[ $db_host == 'mysql8' ]]; then
     collation='utf8mb4_0900_as_cs'
+fi
+
+# Listing current backups
+if [[ "$action" == 'list' ]]; then
+    echo -e "\x1B[2mListing $db_type backups in ${backup_folder_local}\x1B[0m"
+    (
+        files=( "$backup_folder_local"/*.${db_type} )
+        [ -e "${files[0]}" ] || { echo "No $db_type backups found" >&2; exit 0; }
+
+        printf "Name\t\tDate\t\tSize\n"
+        for f in "${files[@]}"; do
+            if stat -f '' "$f" >/dev/null 2>&1; then
+                # macOS
+                sortdate=$(stat -f '%m' "$f")
+                filedate=$(stat -f '%Sm' -t '%e %b %Y %H:%M' "$f")
+            else
+                # Linux
+                sortdate=$(stat -c '%Y' "$f")
+                rawdate=$(stat -c '%y' "$f")
+                filedate=$(date -d "$rawdate" '+%e %b %Y %H:%M')
+            fi
+            filesize=$(du -k -- "$f" | awk '{printf "%.1f MB", $1/1024}')
+            filename=$(basename -- "$f" .${db_type})
+            # Prepend sortdate for sorting, then remove after sort
+            printf "%s\t%s\t\t%s\t\t%s\n" "$sortdate" "$filename" "$filedate" "$filesize"
+        done \
+        | sort -nr -k1,1 \
+        | cut -f2-
+    ) | column -t -s $'\t'
+    exit
 fi
 
 ##########################################
