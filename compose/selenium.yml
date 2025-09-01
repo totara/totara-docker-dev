@@ -31,11 +31,63 @@ services:
       - totara
 
   selenium-chrome-debug:
-    image: selenium/standalone-chrome:106.0
+    image: selenium/standalone-chromium:126.0 # For Totara 19+
     container_name: totara_chrome_standalone_debug
     restart: ${RESTART_POLICY:-no}
     ports:
       - "5902:5900"
+    environment:
+      - TZ=${TIME_ZONE}
+    volumes:
+      - /dev/shm:/dev/shm
+    networks:
+      - totara
+
+  selenium-chrome-debug-legacy:
+    image: selenium/standalone-chrome:102.0 # For Totara 18 and older
+    container_name: totara_chrome_standalone_debug_legacy
+    restart: ${RESTART_POLICY:-no}
+    ports:
+      - "5903:5900"
+    environment:
+      - TZ=${TIME_ZONE}
+    volumes:
+      - /dev/shm:/dev/shm
+    networks:
+      - totara
+
+  selenium-chrome-debug-latest:
+    image: selenium/standalone-chromium:latest # For Totara 19+
+    container_name: totara_chrome_standalone_debug_latest
+    restart: ${RESTART_POLICY:-no}
+    ports:
+      - "5904:5900"
+    environment:
+      - TZ=${TIME_ZONE}
+    volumes:
+      - /dev/shm:/dev/shm
+    networks:
+      - totara
+
+  selenium-edge-debug:
+    image: selenium/standalone-edge:latest # For Totara 19+
+    container_name: totara_edge_standalone_debug
+    restart: ${RESTART_POLICY:-no}
+    ports:
+      - "5905:5900"
+    environment:
+      - TZ=${TIME_ZONE}
+    volumes:
+      - /dev/shm:/dev/shm
+    networks:
+      - totara
+
+  selenium-firefox-debug:
+    image: selenium/standalone-firefox:latest # For Totara 19+
+    container_name: totara_firefox_standalone_debug
+    restart: ${RESTART_POLICY:-no}
+    ports:
+      - "5906:5900"
     environment:
       - TZ=${TIME_ZONE}
     volumes:
