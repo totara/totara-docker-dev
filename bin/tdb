@@ -186,6 +186,9 @@ if [[ $action == 'backup' || $action == 'restore' || $action == 'list' ]]; then
         echo -e "\x1B[2mNote: Backup file alias was not specified. Will use \x1B[0m\x1B[4m\x1B[37m$backup_file_name\x1B[0m"
     else
         backup_file_local="$backup_folder_local/$3.${db_type}"
+        if [ "$for_totara_box" == "1" ]; then
+            backup_file_local="$backup_folder_local/$3.dump"
+        fi
         backup_file_name=$(basename "$backup_file_local")
         backup_file_remote="$backup_folder_remote/$backup_file_name"
     fi
@@ -217,6 +220,11 @@ if [[ $action == 'backup' || $action == 'restore' || $action == 'list' ]]; then
         backup_dataroot_suffix=".dataroot.zip";
         backup_dataroot_remote="$backup_file_remote$backup_dataroot_suffix"
         backup_dataroot_local="$backup_file_local$backup_dataroot_suffix"
+        if [ "$for_totara_box" == "1" ]; then
+            backup_dataroot_suffix=".tar.gz"
+            backup_dataroot_remote="$(echo "$backup_file_remote" | sed 's/\.dump$//')$backup_dataroot_suffix"
+            backup_dataroot_local="$(echo "$backup_file_local" | sed 's/\.dump$//')$backup_dataroot_suffix"
+        fi
 
         # If backing up, make sure we don't accidentally overwrite an existing dataroot zip.
         if [[ $action == 'backup' && -f "$backup_dataroot_local" && "$force_backup" == "0" ]]; then
@@ -241,7 +249,7 @@ fi
 if [[ "$action" == 'list' ]]; then
     echo -e "\x1B[2mListing $db_type backups in ${backup_folder_local}\x1B[0m"
     (
-        files=( "$backup_folder_local"/*.${db_type} )
+        files=( "$backup_folder_local"/*.${db_type} "$backup_folder_local"/*.dump)
         [ -e "${files[0]}" ] || { echo "No $db_type backups found" >&2; exit 0; }
 
         printf "Name\t\tDate\t\tSize\n"
@@ -258,6 +266,7 @@ if [[ "$action" == 'list' ]]; then
             fi
             filesize=$(du -k -- "$f" | awk '{printf "%.1f MB", $1/1024}')
             filename=$(basename -- "$f" .${db_type})
+            filename=$(basename -- "$filename" .dump)
             # Prepend sortdate for sorting, then remove after sort
             printf "%s\t%s\t\t%s\t\t%s\n" "$sortdate" "$filename" "$filedate" "$filesize"
         done \
@@ -507,7 +516,11 @@ elif [ "$action" == 'backup' ]; then
     echo -e "\x1B[0m\x1B[32mSuccessfully backed up \x1B[36m$db_host\x1B[32m database \x1B[34m$db_name\x1B[32m to \x1B[39m\x1B[4m$backup_file_local\x1B[0m"
 
     if [ "$ignore_dataroot" == "0" ]; then
-        $php_command sh -c "cd $dataroot && zip -0 -r $backup_dataroot_remote ." >> /dev/null
+        archive_command="zip -0 -r"
+        if [ "$for_totara_box" == "1" ]; then
+            archive_command="tar -czf"
+        fi
+        $php_command sh -c "cd $dataroot && $archive_command $backup_dataroot_remote ." >> /dev/null
         docker cp --quiet "$php_container":"$backup_dataroot_remote" "$backup_dataroot_local"
         $php_command sh -c "rm $backup_dataroot_remote"
         echo -e "\x1B[2mSuccessfully backed up dataroot to \x1B[0m\x1B[4m\x1B[37m$backup_dataroot_local\x1B[0m"
@@ -534,9 +547,13 @@ elif [ "$action" == 'restore' ]; then
         "
         $php_command sh -c "cd $remote_path && php -r '$php_chmod_code'"
 
+        extract_command="unzip"
+        if [ "$for_totara_box" == "1" ]; then
+            extract_command="tar -xzf"
+        fi
         $php_command sh -c "\
             cd $dataroot_dir/$dataroot_name && \
-            unzip $backup_dataroot_remote && \
+            $extract_command $backup_dataroot_remote && \
             chown www-data:www-data . -R \
         " >> /dev/null
         $php_command sh -c "rm $backup_dataroot_remote"
