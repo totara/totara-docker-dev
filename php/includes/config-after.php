@@ -86,8 +86,10 @@ if ($DOCKER_DEV->behat_parallel) {
             'wd_host' => 'http://selenium-hub:4444/wd/hub'
         ];
     }
-} else {
+} else if ($DOCKER_DEV->major_version > 18) {
     $DOCKER_DEV->behat_host = 'selenium-chrome-debug';
+} else {
+    $DOCKER_DEV->behat_host = 'selenium-chrome-debug-legacy';
 }
 
 if ($DOCKER_DEV->major_version > 18) {
@@ -110,6 +112,53 @@ if ($DOCKER_DEV->major_version > 18) {
                     ],
                 ]
             ]
+        ]
+    ];
+    $CFG->behat_profiles['chrome_latest'] = [
+        'browser' => 'chrome',
+        'wd_host' => "http://selenium-chrome-debug-latest:4444/wd/hub",
+        'capabilities' => [
+            'extra_capabilities' => [
+                'goog:chromeOptions' => [
+                    'args' => [
+                        '--disable-background-timer-throttling',
+                        '--disable-backgrounding-occluded-windows'
+                    ],
+                    'excludeSwitches' => [
+                        'enable-automation'
+                    ],
+                    'prefs' => [
+                        'credentials_enable_service' => false,
+                    ],
+                ]
+            ]
+        ]
+    ];
+    $CFG->behat_profiles['edge'] = [
+        'browser' => 'edge',
+        'wd_host' => "http://selenium-edge-debug:4444/wd/hub",
+        'capabilities' => [
+            'extra_capabilities' => [
+                'ms:edgeOptions' => [
+                    'args' => [
+                        '--disable-background-timer-throttling',
+                        '--disable-backgrounding-occluded-windows'
+                    ],
+                    'excludeSwitches' => [
+                        'enable-automation'
+                    ],
+                    'prefs' => [
+                        'credentials_enable_service' => false,
+                    ],
+                ]
+            ]
+        ]
+    ];
+    $CFG->behat_profiles['firefox'] = [
+        'browser' => 'firefox',
+        'wd_host' => "http://selenium-firefox-debug:4444/wd/hub",
+        'capabilities' => [
+            'extra_capabilities' => [],
         ]
     ];
 } else if ($DOCKER_DEV->major_version >= 10) {
@@ -193,7 +242,7 @@ if ($DOCKER_DEV->major_version > 18) {
 
 // wwwroot setup
 
-// Matches URL with ngrok.app or ngrok-free.app
+// Matches URL with ngrok.app, ngrok-free.app or ngrok.pizza
 $ngrok_hostname_regex = '/\b(?:ngrok-free\.app|ngrok\.app|ngrok\.pizza)\b/';
 if (!empty($_SERVER['HTTP_X_FORWARDED_HOST']) && preg_match($ngrok_hostname_regex, $_SERVER['HTTP_X_FORWARDED_HOST'])) {
     // Request came via ngrok

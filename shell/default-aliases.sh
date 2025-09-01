@@ -209,6 +209,17 @@ behat() {
     behat_source_yml="./behat_local.yml"
   fi
 
+  local args=()
+
+  # convert relative path to absolute ones
+  for arg in "$@"; do
+    if [[ -f "$PWD/$arg" ]]; then
+        args+=("$PWD/$arg")
+    else
+        args+=("$arg")
+    fi
+  done
+
   # Parallel mode variables
   local parallel_mode="0"
   local parallel_count=$(behat_parallel_count)
@@ -216,6 +227,15 @@ behat() {
   if [[ $parallel_count != '0' || "$*" =~ "--parallel" ]]; then
     selenium_host="selenium-hub"
     parallel_mode="1"
+  elif [[ "$version" =~ ^[0-9]+$ && "$version" -lt 19 ]]; then
+    # Totara 18 and older requires selenium-chrome-debug-legacy
+    selenium_host="selenium-chrome-debug-legacy"
+  elif [[ "$*" =~ "--profile=firefox" || "$*" =~ "-p firefox" ]]; then
+    selenium_host="selenium-firefox-debug"
+  elif [[ "$*" =~ "--profile=edge" || "$*" =~ "-p edge" ]]; then
+    selenium_host="selenium-edge-debug"
+  elif [[ "$*" =~ "--profile=chrome_latest" || "$*" =~ "-p chrome_latest" ]]; then
+    selenium_host="selenium-chrome-debug-latest"
   fi
 
   # Abort if behat hasn't been initialised
@@ -243,16 +263,6 @@ behat() {
   if [[ -f "$behat_dataroot_yml" && ! -f "$behat_source_yml" ]]; then
     cp "$behat_dataroot_yml" "$behat_source_yml"
   fi
-
-  # convert relative path to absolute ones
-  local args=()
-  for arg in "$@"; do
-    if [[ -f "$PWD/$arg" ]]; then
-        args+=("$PWD/$arg")
-    else
-        args+=("$arg")
-    fi
-  done
 
   # Run the actual command
   if [[ $parallel_mode == '1' ]]; then
