@@ -244,14 +244,17 @@ behat() {
     cp "$behat_dataroot_yml" "$behat_source_yml"
   fi
 
-  # convert relative path to absolute ones
   local args=()
+
+  # Convert relative paths in args to absolute ones
   for arg in "$@"; do
     if [[ -f "$PWD/$arg" ]]; then
         args+=("$PWD/$arg")
     else
         args+=("$arg")
     fi
+
+    # I'd be tempted to detect the profile argument and start the required container(s) here
   done
 
   # Run the actual command

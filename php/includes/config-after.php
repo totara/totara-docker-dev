@@ -91,10 +91,10 @@ if ($DOCKER_DEV->behat_parallel) {
 }
 
 if ($DOCKER_DEV->major_version > 18) {
-    // Behat config for Totara 19 and higher
+    // New behat profile needed for Totara 19+
     $CFG->behat_profiles['default'] = array(
         'browser' => 'chrome',
-        'wd_host' => "http://$DOCKER_DEV->behat_host:4444/wd/hub",
+        'wd_host' => "http://totara_chrome_standalone_debug_19:4444/wd/hub",
         'capabilities' => array(
             'extra_capabilities' => array(
                 'goog:chromeOptions' => array(
@@ -112,11 +112,58 @@ if ($DOCKER_DEV->major_version > 18) {
             )
         )
     );
+    $CFG->behat_profiles['chrome_latest'] = array(
+        'browser' => 'chrome',
+        'wd_host' => "http://totara_chrome_standalone_debug_latest:4444/wd/hub",
+        'capabilities' => array(
+            'extra_capabilities' => array(
+                'goog:chromeOptions' => array(
+                    'args' => array(
+                        '--disable-background-timer-throttling',
+                        '--disable-backgrounding-occluded-windows'
+                    ),
+                    'excludeSwitches' => array(
+                        'enable-automation'
+                    ),
+                    'prefs' => array(
+                        'credentials_enable_service' => false,
+                    ),
+                )
+            )
+        )
+    );
+    $CFG->behat_profiles['edge'] = array(
+        'browser' => 'edge',
+        'wd_host' => "http://totara_edge_standalone_debug:4444/wd/hub",
+        'capabilities' => array(
+            'extra_capabilities' => array(
+                'ms:edgeOptions' => array(
+                    'args' => array(
+                        '--disable-background-timer-throttling',
+                        '--disable-backgrounding-occluded-windows'
+                    ),
+                    'excludeSwitches' => array(
+                        'enable-automation'
+                    ),
+                    'prefs' => array(
+                        'credentials_enable_service' => false,
+                    ),
+                )
+            )
+        )
+    );
+    $CFG->behat_profiles['firefox'] = array(
+        'browser' => 'firefox',
+        'wd_host' => "http://totara_firefox_standalone_debug:4444/wd/hub",
+        'capabilities' => array(
+            'extra_capabilities' => array(),
+        )
+    );
 } else if ($DOCKER_DEV->major_version >= 10) {
     // Behat config for Totara 10+
     $CFG->behat_profiles['default'] = array(
         'browser' => 'chrome',
-        'wd_host' => "http://$DOCKER_DEV->behat_host:4444/wd/hub",
+        'wd_host' => "http://totara_chrome_standalone_debug_18:4444/wd/hub",
         'capabilities' => array(
             'extra_capabilities' => array(
                 'chromeOptions' => array(
