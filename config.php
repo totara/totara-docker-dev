@@ -19,33 +19,12 @@
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 
-//<editor-fold desc="Docker-dev specific variable setup" defaultstate="collapsed">
-// phpcs:ignoreFile
-
-// Docker-dev specific variable setup
+// Firstly, set up some docker-dev specific variables (must be at the start!)
+// See https://github.com/totara/totara-docker-dev/blob/master/php/includes/config-before.php
 $DOCKER_DEV = new stdClass();
-$DOCKER_DEV->has_server_dir = file_exists(__DIR__ . '/server/config.php');
-$DOCKER_DEV->is_multi_site = __DIR__ !== '/var/www/totara/src';
-$DOCKER_DEV->site_name = $DOCKER_DEV->is_multi_site ? basename(__DIR__) : 'totara';
+$DOCKER_DEV->dir = __DIR__;
+require '/var/www/totara/includes/config-before.php';
 
-// Required for older versions (T12 and below) and moodle
-if (!$DOCKER_DEV->has_server_dir || !isset($CFG)) {
-    unset($CFG);
-    global $CFG;
-    $CFG = new stdClass();
-}
-
-// Get what version of Totara/Moodle is running via regex from the version.php file
-// We can't include the version.php file directly as it may contain undefined constants, which results in a fatal errors in PHP 8+
-$version_file = @file_get_contents(__DIR__ . '/server/version.php') ?: file_get_contents(__DIR__ . '/version.php');
-$totara_version_matches = $moodle_version_matches = array();
-preg_match("/TOTARA->version[\s]*=[\s]*'([^']+)'/", $version_file, $totara_version_matches);
-preg_match("/release[\s]*=[\s]*'([\S]+)[^']+'/", $version_file, $moodle_version_matches);
-$DOCKER_DEV->version = end($totara_version_matches) ?: end($moodle_version_matches);
-$DOCKER_DEV->major_version = preg_replace("/^(\d{2}|[1-8]\.\d|9).+$/", '$1', $DOCKER_DEV->version);
-unset($version_file, $totara_version_matches, $moodle_version_matches);
-
-//</editor-fold>
 
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
@@ -56,25 +35,25 @@ unset($version_file, $totara_version_matches, $moodle_version_matches);
 //////////////////////////////////////////////////////////////////////////
 
 /** PostgresSQL */
-$CFG->dbhost = 'pgsql13'; // See https://github.com/totara/totara-docker-dev/wiki/Database%20Credentials for other versions
+$CFG->dbhost = 'pgsql16'; // See https://github.com/totara/totara-docker-dev/wiki/Database%20Credentials for other versions
 $CFG->dbtype = 'pgsql';
 $CFG->dbuser = 'postgres';
 $CFG->dbpass = '';
 
 /** MySQL */
-//$CFG->dbhost = 'mysql8'; // See https://github.com/totara/totara-docker-dev/wiki/Database%20Credentials for other versions
+//$CFG->dbhost = 'mysql84'; // See https://github.com/totara/totara-docker-dev/wiki/Database%20Credentials for other versions
 //$CFG->dbtype = 'mysqli';
 //$CFG->dbuser = 'root';
 //$CFG->dbpass = 'root';
 
 /** MariaDB */
-//$CFG->dbhost = 'mariadb'; // See https://github.com/totara/totara-docker-dev/wiki/Database%20Credentials for other versions
+//$CFG->dbhost = 'mariadb1108'; // See https://github.com/totara/totara-docker-dev/wiki/Database%20Credentials for other versions
 //$CFG->dbtype = 'mariadb';
 //$CFG->dbuser = 'root';
 //$CFG->dbpass = 'root';
 
 /** Microsoft SQL Server */
-//$CFG->dbhost = 'mssql2019'; // See https://github.com/totara/totara-docker-dev/wiki/Database%20Credentials for other versions
+//$CFG->dbhost = 'mssql2022'; // See https://github.com/totara/totara-docker-dev/wiki/Database%20Credentials for other versions
 //$CFG->dbtype = PHP_MAJOR_VERSION >= 7 ? 'sqlsrv' : 'mssql'; // In PHP 7+ it is called 'sqlsrv' instead of 'mssql'.
 //$CFG->dbuser = 'SA';
 //$CFG->dbpass = 'Totara.Mssql1';
@@ -108,82 +87,6 @@ $CFG->dataroot = "/var/www/totara/data/{$DOCKER_DEV->site_name}.{$CFG->dbhost}";
 //$CFG->dataroot = '/var/www/totara/data/totara13.pgsql13';
 //$CFG->dataroot = '/var/www/totara/data/mobile.mysql';
 //$CFG->dataroot = '/var/www/totara/data/engage.mssql';
-if (!is_dir($CFG->dataroot)) {
-    @mkdir($CFG->dataroot, $CFG->directorypermissions) && @chgrp($CFG->dataroot, 'www-data') && @chown($CFG->dataroot, 'www-data');
-}
-
-/**
- * You shouldn't really need to change these.
- */
-$CFG->dblibrary = 'native';
-$CFG->dboptions = array('dbpersist' => false, 'dbsocket' => false, 'dbport' => '');
-
-/**
- * If using the docker dev SQL Server images, the servers are configured with self issued SSL certs
- * They can be ignored/trusted for dev environments only.
- */
-if ($CFG->dbtype == 'sqlsrv' || $CFG->dbtype == 'mssql') {
-    $CFG->dboptions['trustservercertificate'] = true;
-    $CFG->dboptions['encrypt'] = true;
-}
-
-
-//<editor-fold desc="wwwroot Configuration">
-
-//////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////
-//////                                                              //////
-//////                    wwwroot Configuration                     //////
-//////                                                              //////
-//////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////
-
-/**
- * Here we generate a dynamic wwwroot, so the site can be simultaneously accessed via different PHP versions, and externally via ngrok.
- * You shouldn't need to change this section - but if you find this needs modification to get it working,
- * then please contribute what you did back to the docker-dev repository :)
- */
-
-// Matches URL with ngrok.app or ngrok-free.app
-$ngrok_hostname_regex = '/\b(?:ngrok-free\.app|ngrok\.app|ngrok\.pizza)\b/';
-if (!empty($_SERVER['HTTP_X_FORWARDED_HOST']) && preg_match($ngrok_hostname_regex, $_SERVER['HTTP_X_FORWARDED_HOST'])) {
-    // Request came via ngrok
-    $_SERVER['HTTP_HOST'] = $_SERVER['HTTP_X_FORWARDED_HOST'];
-    $CFG->wwwroot = 'https://' . $_SERVER['HTTP_HOST'];
-} else if (!empty($_SERVER['HTTP_X_ORIGINAL_HOST']) && preg_match($ngrok_hostname_regex, $_SERVER['HTTP_X_ORIGINAL_HOST'])) {
-    // Request came via ngrok
-    $_SERVER['HTTP_HOST'] = $_SERVER['HTTP_X_ORIGINAL_HOST'];
-    $CFG->wwwroot = 'https://' . $_SERVER['HTTP_HOST'];
-} else if (!empty($_SERVER['HTTP_HOST']) && !empty($_SERVER['REQUEST_SCHEME'])) {
-    // accessing it locally via the web
-    $CFG->wwwroot = $_SERVER['REQUEST_SCHEME'] . '://';
-
-    $hostname = $_SERVER['HTTP_HOST'];
-    $hostname_parts = explode('.', $hostname);
-    if (end($hostname_parts) === 'behat') {
-        // redirect if using the behat URL
-        $hostname = str_replace('.behat', '', $hostname);
-    }
-    $CFG->wwwroot .= $hostname;
-
-    if ($DOCKER_DEV->is_multi_site && strpos($hostname, $DOCKER_DEV->site_name) === false) {
-        $CFG->wwwroot .= '/' . $DOCKER_DEV->site_name;
-        if ($DOCKER_DEV->has_server_dir) {
-            $CFG->wwwroot .= '/server';
-        }
-    }
-} else {
-    // accessing it via CLI
-    $CFG->wwwroot = 'http://totara' . PHP_MAJOR_VERSION . PHP_MINOR_VERSION;
-    if ($DOCKER_DEV->is_multi_site) {
-        $CFG->wwwroot .= '/' . $DOCKER_DEV->site_name;
-    }
-    if ($DOCKER_DEV->has_server_dir) {
-        $CFG->wwwroot .= '/server';
-    }
-}
-//</editor-fold>
-
 
 
 
@@ -207,15 +110,6 @@ $CFG->phpunit_dbname = $CFG->dbname;
  * You shouldn't really need to change this.
  */
 $CFG->phpunit_prefix = 'phpu_';
-
-/**
- * We use a different PHPUnit dataroot for each different version, otherwise there are warnings about the dataroot not being empty.
- */
-$CFG->phpunit_dataroot = "/var/www/totara/data/{$DOCKER_DEV->site_name}.{$CFG->dbhost}.{$DOCKER_DEV->major_version}.phpunit";
-if (!is_dir($CFG->phpunit_dataroot)) {
-    @mkdir($CFG->phpunit_dataroot, $CFG->directorypermissions) && @chgrp($CFG->phpunit_dataroot, 'www-data') && @chown($CFG->phpunit_dataroot, 'www-data');
-}
-
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -261,148 +155,6 @@ $CFG->behat_prefix = 'bht_';
  */
 //$CFG->behat_faildump_path = __DIR__ . '/screenshots';
 
-/**
- * We use a different behat dataroot for each different version, otherwise as the behat.yml will need to be regenerated everytime.
- * If the same behat.yml is used across versions, then the tests won't run correctly.
- */
-$CFG->behat_dataroot = "/var/www/totara/data/{$DOCKER_DEV->site_name}.{$CFG->dbhost}.{$DOCKER_DEV->major_version}.behat";
-if (!is_dir($CFG->behat_dataroot)) {
-    @mkdir($CFG->behat_dataroot, $CFG->directorypermissions) && @chgrp($CFG->behat_dataroot, 'www-data') && @chown($CFG->behat_dataroot, 'www-data');
-}
-
-//<editor-fold desc="Advanced behat setup" defaultstate="collapsed">
-/**
- * The wwwroot for behat is the same as the host, but with '.behat' added as a suffix (so 'totara73' becomes 'totara73.behat')
- * You shouldn't really need to change this.
- */
-$CFG->behat_wwwroot = 'http://totara' . PHP_MAJOR_VERSION . PHP_MINOR_VERSION . '.behat';
-if ($DOCKER_DEV->is_multi_site) {
-    $CFG->behat_wwwroot .= '/' . $DOCKER_DEV->site_name;
-}
-if ($DOCKER_DEV->has_server_dir) {
-    $CFG->behat_wwwroot .= '/server';
-}
-
-/**
- * This is where the behat setup get a bit complicated - here we generate the behat config that supports multiple different Totara versions.
- * You shouldn't need to change this section - but if you find this needs modification to get it working,
- * then please contribute what you did back to the docker-dev repository :)
- */
-// Disable running behat in parallel if the Totara version is too old, or if there isn't enough CPU threads available.
-$DOCKER_DEV->behat_parallel &= $DOCKER_DEV->major_version >= 2.9;
-$DOCKER_DEV->behat_host = $DOCKER_DEV->behat_parallel ? 'selenium-hub' : 'selenium-chrome-debug';
-
-if ($DOCKER_DEV->behat_parallel) {
-    for ($i = 1; $i <= $DOCKER_DEV->behat_parallel_count; $i++) {
-        $CFG->behat_parallel_run[] = array(
-            'dbname' => $CFG->behat_dbname,
-            'behat_prefix' => "bh{$i}_",
-            'wd_host' => 'http://selenium-hub:4444/wd/hub'
-        );
-    }
-}
-
-if ($DOCKER_DEV->major_version > 18) {
-    // Behat config for Totara 19 and higher
-    $CFG->behat_profiles['default'] = array(
-        'browser' => 'chrome',
-        'wd_host' => "http://$DOCKER_DEV->behat_host:4444/wd/hub",
-        'capabilities' => array(
-            'extra_capabilities' => array(
-                'goog:chromeOptions' => array(
-                    'args' => array(
-                        '--disable-background-timer-throttling',
-                        '--disable-backgrounding-occluded-windows'
-                    ),
-                    'excludeSwitches' => array(
-                        'enable-automation'
-                    ),
-                    'prefs' => array(
-                        'credentials_enable_service' => false,
-                    ),
-                )
-            )
-        )
-    );
-} else if ($DOCKER_DEV->major_version >= 10) {
-    // Behat config for Totara 10+
-    $CFG->behat_profiles['default'] = array(
-        'browser' => 'chrome',
-        'wd_host' => "http://$DOCKER_DEV->behat_host:4444/wd/hub",
-        'capabilities' => array(
-            'extra_capabilities' => array(
-                'chromeOptions' => array(
-                    'args' => array(
-                        '--disable-infobars',
-                        '--disable-background-throttling'
-                    ),
-                    'prefs' => array(
-                        'credentials_enable_service' => false,
-                    ),
-                    'w3c' => false,
-                ),
-                'goog:chromeOptions' => array(
-                    'args' => array(
-                        '--disable-infobars',
-                        '--disable-background-throttling',
-                        '--disable-background-timer-throttling',
-                        '--disable-backgrounding-occluded-windows'
-                    ),
-                    'prefs' => array(
-                        'credentials_enable_service' => false,
-                    ),
-                    'w3c' => false,
-                    'excludeSwitches' => array(
-                        'enable-automation'
-                    )
-                )
-            )
-        )
-    );
-} else {
-    // Behat config for Totara 9 and earlier
-    $CFG->behat_config = array(
-        'default' => array(
-            'extensions' => array(
-                'Behat\MinkExtension\Extension' => array(
-                    'browser_name' => 'chrome',
-                    'default_session' => 'selenium2',
-                    'selenium2' => array(
-                        'browser' => 'chrome',
-                        'wd_host' => "http://$DOCKER_DEV->behat_host:4444/wd/hub",
-                        'capabilities' => array(
-                            'version' => '',
-                            'platform' => 'LINUX',
-                        )
-                    )
-                )
-            )
-        )
-    );
-    if ($DOCKER_DEV->behat_parallel) {
-        $CFG->behat_profiles = array(
-            'default' => array(
-                'browser' => 'chrome',
-                'wd_host' => "http://$DOCKER_DEV->behat_host:4444/wd/hub",
-                'capabilities' => array(
-                    'browser' => 'chrome',
-                    'browserVersion' => 'ANY',
-                    'version' => '',
-                    'chrome' => array(
-                        'switches' => array(
-                            '--disable-infobars',
-                            '--disable-background-throttling'
-                        ),
-                        'w3c' => false
-                    )
-                )
-            )
-        );
-    }
-}
-//</editor-fold>
-
-
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -432,7 +184,7 @@ if ($development_mode) {
     $CFG->perfdebug = 15;
     define('GRAPHQL_DEVELOPMENT_MODE', true);
 
-//    $CFG->legacyadminsettingsmenu = true;
+    // $CFG->legacyadminsettingsmenu = true;
     $CFG->debugallowscheduledtaskoverride = true;
     $CFG->preventexecpath = false;
     $CFG->mobile_device_emulator = true;
@@ -488,11 +240,10 @@ if ($development_mode) {
         'response_debug' => 2, // 0 = None, 1 = Normal, 2 = Developer
     );
 
-//    // Xhprof Profiling settings
-//    $CFG->profilingenabled = true;
-//    $CFG->profilingincluded = '*';
+    // Xhprof Profiling settings
+    // $CFG->profilingenabled = true;
+    // $CFG->profilingincluded = '*';
 }
-
 
 
 
@@ -504,9 +255,6 @@ if ($development_mode) {
 //////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 
-// Redirects any emails sent by the server
-$CFG->smtphosts = 'maildev:1025';
-
 $CFG->passwordpolicy = false;
 $CFG->tool_generator_users_password = '12345';
 $CFG->upgradekey = '';
@@ -514,21 +262,13 @@ $CFG->upgradekey = '';
 $CFG->country = 'NZ';
 $CFG->defaultcity = 'Wellington'; // very windy!
 
-//<editor-fold desc="Paths for additional binary packages" defaultstate="collapsed">
-$CFG->py3path = '/usr/bin/python3';
-$CFG->pathtogs = '/usr/bin/gs';
-$CFG->pathtodu = '/usr/bin/du';
-$CFG->aspellpath = '/usr/bin/aspell';
-$CFG->pathtodot = '/usr/bin/dot';
-//</editor-fold>
-
 if ($DOCKER_DEV->major_version >= 13) {
-//    $CFG->forceflavour = 'learn';
-//    $CFG->forceflavour = 'learn_professional';
-//    $CFG->forceflavour = 'engage';
-//    $CFG->forceflavour = 'learn_engage';
-//    $CFG->forceflavour = 'learn_perform';
-//    $CFG->forceflavour = 'perform_engage';
+    // $CFG->forceflavour = 'learn';
+    // $CFG->forceflavour = 'learn_professional';
+    // $CFG->forceflavour = 'engage';
+    // $CFG->forceflavour = 'learn_engage';
+    // $CFG->forceflavour = 'learn_perform';
+    // $CFG->forceflavour = 'perform_engage';
     $CFG->forceflavour = 'learn_perform_engage';
 } else {
     // For Totara versions earlier than 13, the enterprise flavour must be set
@@ -537,6 +277,17 @@ if ($DOCKER_DEV->major_version >= 13) {
 
 
 
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+//////                                                              //////
+//////                      Your Custom Config                      //////
+//////                                                              //////
+//////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
+
+
+
+// Add config specific to your site / development env here!
 
 
 
@@ -547,5 +298,9 @@ if ($DOCKER_DEV->major_version >= 13) {
 
 
 
-// This must be the last thing in the config.
-file_exists(__DIR__ . '/lib/setup.php') && require_once __DIR__  .  '/lib/setup.php';
+
+
+// Finally, include docker-dev specific config (must be at the end!)
+// See https://github.com/totara/totara-docker-dev/blob/master/php/includes/config-after.php
+require '/var/www/totara/includes/config-after.php';
+// DO NOT ADD ANYTHING AFTER THIS LINE

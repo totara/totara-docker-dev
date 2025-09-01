@@ -18,10 +18,10 @@ jobs:
         with:
           php-version: 8.3
       - name: Validate config.php syntax is compatible with PHP 8
-        run: php -l ./config.php
-      - name: Set up PHP 5.3
+        run: php -l ./config.php && find ./php/includes -name '*.php' -exec php -l {} +
+      - name: Set up PHP 5.5
         uses: shivammathur/setup-php@c541c155eee45413f5b09a52248675b1a2575231 # v2.31.1
         with:
-          php-version: 5.3
-      - name: Validate config.php syntax is compatible with PHP 5.3
-        run: php -l ./config.php
+          php-version: 5.5
+      - name: Validate config.php syntax is compatible with PHP 5.5
+        run: php -l ./config.php && find ./php/includes -name '*.php' -exec php -l {} +
