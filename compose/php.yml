@@ -422,6 +422,7 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - ./php/includes:/var/www/totara/includes
+      - coverage-report:/var/www/totara/coverage-report
       - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
@@ -448,6 +449,7 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - ./php/includes:/var/www/totara/includes
+      - coverage-report:/var/www/totara/coverage-report
       - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
@@ -483,6 +485,7 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - ./php/includes:/var/www/totara/includes
+      - coverage-report:/var/www/totara/coverage-report
       - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
@@ -509,6 +512,7 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - ./php/includes:/var/www/totara/includes
+      - coverage-report:/var/www/totara/coverage-report
       - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
@@ -543,6 +547,7 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - ./php/includes:/var/www/totara/includes
+      - coverage-report:/var/www/totara/coverage-report
       - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
@@ -569,6 +574,7 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - ./php/includes:/var/www/totara/includes
+      - coverage-report:/var/www/totara/coverage-report
       - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
@@ -601,6 +607,7 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - ./php/includes:/var/www/totara/includes
+      - coverage-report:/var/www/totara/coverage-report
       - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
@@ -639,6 +646,7 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - ./php/includes:/var/www/totara/includes
+      - coverage-report:/var/www/totara/coverage-report
       - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
@@ -659,6 +667,7 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - ./php/includes:/var/www/totara/includes
+      - coverage-report:/var/www/totara/coverage-report
       - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
@@ -697,6 +706,7 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - ./php/includes:/var/www/totara/includes
+      - coverage-report:/var/www/totara/coverage-report
       - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
@@ -717,6 +727,7 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - ./php/includes:/var/www/totara/includes
+      - coverage-report:/var/www/totara/coverage-report
       - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
@@ -755,6 +766,7 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - ./php/includes:/var/www/totara/includes
+      - coverage-report:/var/www/totara/coverage-report
       - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
@@ -775,6 +787,7 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - ./php/includes:/var/www/totara/includes
+      - coverage-report:/var/www/totara/coverage-report
       - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
@@ -811,6 +824,7 @@ services:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - ./php/includes:/var/www/totara/includes
+      - coverage-report:/var/www/totara/coverage-report
       - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
@@ -819,5 +833,6 @@ services:
 
 volumes:
   totara-data:
+  coverage-report:
   bash-history:
   zsh-history:
