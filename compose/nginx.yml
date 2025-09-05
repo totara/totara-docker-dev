@@ -15,6 +15,7 @@ services:
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
+      - coverage-report:/var/www/totara/coverage-report
     depends_on:
       - maildev
     networks:
@@ -67,3 +68,4 @@ services:
 
 volumes:
   totara-data:
+  coverage-report:

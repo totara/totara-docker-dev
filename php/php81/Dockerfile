@@ -30,6 +30,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         libldap2-dev \
         libltdl-dev \
         libpspell-dev \
+        xmlstarlet \
     && docker-php-ext-install -j$(nproc) \
         zip \
         intl \
@@ -73,6 +74,10 @@ RUN pecl install -o -f memcached \
 RUN pecl install -o -f excimer \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable excimer
+
+RUN pecl install -o -f pcov \
+    &&  rm -rf /tmp/pear \
+    &&  docker-php-ext-enable pcov
 
 # we need en_US locales for MSSQL connection to work
 # we need en_AU locales for behat to work
