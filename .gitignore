@@ -3,13 +3,25 @@ use-mutagen
 mutagen.yml.lock
 .env
 !.gitkeep
+/tools/.update
+
+# Ignore custom cron jobs that you create yourself
 /cron.d/*.cron
-/shell/*.sh
-/shell/*.bash
-!/shell/default-aliases.sh
+
+# Ignore custom docker compose config files that you create yourself
 /custom/*.yml
 /custom/*.yaml
-/tools/.update
+
+# Ignore the custom alias files that come with the project, but not ones you create yourself
+/shell/*.sh
+/shell/*.bash
+!/shell/util-aliases.sh
+!/shell/site-aliases.sh
+!/shell/phpunit-aliases.sh
+!/shell/behat-aliases.sh
+!/shell/generator-aliases.sh
+
+# IDE and OS files
 .idea/
 .vscode/
 .DS_Store
