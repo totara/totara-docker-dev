@@ -46,7 +46,6 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         mysqli \
         exif \
         ldap \
-        pspell \
     && docker-php-ext-configure gd \
             --with-freetype \
             --with-jpeg \
@@ -84,11 +83,18 @@ RUN pecl channel-update pecl.php.net && \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable imap
 
-RUN pecl install -o -f excimer \
+RUN pecl channel-update pecl.php.net && \
+    pecl install -o -f excimer \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable excimer
 
-RUN pecl install -o -f pcov \
+RUN pecl channel-update pecl.php.net && \
+    pecl install -o -f pspell \
+    &&  rm -rf /tmp/pear \
+    &&  docker-php-ext-enable pspell
+
+RUN pecl channel-update pecl.php.net && \
+    pecl install -o -f pcov \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable pcov
 
