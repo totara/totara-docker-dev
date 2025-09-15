@@ -15,21 +15,27 @@ if [[ -z "$container" ]]; then
     exit 1
 fi
 
-# If just 'php' is specified, then dynamically work out which one to actually use based upon the site composer.json
-if [[ "$container" == "php" ]]; then
+# If just 'php' or 'php-debug' is specified, then dynamically work out which one to actually use based upon the site composer.json
+if [[ "$container" == "php" || "$container" == "php-debug" ]]; then
     if [[ ! -f "$local_path/version.php" ]]; then
         echo "This command must be run from a Totara site directory if 'php' is specified for the container"
         exit 1
     fi
     php_container=($(php "$project_path/bin/helpers/php_container.php" "$local_path"))
-    container=${php_container[0]}
+    if [[ "$container" == "php-debug" ]]; then
+        container="${php_container[0]}-debug"
+    else 
+        container=${php_container[0]}
+    fi
     echo -e "\x1B[2mUsing PHP Container: $container\x1B[0m"
 fi
 
 # If we are bashing into php/apache/nginx, then lets make the shell begin in the remote directory
 extra_args=""
 if [[ "$container" =~ "php" || "$container" =~ "nginx" || "$container" =~ "apache" ]]; then
-    extra_args="-w $remote_path"
+    if [[ -f "$local_path/version.php" ]]; then
+        extra_args="-w $remote_path"
+    fi
 fi
 
 # Quote command to be reused as shell input

@@ -7,12 +7,32 @@ set -a; source "$project_path/.env"; set +a
 
 if [[ -z "$1" ]]; then
     $script_path/texec php "${INTERACTIVE_SHELL:-zsh}"
-else
-    # Quote command to be reused as shell input
-    command_str=$(printf " %q" "$@")
-    # Handle being called with a php script instead of a command
-    if [[ $1 == *.php ]]; then
-        command_str="php $command_str"
-    fi
-    $script_path/texec php bash -ic "$command_str"
+    exit
 fi
+
+# If the first arg is 'debug', then use the debug container
+php_container_command="php"
+if [[ "$1" == "debug" ]]; then
+    php_container_command="php-debug"
+    shift
+fi
+
+# Replace local path with remote path in any file path arguments
+# e.g. /User/me/totara-sites/mysite/server/plugin/test.php -> /var/www/totara/src/mysite/server/plugin/test.php
+args=()
+for arg in "$@"; do
+    if [[ "$arg" == "$LOCAL_SRC"* && -e "$arg" ]]; then
+        arg="$REMOTE_SRC${arg#$LOCAL_SRC}"
+    fi
+    args+=("$arg")
+done
+
+# Quote command to be reused as shell input
+command_str=$(printf " %q" "${args[@]}")
+
+# Handle being called with a php script instead of a command
+if [[ $1 == *.php ]]; then
+    command_str="$php_container_command $command_str"
+fi
+
+$script_path/texec $php_container_command bash -ic "$command_str"
