@@ -29,7 +29,9 @@ fi
 # If we are bashing into php/apache/nginx, then lets make the shell begin in the remote directory
 extra_args=""
 if [[ "$container" =~ "php" || "$container" =~ "nginx" || "$container" =~ "apache" ]]; then
-    extra_args="-w $remote_path"
+    if [[ -f "$local_path/version.php" ]]; then
+        extra_args="-w $remote_path"
+    fi
 fi
 
 # Quote command to be reused as shell input

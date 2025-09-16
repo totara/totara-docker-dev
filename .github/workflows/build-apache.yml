@@ -1,0 +1,23 @@
+name: Build Apache image
+
+on:
+  release:
+    types:
+      - created
+  pull_request:
+    branches:
+      - master
+      - develop
+    paths:
+      - apache/**
+
+jobs:
+  build-apache-image:
+    name: Build Apache image
+    uses: ./.github/workflows/build-image.yml
+    with:
+      image: apache
+      context: ./apache
+      push: ${{ github.event_name == 'release' }}
+      test-command: httpd -v
+    secrets: inherit

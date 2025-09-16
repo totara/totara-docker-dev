@@ -1,0 +1,28 @@
+name: Build MSSQL images
+
+on:
+  release:
+    types:
+      - created
+  pull_request:
+    branches:
+      - master
+      - develop
+    paths:
+      - mssql/**
+
+jobs:
+  build-mssql-images:
+    name: Build MSSQL images
+    strategy:
+      matrix:
+        version: [2017, 2019, 2022]
+    uses: ./.github/workflows/build-image.yml
+    with:
+      image: mssql${{ matrix.version }}
+      context: ./mssql
+      dockerfile: ${{ matrix.version }}/Dockerfile
+      multiarch: false # Mssql does not support multiple architectures
+      push: ${{ github.event_name == 'release' }}
+      test-command: /opt/mssql-tools18/bin/sqlcmd -\? # "Simple" command to show sqlcmd is installed
+    secrets: inherit

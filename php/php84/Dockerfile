@@ -13,6 +13,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         libicu-dev \
         libpq-dev \
         gnupg2 \
+        cron \
         nano \
         vim \
         wget \
@@ -92,6 +93,11 @@ RUN pecl channel-update pecl.php.net && \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable pspell
 
+RUN pecl channel-update pecl.php.net && \
+    pecl install -o -f xdebug-3.4.0 \
+    &&  rm -rf /tmp/pear \
+    &&  docker-php-ext-enable xdebug.so
+
 # we need en_US locales for MSSQL connection to work
 # we need en_AU locales for behat to work
 RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
@@ -142,3 +148,6 @@ RUN git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.oh-my-zsh/
 RUN echo 'setopt +o nomatch' > ~/.zshrc
 RUN echo 'source ~/custom_shell/.zshrc' >> ~/.zshrc
 RUN cat ~/.bashrc >> ~/.zshrc
+
+COPY cron-entrypoint.sh /cron-entrypoint.sh
+RUN chmod +x /cron-entrypoint.sh

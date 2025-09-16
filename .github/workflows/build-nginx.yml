@@ -1,0 +1,23 @@
+name: Build Nginx image
+
+on:
+  release:
+    types:
+      - created
+  pull_request:
+    branches:
+      - master
+      - develop
+    paths:
+      - nginx/**
+
+jobs:
+  build-nginx-image:
+    name: Build Nginx image
+    uses: ./.github/workflows/build-image.yml
+    with:
+      image: nginx
+      context: ./nginx
+      push: ${{ github.event_name == 'release' }}
+      test-command: nginx -v
+    secrets: inherit
