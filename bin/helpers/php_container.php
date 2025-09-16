@@ -27,6 +27,7 @@ $php_containers_running = array_filter($php_containers_running, function ($conta
 // Get all the possible containers that could be started
 $php_containers_matches = array();
 preg_match_all("/php-([0-9]\.[0-9])[^:]*:/", file_get_contents("$docker_dev_root/compose/php.yml"), $php_containers_matches);
+preg_match_all("/php-([0-9]\.[0-9])[^:]*:/", file_get_contents("$docker_dev_root/compose/php-legacy.yml"), $php_containers_matches);
 if (empty($php_containers_matches)) {
     fwrite(fopen('php://stderr', 'wb'), "Fatal regex error" . PHP_EOL);
     exit(1);

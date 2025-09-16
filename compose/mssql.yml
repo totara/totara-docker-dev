@@ -60,6 +60,9 @@ services:
     networks:
       - totara
 
+  # When adding a new MSSQL container, make sure you also add entries in:
+  # compose/build.yml, .github/workflows/build-mssql.yml
+
 volumes:
   mssql-data:
   mssql2019-data:

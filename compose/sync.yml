@@ -1,6 +1,14 @@
 services:
 
+  apache:
+    volumes:
+      - totara-www-sync:${REMOTE_SRC}:nocopy
+
   nginx:
+    volumes:
+      - totara-www-sync:${REMOTE_SRC}:nocopy
+
+  nodejs:
     volumes:
       - totara-www-sync:${REMOTE_SRC}:nocopy
 
@@ -116,10 +124,6 @@ services:
     volumes:
       - totara-www-sync:${REMOTE_SRC}:nocopy
 
-  nodejs:
-    volumes:
-      - totara-www-sync:${REMOTE_SRC}:nocopy
-
   php-8.0-cron:
     volumes:
       - totara-www-sync:${REMOTE_SRC}:nocopy
@@ -171,7 +175,11 @@ services:
   php-8.4-debug:
     volumes:
       - totara-www-sync:${REMOTE_SRC}:nocopy
-  
+
+  # php-X.X: ...
+  # php-X.X-cron: ...
+  # php-X.X-debug: ...
+
   sync:
     image: alpine:latest
     container_name: totara_sync

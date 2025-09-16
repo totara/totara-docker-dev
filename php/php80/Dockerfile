@@ -12,6 +12,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         libicu-dev \
         libpq-dev \
         gnupg2 \
+        cron \
         nano \
         vim \
         wget \
@@ -68,6 +69,10 @@ RUN pecl install -o -f igbinary \
 RUN pecl install -o -f memcached \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable memcached
+
+RUN pecl install -o -f xdebug-3.4.0 \
+    &&  rm -rf /tmp/pear \
+    &&  docker-php-ext-enable xdebug.so
 
 RUN pecl install -o -f pcov \
     &&  rm -rf /tmp/pear \
@@ -133,3 +138,6 @@ RUN git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.oh-my-zsh/
 RUN echo 'setopt +o nomatch' > ~/.zshrc
 RUN echo 'source ~/custom_shell/.zshrc' >> ~/.zshrc
 RUN cat ~/.bashrc >> ~/.zshrc
+
+COPY cron-entrypoint.sh /cron-entrypoint.sh
+RUN chmod +x /cron-entrypoint.sh
