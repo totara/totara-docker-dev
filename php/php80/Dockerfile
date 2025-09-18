@@ -73,6 +73,9 @@ RUN pecl install -o -f pcov \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable pcov
 
+# Install composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
 # we need en_US locales for MSSQL connection to work
 # we need en_AU locales for behat to work
 RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
