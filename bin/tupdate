@@ -1,0 +1,8 @@
+#!/bin/bash
+
+script_path="$( cd "$(dirname "$0")" ; pwd -P )"
+project_path="$( cd $script_path && cd ..; pwd -P )"
+set -a; source "$project_path/.env"; set +a
+
+# Run the actual update script
+$project_path/tools/update.sh || echo -e "\n\x1B[31mThere was an error while updating docker-dev :(\x1B[0m"
