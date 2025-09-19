@@ -3,10 +3,10 @@
 script_path="$( cd "$(dirname "$0")" ; pwd -P )"
 project_path="$( cd $script_path && cd ..; pwd -P )"
 
-if [ $# -eq 0 ] || [ $1 == 'all' ]; then
-    source "$project_path/tools/check_for_update.sh"
-    # pulling all images already present from docker hub
-    docker images --filter=reference='totara/docker-dev-*' --format "{{.Repository}}" | xargs -I % sh -c 'docker pull %'
+if [ $# -eq 0 ] || [ "$1" == 'all' ]; then
+    # Get all compose services using a totara/docker-dev image and only pull those
+    $script_path/tdocker pull \
+        $($script_path/tdocker config --format json | jq -r '.services | to_entries[] | select(.value.image? | startswith("totara/docker-dev")) | .key')
 else
     $script_path/tdocker pull "$@"
 fi
