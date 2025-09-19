@@ -3,18 +3,23 @@
 script_path=$( cd "$(dirname "$0")" || exit; pwd -P )
 project_path=$( cd "$script_path" && cd ..; pwd -P )
 
+set -e
+
 old_tag=$(git describe --tags)
 
 export $(grep -E -v '^#' "$project_path/tools/.version" | xargs)
 
-# Big chain of commands we only want to run if the previous one was successful
-echo -ne "Stopping all running containers" && \
-    "$project_path"/bin/tdown &> /dev/null && \
-    echo -e "...done\n\nPulling the latest code" && \
-    git pull origin master --rebase && \
-    source $project_path/tools/post_update.sh && \
-    return &> /dev/null || exit
 
-# Something failed...
-echo -e "\n\x1B[31mThere was an error while updating.\x1B[0m"
-echo "The update can be attempted again by running the $script_path/$(basename $0) script."
+# Actual update steps
+echo -ne "\033[1;35mUpdating docker dev to the latest version!\033[0m\n\n"
+
+# Store the list of running services so they can be restarted later
+echo -ne "\033[1;35mStopping all running containers...\033[0m\n"
+echo "$(tdocker ps --services --status running | xargs)" > "$project_path/tools/.stopped_services"
+"$project_path"/bin/tdown
+
+# Rebase on the latest master in case there are any local commits
+echo -e "\033[1;35mPulling the latest code...\033[0m\n"
+git pull origin master --rebase
+
+source $project_path/tools/post_update.sh
