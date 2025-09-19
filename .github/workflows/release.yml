@@ -6,22 +6,6 @@ on:
       - created
 
 jobs:
-  build-apache-image:
-    name: Build Apache image
-    uses: ./.github/workflows/build-image.yml
-    with:
-      image: apache
-      context: ./apache
-    secrets: inherit
-
-  build-nginx-image:
-    name: Build Nginx image
-    uses: ./.github/workflows/build-image.yml
-    with:
-      image: nginx
-      context: ./nginx
-    secrets: inherit
-
   build-mssql-images:
     name: Build MSSQL images
     strategy:

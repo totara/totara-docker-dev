@@ -4,7 +4,56 @@ services:
   # please check the compose files in the 'compose' folder
   # you should use the built in bin/ scripts to run commands as it makes your life easier
   # otherwise you need to run something like:
-  # docker compose -f docker-compose.yml -f compose/nginx.yml -f compose/pgsql.yml -f compose/php.yml up -d pgsql php-7.3
+  # docker compose -f docker-compose.yml -f compose/pgsql.yml -f compose/php.yml up -d pgsql php-8.3
+
+  nginx:
+    image: nginx:1.29
+    container_name: totara_nginx
+    restart: ${RESTART_POLICY:-no}
+    entrypoint: ["/totara-entrypoint.sh"]
+    environment:
+      - TZ=${TIME_ZONE}
+      - REMOTE_DATA
+      - REMOTE_SRC
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8443:8443" # ngrok only
+    volumes:
+      - ./nginx/entrypoint.sh:/totara-entrypoint.sh
+      - ./nginx/config:/etc/nginx/totara:ro
+      - ./nginx/config/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+      - coverage-report:/var/www/totara/coverage-report
+    depends_on:
+      - maildev
+    networks:
+      - totara
+
+  apache:
+    image: httpd:2.4
+    container_name: totara_apache
+    restart: ${RESTART_POLICY:-no}
+    entrypoint: ["/totara-entrypoint.sh"]
+    environment:
+      - TZ=${TIME_ZONE}
+      - REMOTE_DATA
+      - REMOTE_SRC
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8443:8443" # ngrok only
+    volumes:
+      - ./apache/entrypoint.sh:/totara-entrypoint.sh
+      - ./apache/httpd.conf:/usr/local/apache2/conf/httpd.conf:ro
+      - ./apache/conf.d:/usr/local/apache2/conf.d:ro
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+    depends_on:
+      - maildev
+    networks:
+      - totara
 
   nodejs:
     image: node:20

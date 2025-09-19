@@ -10,11 +10,9 @@ source "$project_path/tools/check_for_update.sh"
 
 files=(
     "docker-compose.yml"
-    "compose/apache.yml"
     "compose/mariadb.yml"
     "compose/mssql.yml"
     "compose/mysql.yml"
-    "compose/nginx.yml"
     "compose/pgsql.yml"
     "compose/php.yml"
     "compose/selenium.yml"
