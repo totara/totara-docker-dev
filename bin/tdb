@@ -249,8 +249,9 @@ fi
 if [[ "$action" == 'list' ]]; then
     echo -e "\x1B[2mListing $db_type backups in ${backup_folder_local}\x1B[0m"
     (
-        files=( "$backup_folder_local"/*.${db_type} "$backup_folder_local"/*.dump)
-        [ -e "${files[0]}" ] || { echo "No $db_type backups found" >&2; exit 0; }
+        shopt -s nullglob
+        files=( "$backup_folder_local"/*.${db_type} "$backup_folder_local"/*.dump )
+        [ ${#files[@]} -eq 0 ] && { echo "No $db_type backups found" >&2; exit 0; }
 
         printf "Name\t\tDate\t\tSize\n"
         for f in "${files[@]}"; do
