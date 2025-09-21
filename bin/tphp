@@ -18,11 +18,13 @@ if [[ "$1" == "debug" ]]; then
 fi
 
 # Replace local path with remote path in any file path arguments
-# e.g. /User/me/totara-sites/mysite/server/plugin/test.php -> /var/www/totara/src/mysite/server/plugin/test.php
+# e.g. //wsl.localhost/Ubuntu/home/me/totara-sites/mysite/server/plugin/test.php -> /var/www/totara/src/mysite/server/plugin/test.php
 args=()
 for arg in "$@"; do
-    if [[ "$arg" == "$LOCAL_SRC"* && -e "$arg" ]]; then
-        arg="$REMOTE_SRC${arg#$LOCAL_SRC}"
+    if [[ "$arg" == *"$LOCAL_SRC"* ]]; then
+        arg="$REMOTE_SRC${arg#*$LOCAL_SRC}"
+        # Strip any unescaped single quote characters
+        arg=$(echo "$arg" | sed "s/\([^']\)'\([^']\)/\1\2/g; s/^'//; s/'$//")
     fi
     args+=("$arg")
 done
