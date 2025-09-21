@@ -3,7 +3,8 @@ use-mutagen
 mutagen.yml.lock
 .env
 !.gitkeep
-/tools/.update
+/tools/.*
+!/tools/.version
 
 # Ignore custom cron jobs that you create yourself
 /cron.d/*.cron

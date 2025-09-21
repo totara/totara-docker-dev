@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [[ -z $release_date ]]; then
-    echo "post_update.sh can't be run directly - please run update.sh instead"
+    echo "post_update.sh can't be run directly - please run tupdate instead"
     exit 1
 fi
 
@@ -13,14 +13,20 @@ if [[ "$release_date" -lt "20211112" ]]; then
     echo "" >> /dev/null
 fi
 
-if [[ ! $? -eq 0 ]]; then
-    # Something went wrong in the custom upgrade steps...
-    echo "An error occurred in the docker-dev specific upgrade steps!"
-    return &> /dev/null || exit
+echo -ne "\n\033[1;35mPulling the latest container images - this could take a few minutes...\033[0m\n\n"
+$project_path/bin/tpull
+
+if [[ -f "$project_path/tools/.stopped_services" ]]; then
+    echo -ne "\n\033[1;35mStarting your containers again...\033[0m\n\n"
+    xargs $project_path/bin/tup < "$project_path/tools/.stopped_services"
 fi
 
-echo -ne "\nPulling the latest container images - this could take a few minutes" && \
-$project_path/bin/tpull &> /dev/null && \
-echo -e "...done\n\n\x1B[2mSuccessfully updated to $new_tag from $old_tag\x1B[0m" && \
-echo "View the latest changes here: https://github.com/totara/totara-docker-dev/releases/latest" && \
-echo "Note: You will need to start your containers again with the tup command"
+echo -e "\n\033[1;35mSuccessfully updated to $new_tag!\x1B[0m"
+echo -e "\033[1;35mView the release notes here: https://github.com/totara/totara-docker-dev/releases\x1B[0m"
+
+if [[ -f "$project_path/tools/.stopped_services" ]]; then
+    rm -f "$project_path/tools/.stopped_services"
+else
+    echo "Note: You will need to start your containers again with the tup command"
+fi
+
