@@ -33,17 +33,16 @@ jobs:
         if: ${{ inputs.push == true }}
         uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
         with:
-          username: ${{ vars.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Extract metadata (tags, labels) for Docker
         if: ${{ inputs.push == true }}
         id: meta
         uses: docker/metadata-action@369eb591f429131d6889c46b94e711f089e6ca96 # v5.6.1
         with:
-          images: totara/docker-dev-${{ inputs.image }}
-          tags: |
-            type=raw,latest
-            type=semver,pattern={{version}}
+          images: ghcr.io/totara/docker-dev-${{ inputs.image }}
+          tags: type=raw,latest
       - name: Set up QEMU (to support building for both amd64 and arm64)
         if: ${{ inputs.multiarch == true }}
         uses: docker/setup-qemu-action@49b3bc8e6bdd4a60e6116a5414239cba5943d3cf # v3.2.0

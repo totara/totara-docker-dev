@@ -10,7 +10,8 @@ on:
     paths:
       - php/**
       - '!php/includes/**'
-      - ./.github/workflows/build-image.yml
+      - .github/workflows/build-image.yml
+      - .github/workflows/build-php.yml
 
 jobs:
   build-php-images:
