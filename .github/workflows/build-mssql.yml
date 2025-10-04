@@ -9,7 +9,8 @@ on:
       - master
     paths:
       - mssql/**
-      - ./.github/workflows/build-image.yml
+      - .github/workflows/build-image.yml
+      - .github/workflows/build-mssql.yml
 
 jobs:
   build-mssql-images:
