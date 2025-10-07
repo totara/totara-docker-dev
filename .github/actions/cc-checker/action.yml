@@ -1,0 +1,26 @@
+name: 'Check Conventional Commit In Pull Requests'
+description: 'Check that the PR title contains a valid task type and (optionally) a task number, and label the PR based on the task type'
+
+inputs:
+  commit-types:
+    description: 'An array of commit types. Example: ["feat","fix","docs","test","ci","refactor","perf","chore","revert"]'
+    required: true
+  github-token:
+    description: "GitHub token to authenticate requests"
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+    - name: Run Conventional Commit Checker
+      run: |
+        export COMMIT_TYPES='${{ inputs.commit-types }}'
+        export GITHUB_TOKEN='${{ inputs.github-token }}'
+        cd .github/actions/cc-checker
+        npm install --no-save conventional-commits-parser@^3.2.4 @actions/core@^1.11.1 @actions/github@^6.0.1
+        node cc-checker.js
+      shell: bash

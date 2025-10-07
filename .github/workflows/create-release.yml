@@ -1,0 +1,35 @@
+name: Create Semantic Release
+
+on:
+  push:
+    branches:
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      id-token: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install dependencies
+        run: npm install --no-save semantic-release@^24.2.9
+      - name: Release
+        env:
+          # The RELEASE_TOKEN repository secret must be a personal access token with the permissions described here:
+          # https://github.com/semantic-release/github/blob/master/README.md#github-authentication
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        run: npx semantic-release

@@ -8,31 +8,17 @@ We try to collect all improvements and bug reports as Issues. Also we avoid push
 
 ## Workflow
 
-We follow the [GitFlow Workflow](https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow).
-
-## Standard workflow
-
-If you want to add a new feature or fix a bug
+If you want to add a new feature or fix a bug:
 
 1. Fork the repository
-2. Check out the **develop** branch `git checkout develop` 
-3. Create a new feature or bugfix branch `git checkout -b feature-upgrade-nodejes` (prefix with **feature**- or **bugfix**- and name it with something meaningful)
-4. Create and push your commits into your own repository
-5. Create a new Pull Request for your branch pointing to **develop**. Don't point it to **master** directly.
+2. Check out the latest **master** branch - `git checkout master && git pull` 
+3. Create a new feature or bugfix branch, for example: `git checkout -b feat-add-postgres18` (prefix with **feat**- or **fix**- and name it with something meaningful)
+4. Create commits with a [conventional commit message](https://www.conventionalcommits.org), for example: "feat: Add Postgres 18 container" or "fix: Remove usage of deprecated PHP constant"
+5. Push your commits into your own repository
+6. Create a new Pull Request for your branch pointing to **master**.
 
-When enough features come together we will merge develop into master, create a new tag and publish it as a new release. With this approach the master will always contain the latest stable version.
-
-## Hotfixes
-
-If something critical needs to be fixed and released please 
-
-1. Create a hotfix branch (prefix with hotfix- and name it properly) based on the current master
-2. Fix the code
-3. Create a new Pull Request from your hotfix branch pointing it to **master**
-4. Once it got reviewed and merged we will merge master back into develop to make sure it's in sync.
-
-## Unstable releases
-
-We might release unstable versions. Those will be tagged on develop and released clearly marked as unstable releases.
+When the pull request has been approved and merged, then a release will automatically be made,
+using [semantic versioning](https://semver.org/) based upon the conventional commit messages in the merged pull request.
+This will rebuild and push new versions of the containers.
 
 If you have any questions don't hesitate to ask.
