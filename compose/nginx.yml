@@ -54,17 +54,25 @@ services:
           - totara74.behat
           - totara74.behat.totaralms.com
           - totara80
+          - totara80.debug
           - totara80.behat
           - totara80.behat.totaralms.com
           - totara81
+          - totara81.debug
           - totara81.behat
           - totara81.behat.totaralms.com
           - totara82
+          - totara82.debug
           - totara82.behat
           - totara82.behat.totaralms.com
           - totara83
+          - totara83.debug
           - totara83.behat
           - totara83.behat.totaralms.com
+          - totara84
+          - totara84.debug
+          - totara84.behat
+          - totara84.behat.totaralms.com
 
 volumes:
   totara-data:
