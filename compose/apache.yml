@@ -1,9 +1,10 @@
 services:
 
   apache:
-    image: totara/docker-dev-apache
+    image: httpd:2.4
     container_name: totara_apache
     restart: ${RESTART_POLICY:-no}
+    entrypoint: ["/totara-entrypoint.sh"]
     environment:
       - TZ=${TIME_ZONE}
       - REMOTE_DATA
@@ -13,6 +14,11 @@ services:
       - "443:443"
       - "8443:8443" # ngrok only
     volumes:
+      - ./apache/entrypoint.sh:/totara-entrypoint.sh
+      - ./apache/httpd.conf:/usr/local/apache2/conf/httpd.conf
+      - ./apache/conf.d/local-server.conf:/usr/local/apache2/conf.d/local-server.conf
+      - ./apache/conf.d/remote-server.conf:/usr/local/apache2/conf.d/remote-server.conf
+      - ./apache/conf.d/server.conf:/tmp/server.conf
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
     depends_on:
