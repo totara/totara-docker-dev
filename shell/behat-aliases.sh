@@ -87,6 +87,11 @@ behat() {
     return 1
   fi
 
+  # Regenerate the behat.yml if the behat_wwwroot in config.php doesn't match
+  if ! grep $(config_var behat_wwwroot) "$behat_dataroot_yml" &> /dev/null; then
+    install_behat
+  fi
+
   # Abort if the appropriate selenium container isn't running
   if ! nc -w5 -z -v $selenium_host 4444 &> /dev/null; then
     print_error "The $selenium_host container must be running in order to run behat tests"

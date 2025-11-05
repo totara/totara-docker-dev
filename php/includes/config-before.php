@@ -26,3 +26,6 @@ preg_match("/release[\s]*=[\s]*'([\S]+)[^']+'/", $version_file, $moodle_version_
 $DOCKER_DEV->version = end($totara_version_matches) ?: end($moodle_version_matches);
 $DOCKER_DEV->major_version = preg_replace("/^(\d{2}|[1-8]\.\d|9).+$/", '$1', $DOCKER_DEV->version);
 unset($version_file, $totara_version_matches, $moodle_version_matches);
+
+// Track if Xdebug is enabled
+$DOCKER_DEV->xdebug_enabled = isset($_ENV['XDEBUG_SESSION']);

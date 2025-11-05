@@ -58,6 +58,9 @@ if (!is_dir($CFG->behat_dataroot)) {
  * You shouldn't really need to change this.
  */
 $CFG->behat_wwwroot = 'http://totara' . PHP_MAJOR_VERSION . PHP_MINOR_VERSION . '.behat';
+if ($DOCKER_DEV->xdebug_enabled) {
+    $CFG->behat_wwwroot .= '.debug';
+}
 if ($DOCKER_DEV->is_multi_site) {
     $CFG->behat_wwwroot .= '/' . $DOCKER_DEV->site_name;
 }
@@ -238,6 +241,11 @@ if ($DOCKER_DEV->major_version > 18) {
     }
 }
 
+// XDebug impacts performance pretty hard, so increase the behat timeout
+if ($DOCKER_DEV->xdebug_enabled) {
+    $CFG->behat_increasetimeout = 120;
+}
+
 
 
 // wwwroot setup
@@ -258,7 +266,7 @@ if (!empty($_SERVER['HTTP_X_FORWARDED_HOST']) && preg_match($ngrok_hostname_rege
 
     $hostname = $_SERVER['HTTP_HOST'];
     $hostname_parts = explode('.', $hostname);
-    if (end($hostname_parts) === 'behat') {
+    if (end($hostname_parts) === 'behat' || prev($hostname_parts) === 'behat') {
         // redirect if using the behat URL
         $hostname = str_replace('.behat', '', $hostname);
     }
@@ -273,6 +281,9 @@ if (!empty($_SERVER['HTTP_X_FORWARDED_HOST']) && preg_match($ngrok_hostname_rege
 } else {
     // accessing it via CLI
     $CFG->wwwroot = 'http://totara' . PHP_MAJOR_VERSION . PHP_MINOR_VERSION;
+    if ($DOCKER_DEV->xdebug_enabled) {
+        $CFG->wwwroot .= '.debug';
+    }
     if ($DOCKER_DEV->is_multi_site) {
         $CFG->wwwroot .= '/' . $DOCKER_DEV->site_name;
     }
