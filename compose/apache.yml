@@ -29,54 +29,67 @@ services:
           - totara54
           - totara54.debug
           - totara54.behat
+          - totara54.behat.debug
           - totara54.behat.totaralms.com
           - totara55
           - totara55.debug
           - totara55.behat
+          - totara55.behat.debug
           - totara55.behat.totaralms.com
           - totara56
           - totara56.debug
           - totara56.behat
+          - totara56.behat.debug
           - totara56.behat.totaralms.com
           - totara70
           - totara70.debug
           - totara70.behat
+          - totara70.behat.debug
           - totara70.behat.totaralms.com
           - totara71
           - totara71.debug
           - totara71.behat
+          - totara71.behat.debug
           - totara71.behat.totaralms.com
           - totara72
           - totara72.debug
           - totara72.behat
+          - totara72.behat.debug
           - totara72.behat.totaralms.com
           - totara73
           - totara73.debug
           - totara73.behat
+          - totara73.behat.debug
           - totara73.behat.totaralms.com
           - totara74
           - totara74.debug
           - totara74.behat
+          - totara74.behat.debug
           - totara74.behat.totaralms.com
           - totara80
           - totara80.debug
           - totara80.behat
+          - totara80.behat.debug
           - totara80.behat.totaralms.com
           - totara81
           - totara81.debug
           - totara81.behat
+          - totara81.behat.debug
           - totara81.behat.totaralms.com
           - totara82
           - totara82.debug
           - totara82.behat
+          - totara82.behat.debug
           - totara82.behat.totaralms.com
           - totara83
           - totara83.debug
           - totara83.behat
+          - totara83.behat.debug
           - totara83.behat.totaralms.com
           - totara84
           - totara84.debug
           - totara84.behat
+          - totara84.behat.debug
           - totara84.behat.totaralms.com
 
 volumes:

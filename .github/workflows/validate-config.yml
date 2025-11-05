@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'config.php'
+      - 'php/includes/**'
 
 jobs:
   validate-config:
