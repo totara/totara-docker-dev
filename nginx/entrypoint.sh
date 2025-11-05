@@ -10,7 +10,7 @@ then
         -days 3650 \
         -nodes \
         -x509 \
-        -subj "/C=US/ST=CA/L=SF/O=Docker-demo/CN=totara" \
+        -subj "/C=US/ST=CA/L=SF/O=Docker-dev/CN=totara" \
         -keyout /etc/nginx/ssl/domain.key \
         -out /etc/nginx/ssl/domain.crt
 fi
@@ -20,9 +20,7 @@ chown www-data:www-data $REMOTE_DATA -R
 
 # Replace the remote src variable in the nginx configuration with
 # the one defined in the environment variables
-cp /etc/nginx/totara-server.conf /tmp/temp.conf
-envsubst '$REMOTE_SRC' < /tmp/temp.conf > /etc/nginx/totara-server.conf
-rm /tmp/temp.conf
+sed "s|\$REMOTE_SRC|$REMOTE_SRC|g" /tmp/server.conf > /etc/nginx/totara/server.conf
 
 # fire up nginx
 nginx -g 'daemon off;'

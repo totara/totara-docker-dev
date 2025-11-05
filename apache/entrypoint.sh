@@ -8,7 +8,7 @@ if [ ! -f "/usr/local/apache2/conf/server.crt" ]; then
         -days 3650 \
         -nodes \
         -x509 \
-        -subj "/C=US/ST=CA/L=SF/O=Docker-demo/CN=totara" \
+        -subj "/C=US/ST=CA/L=SF/O=Docker-dev/CN=totara" \
         -keyout /usr/local/apache2/conf/server.key \
         -out /usr/local/apache2/conf/server.crt
 fi
@@ -18,8 +18,6 @@ chown www-data:www-data $REMOTE_DATA -R
 
 # Replace the remote src variable in the apache configuration with
 # the one defined in the environment variables
-cp /usr/local/apache2/conf.d/server.conf /tmp/temp.conf
-envsubst '$REMOTE_SRC' < /tmp/temp.conf > /usr/local/apache2/conf.d/server.conf
-rm /tmp/temp.conf
+sed "s|\$REMOTE_SRC|$REMOTE_SRC|g" /tmp/server.conf > /usr/local/apache2/conf.d/server.conf
 
 httpd -D "FOREGROUND" -k start

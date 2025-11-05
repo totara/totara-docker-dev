@@ -1,9 +1,10 @@
 services:
 
   nginx:
-    image: totara/docker-dev-nginx
+    image: nginx:1.29
     container_name: totara_nginx
     restart: ${RESTART_POLICY:-no}
+    entrypoint: ["/totara-entrypoint.sh"]
     environment:
       - TZ=${TIME_ZONE}
       - REMOTE_DATA
@@ -13,6 +14,11 @@ services:
       - "443:443"
       - "8443:8443" # ngrok only
     volumes:
+      - ./nginx/entrypoint.sh:/totara-entrypoint.sh
+      - ./nginx/config/default.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/config/local-server.conf:/etc/nginx/totara/local-server.conf
+      - ./nginx/config/remote-server.conf:/etc/nginx/totara/remote-server.conf
+      - ./nginx/config/server.conf:/tmp/server.conf
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
       - coverage-report:/var/www/totara/coverage-report
