@@ -1,4 +1,4 @@
-FROM php:8.4-fpm-bullseye
+FROM php:8.4-fpm-bookworm
 
 ARG TIME_ZONE=Pacific/Auckland
 
@@ -13,6 +13,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         libicu-dev \
         libpq-dev \
         gnupg2 \
+        cron \
         nano \
         vim \
         wget \
@@ -23,7 +24,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         libzip-dev \
         libmemcached-dev \
         zip \
-        netcat \
+        netcat-traditional \
         bc \
         ghostscript \
         graphviz \
@@ -94,6 +95,11 @@ RUN pecl channel-update pecl.php.net && \
     &&  docker-php-ext-enable pspell
 
 RUN pecl channel-update pecl.php.net && \
+    pecl install -o -f xdebug-3.4.0 \
+    &&  rm -rf /tmp/pear \
+    &&  docker-php-ext-enable xdebug.so
+
+RUN pecl channel-update pecl.php.net && \
     pecl install -o -f pcov \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable pcov
@@ -143,7 +149,7 @@ RUN echo 'if [[ -e "/root/custom_shell/default-aliases.sh" ]]; then source "/roo
 
 # Have the option of using the oh my zsh shell.
 RUN apt-get update && apt-get install -y zsh
-RUN sh -c "$(curl https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)" --unattended
+RUN sh -c "$(curl https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" --unattended
 RUN git clone https://github.com/romkatv/powerlevel10k ~/.oh-my-zsh/custom/themes/powerlevel10k
 RUN git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
 RUN git clone https://github.com/zsh-users/zsh-completions ~/.oh-my-zsh/custom/plugins/zsh-completions
@@ -151,3 +157,7 @@ RUN git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.oh-my-zsh/
 RUN echo 'setopt +o nomatch' > ~/.zshrc
 RUN echo 'source ~/custom_shell/.zshrc' >> ~/.zshrc
 RUN cat ~/.bashrc >> ~/.zshrc
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT [ "/entrypoint.sh" ]

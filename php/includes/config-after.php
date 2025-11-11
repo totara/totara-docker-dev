@@ -241,11 +241,6 @@ if ($DOCKER_DEV->major_version > 18) {
     }
 }
 
-// XDebug impacts performance pretty hard, so increase the behat timeout
-if ($DOCKER_DEV->xdebug_enabled) {
-    $CFG->behat_increasetimeout = 120;
-}
-
 
 
 // wwwroot setup

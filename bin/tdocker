@@ -17,6 +17,7 @@ files=(
     "compose/nginx.yml"
     "compose/pgsql.yml"
     "compose/php.yml"
+    "compose/php-legacy.yml"
     "compose/selenium.yml"
 )
 
