@@ -13,7 +13,7 @@ behat_parallel_count() {
         echo(0);
     }
   "
-  php -r "$php_code"
+  php -n -r "$php_code"
 }
 
 # Initialise Behat

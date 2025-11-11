@@ -38,8 +38,13 @@ sudo rm "/tmp/hosts"
 # Shouldn't need to change this
 host_ip="127.0.0.1"
 
-# Get all the possible php hosts from the docker compose yml file
-php_versions=($(cat "$project_path/compose/php.yml" | sed -E -n 's/.*\php-([0-9]).([0-9])[^:]*:/\1\2/p' | uniq | sort))
+# Get all the possible php hosts from the docker compose yml files
+php_versions=($(
+  {
+    sed -E -n 's/.*\php-([0-9]).([0-9])[^:]*:/\1\2/p' "$project_path/compose/php.yml"
+    sed -E -n 's/.*\php-([0-9]).([0-9])[^:]*:/\1\2/p' "$project_path/compose/php-legacy.yml"
+  } | uniq | sort
+))
 
 # Get the sub sites that we should also add host entries for
 sites=($(find "$LOCAL_SRC" -mindepth 2 -maxdepth 2 -name "version.php" -type f -exec dirname {} \; | sort | xargs -n 1 basename))
