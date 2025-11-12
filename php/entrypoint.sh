@@ -14,4 +14,8 @@ else
     echo "Not the designated cron container (CRON_CONTAINER: ${CRON_CONTAINER:-none}), skipping crontab installation"
 fi
 
+# Generate random seed file for openssl
+# This prevents openssl from complaining about not having enough entropy
+openssl rand -writerand /root/.rnd
+
 php-fpm
