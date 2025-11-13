@@ -298,3 +298,9 @@ $CFG->pathtogs = '/usr/bin/gs';
 $CFG->pathtodu = '/usr/bin/du';
 $CFG->aspellpath = '/usr/bin/aspell';
 $CFG->pathtodot = '/usr/bin/dot';
+
+
+// Tell Totara where composer is
+if (!defined('TOTARA_COMPOSER')) {
+    define('TOTARA_COMPOSER', '/usr/bin/composer');
+}
