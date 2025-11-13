@@ -1,11 +1,4 @@
 services:
-
-  apache:
-    build: ./apache
-
-  nginx:
-    build: ./nginx
-
   mssql2017:
     build:
       context: ./mssql
@@ -21,159 +14,103 @@ services:
       context: ./mssql
       dockerfile: 2022/Dockerfile
 
-  php-5.3:
-    build: ./php/php53
-
-  php-5.3-debug:
-    build: ./php/php53-debug
-
-  php-5.4:
-    build: ./php/php54
-
-  php-5.4-debug:
-    build: ./php/php54-debug
-
-  php-5.4-cron:
-    build: ./php/php54-cron
-
-  php-5.5:
-    build: ./php/php55
-
-  php-5.5-debug:
-    build: ./php/php55-debug
-
-  php-5.5-cron:
-    build: ./php/php55-cron
-
-  php-5.6:
-    build:
-      context: ./php/php56
-      args:
-        TIME_ZONE: ${TIME_ZONE}
-
-  php-5.6-debug:
-    build: ./php/php56-debug
-
-  php-5.6-cron:
-    build: ./php/php56-cron
-
-  php-7.0:
-    build:
-      context: ./php/php70
-      args:
-        TIME_ZONE: ${TIME_ZONE}
-
-  php-7.0-debug:
-    build: ./php/php70-debug
-
-  php-7.0-cron:
-    build: ./php/php70-cron
-
-  php-7.1:
-    build:
-      context: ./php/php71
-      args:
-        TIME_ZONE: ${TIME_ZONE}
-
-  php-7.1-debug:
-    build: ./php/php71-debug
-
-  php-7.1-cron:
-    build: ./php/php71-cron
-
-  php-7.2:
-    build:
-      context: ./php/php72
-      args:
-        TIME_ZONE: ${TIME_ZONE}
-
-  php-7.2-debug:
-    build: ./php/php72-debug
-
-  php-7.2-cron:
-    build: ./php/php72-cron
-
   php-7.3:
     build:
-      context: ./php/php73
+      context: ./php
+      dockerfile: php73/Dockerfile
       args:
         TIME_ZONE: ${TIME_ZONE}
 
   php-7.3-debug:
-    build: ./php/php73-debug
-
-  php-7.3-cron:
-    build: ./php/php73-cron
+    build:
+      context: ./php
+      dockerfile: php73/Dockerfile
+      args:
+        TIME_ZONE: ${TIME_ZONE}
 
   php-7.4:
     build:
-      context: ./php/php74
+      context: ./php
+      dockerfile: php74/Dockerfile
       args:
         TIME_ZONE: ${TIME_ZONE}
 
   php-7.4-debug:
-    build: ./php/php74-debug
-
-  php-7.4-cron:
-    build: ./php/php74-cron
+    build:
+      context: ./php
+      dockerfile: php74/Dockerfile
+      args:
+        TIME_ZONE: ${TIME_ZONE}
 
   php-8.0:
     build:
-      context: ./php/php80
+      context: ./php
+      dockerfile: php80/Dockerfile
       args:
         TIME_ZONE: ${TIME_ZONE}
 
-  php-8.0-cron:
-    build: ./php/php80-cron
-
   php-8.0-debug:
-    build: ./php/php80-debug
+    build:
+      context: ./php
+      dockerfile: php80/Dockerfile
+      args:
+        TIME_ZONE: ${TIME_ZONE}
 
   php-8.1:
     build:
-      context: ./php/php81
+      context: ./php
+      dockerfile: php81/Dockerfile
       args:
         TIME_ZONE: ${TIME_ZONE}
 
-  php-8.1-cron:
-    build: ./php/php81-cron
-
   php-8.1-debug:
-    build: ./php/php81-debug
+    build:
+      context: ./php
+      dockerfile: php81/Dockerfile
+      args:
+        TIME_ZONE: ${TIME_ZONE}
 
   php-8.2:
     build:
-      context: ./php/php82
+      context: ./php
+      dockerfile: php82/Dockerfile
       args:
         TIME_ZONE: ${TIME_ZONE}
 
-  php-8.2-cron:
-    build: ./php/php82-cron
-
   php-8.2-debug:
-    build: ./php/php82-debug
+    build:
+      context: ./php
+      dockerfile: php82/Dockerfile
+      args:
+        TIME_ZONE: ${TIME_ZONE}
 
   php-8.3:
     build:
-      context: ./php/php83
+      context: ./php
+      dockerfile: php83/Dockerfile
       args:
         TIME_ZONE: ${TIME_ZONE}
 
-  php-8.3-cron:
-    build: ./php/php83-cron
-
   php-8.3-debug:
-    build: ./php/php83-debug
+    build:
+      context: ./php
+      dockerfile: php83/Dockerfile
+      args:
+        TIME_ZONE: ${TIME_ZONE}
 
   php-8.4:
     build:
-      context: ./php/php84
+      context: ./php
+      dockerfile: php84/Dockerfile
       args:
         TIME_ZONE: ${TIME_ZONE}
 
-  php-8.4-cron:
-    build: ./php/php84-cron
-
   php-8.4-debug:
-    build: ./php/php84-debug
+    build:
+      context: ./php
+      dockerfile: php84/Dockerfile
+      args:
+        TIME_ZONE: ${TIME_ZONE}
 
+  # php-X.X: ...
+  # php-X.X-debug: ...

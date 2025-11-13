@@ -74,7 +74,7 @@ config_var() {
     }
     fwrite(fopen('php://stdout', 'w'), implode(' ', \$output));
   "
-  php -r "$php_code" $@
+  php -n -r "$php_code" $@
 }
 
 # Get the Totara/Moodle version, e.g. '14.2dev' or '2.9.3'
@@ -89,15 +89,15 @@ totara_version() {
     \$version = end(\$totara_version_matches) ?: end(\$moodle_version_matches);
   "
 
-  version=$(php -r "$php_code echo \$version;")
+  version=$(php -n -r "$php_code echo \$version;")
 
   if [[ "$1" == "major" ]]; then
     if [[ "$version" =~ ^evergreen ]]; then
       print "evergreen"
     else
-      php -r "$php_code echo preg_replace(\"/^(\d{2}|[1-8]\.\d|9).+$/\", \"\$1\", \$version);"
+      php -n -r "$php_code echo preg_replace(\"/^(\d{2}|[1-8]\.\d|9).+$/\", \"\$1\", \$version);"
     fi
   else
-    php -r "$php_code echo \$version;"
+    php -n -r "$php_code echo \$version;"
   fi
 }

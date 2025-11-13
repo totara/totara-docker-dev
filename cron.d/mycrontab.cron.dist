@@ -4,4 +4,4 @@
 # keep this line for ensuring the correct bin paths for all containers
 PATH=$PATH:/usr/bin:/usr/local/bin
 
-* * * * *   cd /var/www/totara/src && php admin/cli/cron.php > /proc/1/fd/1 2>/proc/1/fd/2
+* * * * *   cd /var/www/totara/src/YOUR_SITE_DIRECTORY_HERE && php server/admin/cli/cron.php > /proc/1/fd/1 2>/proc/1/fd/2
