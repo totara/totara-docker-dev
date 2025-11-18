@@ -133,7 +133,7 @@ services:
       - totara
 
   php-8.0-debug:
-    image: totara/docker-dev-php80-debug
+    image: totara/docker-dev-php80
     container_name: totara_php80_debug
     restart: ${RESTART_POLICY:-no}
     working_dir: ${REMOTE_SRC}
