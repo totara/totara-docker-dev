@@ -407,6 +407,8 @@ services:
     networks:
       - totara
 
+  # Do not add new PHP versions here, add them to compose/php.yml instead!
+
 volumes:
   totara-data:
   bash-history:

@@ -20,6 +20,8 @@ services:
       - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
+    depends_on:
+      - php-7.3-debug
     networks:
       - totara
 
@@ -72,6 +74,8 @@ services:
       - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
+    depends_on:
+      - php-7.4-debug
     networks:
       - totara
 
@@ -123,6 +127,8 @@ services:
       - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
+    depends_on:
+      - php-8.0-debug
     networks:
       - totara
 
@@ -174,6 +180,8 @@ services:
       - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
+    depends_on:
+      - php-8.1-debug
     networks:
       - totara
 
@@ -225,6 +233,8 @@ services:
       - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
+    depends_on:
+      - php-8.2-debug
     networks:
       - totara
 
@@ -276,6 +286,8 @@ services:
       - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
+    depends_on:
+      - php-8.3-debug
     networks:
       - totara
 
@@ -326,6 +338,8 @@ services:
       - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
+    depends_on:
+      - php-8.4-debug
     networks:
       - totara
 
