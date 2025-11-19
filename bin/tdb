@@ -121,7 +121,7 @@ config_output=$( eval "$php_command /bin/zsh -i -c 'cd $remote_path && config_va
 if [[ "$config_output" =~ "dataroot is not configured properly" ]]; then
     echo -e "\x1B[33m\$CFG->dataroot is not configured properly, directory does not exist or is not accessible.\x1B[0m"
     exit
-elif [[ "$config_output" =~ "Parse error" ]]; then
+elif [[ "$config_output" =~ "Parse error" || "$config_output" =~ "Fatal error" || "$config_output" =~ "Warning" || "$config_output" =~ "Notice" ]]; then
     echo -e "\x1B[33mThe site config.php is invalid or the currently running PHP container version is incompatible with this totara version.\nDouble check your config.php and/or try stopping all running php containers and up the correct container for this site.\x1B[0m"
     exit
 elif [[ "$config_output" =~ "Creating default object from empty value" ]]; then
