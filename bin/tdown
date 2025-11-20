@@ -5,7 +5,7 @@ project_path="$( cd $script_path && cd ..; pwd -P )"
 
 set -a; source "$project_path/.env"; set +a
 
-$script_path/tdocker down
+$script_path/tdocker down --remove-orphans $@
 
 # stop mutagen if it is running
 if [[ "$USE_MUTAGEN" == "1" || -f "$project_path/.use-mutagen" ]]; then
