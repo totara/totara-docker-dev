@@ -28,18 +28,6 @@ services:
     networks:
       - totara
 
-  # Deprecated - use maildev instead
-  mailcatcher:
-    image: tophfr/mailcatcher
-    container_name: totara_mailcatcher
-    restart: ${RESTART_POLICY:-no}
-    ports:
-      - "8080:80"
-    environment:
-      TZ: ${TIME_ZONE}
-    networks:
-      - totara
-
   redis:
     image: redis
     restart: ${RESTART_POLICY:-no}
