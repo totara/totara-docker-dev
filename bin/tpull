@@ -6,7 +6,7 @@ project_path="$( cd $script_path && cd ..; pwd -P )"
 if [ $# -eq 0 ] || [ $1 == 'all' ]; then
     source "$project_path/tools/check_for_update.sh"
     # pulling all images already present from docker hub
-    docker images --filter=reference='totara/docker-dev-*' --format "{{.Repository}}" | xargs -I % sh -c 'docker pull %'
+    docker images --filter=reference='ghcr.io/totara/docker-dev-*' --format "{{.Repository}}" | xargs -I % sh -c 'docker pull %'
 else
     $script_path/tdocker pull "$@"
 fi

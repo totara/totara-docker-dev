@@ -1,7 +1,7 @@
 services:
 
   mssql2017:
-    image: totara/docker-dev-mssql
+    image: ghcr.io/totara/docker-dev-mssql2017
     # Mssql does not support multiple architectures
     platform: linux/amd64
     container_name: totara_mssql
@@ -21,7 +21,7 @@ services:
       - totara
 
   mssql2019:
-    image: totara/docker-dev-mssql2019
+    image: ghcr.io/totara/docker-dev-mssql2019
     # Mssql does not support multiple architectures
     platform: linux/amd64
     container_name: totara_mssql2019
@@ -41,7 +41,7 @@ services:
       - totara
 
   mssql2022:
-    image: totara/docker-dev-mssql2022
+    image: ghcr.io/totara/docker-dev-mssql2022
     # Mssql does not support multiple architectures
     platform: linux/amd64
     container_name: totara_mssql2022
