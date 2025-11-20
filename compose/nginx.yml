@@ -27,11 +27,6 @@ services:
     networks:
       totara:
         aliases:
-          - totara54
-          - totara54.debug
-          - totara54.behat
-          - totara54.behat.debug
-          - totara54.behat.totaralms.com
           - totara55
           - totara55.debug
           - totara55.behat
