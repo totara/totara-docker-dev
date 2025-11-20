@@ -35,7 +35,7 @@ if [[ "$USE_MUTAGEN" == "1" || -f "$project_path/.use-mutagen" ]]; then
     containers_to_start+=("sync")
 fi
 
-$script_path/tdocker up -d "${containers_to_start[@]}"
+$script_path/tdocker up --remove-orphans -d "${containers_to_start[@]}"
 
 # if mutagen should be used make sure it's started
 if [[ "$USE_MUTAGEN" == "1" || -f "$project_path/.use-mutagen" ]]; then
