@@ -71,6 +71,8 @@ services:
 
   selenium-edge-debug:
     image: selenium/standalone-edge:latest # For Totara 19+
+    # Edge does not support arm64 yet
+    platform: linux/amd64
     container_name: totara_edge_standalone_debug
     restart: ${RESTART_POLICY:-no}
     ports:
