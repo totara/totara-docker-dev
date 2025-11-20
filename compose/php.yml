@@ -373,8 +373,13 @@ services:
   # php-X.X: ...
   # php-X.X-debug: ...
 
-  # When adding a new PHP container, make sure you also add entries in:
-  # compose/build.yml, compose/sync.yml, .github/workflows/build-php.yml
+  # When adding a new PHP container here, make sure you also:
+  # - Add a build entry in compose/build.yml
+  # - Add a mutagen sync entry in compose/sync.yml
+  # - Add relevant network aliases in compose/nginx.yml and compose/apache.yml
+  # - Add a CI build entry in .github/workflows/build-php.yml
+  # - Update the max PHP version in .github/workflows/validate-config.yml
+  # - Update README.md
 
 volumes:
   totara-data:
