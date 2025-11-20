@@ -1,7 +1,7 @@
 # Legacy containers - these are no longer built or maintained
 services:
   php-5.5:
-    image: totara/docker-dev-php55
+    image: ghcr.io/totara/docker-dev-php55
     container_name: totara_php55
     restart: ${RESTART_POLICY:-no}
     working_dir: ${REMOTE_SRC}
@@ -24,7 +24,7 @@ services:
       - totara
 
   php-5.5-debug:
-    image: totara/docker-dev-php55-debug
+    image: ghcr.io/totara/docker-dev-php55-debug
     container_name: totara_php55_debug
     restart: ${RESTART_POLICY:-no}
     working_dir: ${REMOTE_SRC}
@@ -47,7 +47,7 @@ services:
       - totara
 
   php-5.5-cron:
-    image: totara/docker-dev-php55-cron
+    image: ghcr.io/totara/docker-dev-php55-cron
     container_name: totara_php55_cron
     restart: ${RESTART_POLICY:-no}
     environment:
@@ -61,7 +61,7 @@ services:
       - totara
 
   php-5.6:
-    image: totara/docker-dev-php56
+    image: ghcr.io/totara/docker-dev-php56
     container_name: totara_php56
     restart: ${RESTART_POLICY:-no}
     working_dir: ${REMOTE_SRC}
@@ -84,7 +84,7 @@ services:
       - totara
 
   php-5.6-debug:
-    image: totara/docker-dev-php56-debug
+    image: ghcr.io/totara/docker-dev-php56-debug
     container_name: totara_php56_debug
     restart: ${RESTART_POLICY:-no}
     working_dir: ${REMOTE_SRC}
@@ -107,7 +107,7 @@ services:
       - totara
 
   php-5.6-cron:
-    image: totara/docker-dev-php56-cron
+    image: ghcr.io/totara/docker-dev-php56-cron
     container_name: totara_php56_cron
     restart: ${RESTART_POLICY:-no}
     environment:
@@ -121,7 +121,7 @@ services:
       - totara
 
   php-7.0:
-    image: totara/docker-dev-php70
+    image: ghcr.io/totara/docker-dev-php70
     container_name: totara_php70
     restart: ${RESTART_POLICY:-no}
     working_dir: ${REMOTE_SRC}
@@ -144,7 +144,7 @@ services:
       - totara
 
   php-7.0-debug:
-    image: totara/docker-dev-php70-debug
+    image: ghcr.io/totara/docker-dev-php70-debug
     container_name: totara_php70_debug
     restart: ${RESTART_POLICY:-no}
     working_dir: ${REMOTE_SRC}
@@ -167,7 +167,7 @@ services:
       - totara
 
   php-7.0-cron:
-    image: totara/docker-dev-php70-cron
+    image: ghcr.io/totara/docker-dev-php70-cron
     container_name: totara_php70_cron
     restart: ${RESTART_POLICY:-no}
     environment:
@@ -181,7 +181,7 @@ services:
       - totara
 
   php-7.1:
-    image: totara/docker-dev-php71
+    image: ghcr.io/totara/docker-dev-php71
     container_name: totara_php71
     restart: ${RESTART_POLICY:-no}
     working_dir: ${REMOTE_SRC}
@@ -204,7 +204,7 @@ services:
       - totara
 
   php-7.1-debug:
-    image: totara/docker-dev-php71-debug
+    image: ghcr.io/totara/docker-dev-php71-debug
     container_name: totara_php71_debug
     restart: ${RESTART_POLICY:-no}
     working_dir: ${REMOTE_SRC}
@@ -227,7 +227,7 @@ services:
       - totara
 
   php-7.1-cron:
-    image: totara/docker-dev-php71-cron
+    image: ghcr.io/totara/docker-dev-php71-cron
     container_name: totara_php71_cron
     restart: ${RESTART_POLICY:-no}
     environment:
@@ -241,7 +241,7 @@ services:
       - totara
 
   php-7.2:
-    image: totara/docker-dev-php72
+    image: ghcr.io/totara/docker-dev-php72
     container_name: totara_php72
     restart: ${RESTART_POLICY:-no}
     working_dir: ${REMOTE_SRC}
@@ -264,7 +264,7 @@ services:
       - totara
 
   php-7.2-debug:
-    image: totara/docker-dev-php72-debug
+    image: ghcr.io/totara/docker-dev-php72-debug
     container_name: totara_php72_debug
     restart: ${RESTART_POLICY:-no}
     working_dir: ${REMOTE_SRC}
@@ -288,7 +288,7 @@ services:
       - totara
 
   php-7.2-cron:
-    image: totara/docker-dev-php72-cron
+    image: ghcr.io/totara/docker-dev-php72-cron
     container_name: totara_php72_cron
     restart: ${RESTART_POLICY:-no}
     environment:
