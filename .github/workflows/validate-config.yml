@@ -6,14 +6,40 @@ on:
       - 'config.php'
       - 'php/includes/**'
       - '.github/workflows/validate-config.yml'
-      - '.github/workflows/validate-config-for-version.yml'
 
 jobs:
   validate-config:
-    uses: ./.github/workflows/validate-config-for-version.yml
+    name: Validate for PHP ${{ matrix.php-version }}
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: true
       matrix:
         php-version: ['8.4', '5.5']
-    with:
-      php-version: ${{ matrix.php-version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - name: Create symlinks for config.php includes
+        run: |
+          sudo mkdir -p /var/www/totara
+          sudo ln -sf "$GITHUB_WORKSPACE/php/includes" /var/www/totara/includes
+      - name: Set up PHP ${{ matrix.php-version }}
+        uses: shivammathur/setup-php@c541c155eee45413f5b09a52248675b1a2575231 # v2.31.1
+        with:
+          php-version: ${{ matrix.php-version }}
+      - name: Validate config.php syntax (PHP ${{ matrix.php-version }})
+        run: php -l ./config.php && find ./php/includes -name '*.php' -exec php -l {} +
+      - name: Check that required $CFG variables are defined (PHP ${{ matrix.php-version }})
+        run: |
+          php -r '
+            define("CLI_SCRIPT", true);
+            define("ABORT_AFTER_CONFIG", true);
+            include "config.php";
+            foreach (["dbhost", "dbtype", "dbuser", "dbpass", "dbname", "prefix", "wwwroot", "dataroot"] as $var) {
+              if (!isset($CFG->{$var})) {
+                fwrite(STDERR, "Missing \$CFG->{$var} from config.php (or from php/includes/) - is it commented out?\n");
+                exit(1);
+              }
+            }
+          '
