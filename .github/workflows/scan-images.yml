@@ -1,0 +1,46 @@
+name: Trivy Image Vulnerability Scan
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 18 * * 0' # Run every Monday at 6am NZST
+
+permissions:
+  contents: read
+
+jobs:
+  scan-image:
+    name: Scan ${{ matrix.image }} image for vulnerabilities
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - image: mssql2017
+          - image: mssql2019
+          - image: mssql2022
+          - image: php73
+          - image: php74
+          - image: php80
+          - image: php81
+          - image: php82
+          - image: php83
+          - image: php84
+    permissions:
+      contents: read
+      security-events: write
+    steps:
+      - name: Pull image to scan
+        run: docker pull ghcr.io/totara/docker-dev-${{ matrix.image }}
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@b6643a29fecd7f34b3597bc6acb0a98b03d33ff8 # v0.33.1
+        with:
+          image-ref: ghcr.io/totara/docker-dev-${{ matrix.image }}
+          format: template
+          template: '@/contrib/sarif.tpl'
+          output: trivy-results-${{ matrix.image }}-image.sarif
+          severity: 'CRITICAL,HIGH'
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v4
+        with:
+          sarif_file: trivy-results-${{ matrix.image }}-image.sarif
