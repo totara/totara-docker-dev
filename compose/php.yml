@@ -378,6 +378,7 @@ services:
   # - Add a mutagen sync entry in compose/sync.yml
   # - Add relevant network aliases in compose/nginx.yml and compose/apache.yml
   # - Add a CI build entry in .github/workflows/build-php.yml
+  # - Add a image matrix entry in .github/workflows/scan-images.yml
   # - Update the max PHP version in .github/workflows/validate-config.yml
   # - Update README.md
 

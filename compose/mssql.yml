@@ -60,8 +60,11 @@ services:
     networks:
       - totara
 
-  # When adding a new MSSQL container, make sure you also add entries in:
-  # compose/build.yml, .github/workflows/build-mssql.yml
+  # When adding a new MSSQL container here, make sure you also:
+  # - Add a build entry in compose/build.yml
+  # - Add a CI build entry in .github/workflows/build-mssql.yml
+  # - Add a image matrix entry in .github/workflows/scan-images.yml
+  # - Update README.md
 
 volumes:
   mssql-data:
