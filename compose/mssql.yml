@@ -4,7 +4,7 @@ services:
     image: ghcr.io/totara/docker-dev-mssql2017
     # Mssql does not support multiple architectures
     platform: linux/amd64
-    container_name: totara_mssql
+    container_name: totara_mssql2017
     restart: ${RESTART_POLICY:-no}
     ports:
       - "1433:1433"
