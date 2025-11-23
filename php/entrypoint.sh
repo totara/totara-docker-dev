@@ -18,4 +18,13 @@ fi
 # This prevents openssl from complaining about not having enough entropy
 openssl rand -writerand /root/.rnd
 
+# Enforce minimum PHP version for 8.5 series (>= 8.5.2)
+if php -r 'exit(PHP_MAJOR_VERSION==8 && PHP_MINOR_VERSION==5 ? 0 : 2);'; then
+    if ! php -r 'exit(version_compare(PHP_VERSION, "8.5.2", ">=") ? 0 : 1);'; then
+        echo "PHP 8.5 detected, but version $(php -r 'echo PHP_VERSION;') is < 8.5.2."
+        echo "Please rebuild/update the image to use php:8.5.2-fpm-bookworm or newer."
+        exit 1
+    fi
+fi
+
 php-fpm
