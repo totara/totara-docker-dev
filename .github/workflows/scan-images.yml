@@ -26,6 +26,7 @@ jobs:
           - image: php82
           - image: php83
           - image: php84
+          - image: php85
     permissions:
       contents: read
       security-events: write

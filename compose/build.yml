@@ -112,5 +112,19 @@ services:
       args:
         TIME_ZONE: ${TIME_ZONE}
 
+  php-8.5:
+    build:
+      context: ./php
+      dockerfile: php85/Dockerfile
+      args:
+        TIME_ZONE: ${TIME_ZONE}
+
+  php-8.5-debug:
+    build:
+      context: ./php
+      dockerfile: php85/Dockerfile
+      args:
+        TIME_ZONE: ${TIME_ZONE}
+
   # php-X.X: ...
   # php-X.X-debug: ...
