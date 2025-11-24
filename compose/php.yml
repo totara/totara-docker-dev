@@ -370,6 +370,57 @@ services:
     networks:
       - totara
 
+  php-8.5:
+    image: ghcr.io/totara/docker-dev-php85
+    container_name: totara_php85
+    working_dir: ${REMOTE_SRC}
+    environment:
+      CONTAINERNAME: php-8.5
+      CRON_CONTAINER: ${CRON_CONTAINER:-none}
+      HIST_FILE: /root/.bash_history
+      DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
+      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT:-0}
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+      - ./cron.d:/etc/cron.d
+      - ./php/includes:/var/www/totara/includes
+      - coverage-report:/var/www/totara/coverage-report
+      - bash-history:/root/.bash_history
+      - zsh-history:/root/.zsh_history
+      - ./shell:/root/custom_shell
+    depends_on:
+      - php-8.5-debug
+    networks:
+      - totara     
+
+  php-8.5-debug:
+    image: ghcr.io/totara/docker-dev-php85
+    container_name: totara_php85_debug
+    working_dir: ${REMOTE_SRC}
+    environment:
+      CONTAINERNAME: php-8.5-debug
+      CRON_CONTAINER: ${CRON_CONTAINER:-none}
+      TZ: ${TIME_ZONE}
+      XDEBUG_CONFIG: client_host=${HOST_IP}
+      XDEBUG_MODE: debug
+      XDEBUG_SESSION: totara85
+      PHP_IDE_CONFIG: serverName=totara85
+      HIST_FILE: /root/.bash_history
+      DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
+      USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT:-0}
+    volumes:
+      - ${LOCAL_SRC}:${REMOTE_SRC}
+      - totara-data:${REMOTE_DATA}
+      - ./cron.d:/etc/cron.d
+      - ./php/includes:/var/www/totara/includes
+      - coverage-report:/var/www/totara/coverage-report
+      - bash-history:/root/.bash_history
+      - zsh-history:/root/.zsh_history
+      - ./shell:/root/custom_shell
+    networks:
+      - totara
+
   # php-X.X: ...
   # php-X.X-debug: ...
 

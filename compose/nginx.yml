@@ -87,7 +87,12 @@ services:
           - totara84.behat
           - totara84.behat.debug
           - totara84.behat.totaralms.com
-
+          - totara85
+          - totara85.debug
+          - totara85.behat
+          - totara85.behat.debug
+          - totara85.behat.totaralms.com
+          
 volumes:
   totara-data:
   coverage-report:

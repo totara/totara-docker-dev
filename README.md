@@ -14,7 +14,7 @@ Although this project started as a development environment for Totara Learn it c
 ### What You Get
  * [NGINX](https://nginx.org/) as a webserver
  * [Apache](https://httpd.apache.org/) as a webserver
- * [PHP](http://php.net/) 5.5, 5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0, 8.1, 8.2, 8.3, 8.4 to test for different versions
+ * [PHP](http://php.net/) 5.5, 5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0, 8.1, 8.2, 8.3, 8.4, 8.5 to test for different versions
  * [PostgreSQL](https://www.postgresql.org/) (9.3, 9.6, 10, 11, 12, 13, 14, 15, 16, 17), 
  * [MariaDB](https://mariadb.org/) (10.2, 10.3, 10.4, 10.5, 10.6, 10.7, 10.8, 10.11, 11.4, 11.8), 
  * [MySQL](https://www.mysql.com/) (5.7, 8.0, 8.4), 
