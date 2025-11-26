@@ -302,5 +302,6 @@ $CFG->pathtodot = '/usr/bin/dot';
 
 // Tell Totara where composer is
 if (!defined('TOTARA_COMPOSER')) {
-    define('TOTARA_COMPOSER', '/usr/bin/composer');
+    // Disable xdebug when running composer so breakpoints don't interfere with composer operations
+    define('TOTARA_COMPOSER', 'XDEBUG_MODE=off /usr/bin/composer');
 }
