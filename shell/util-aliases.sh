@@ -101,3 +101,6 @@ totara_version() {
     php -n -r "$php_code echo \$version;"
   fi
 }
+
+# Run composer but disable xdebug for the duration of the command
+alias composer='XDEBUG_MODE=off composer'
