@@ -199,6 +199,26 @@ services:
     networks:
       - totara
 
+  pgsql18:
+    image: postgres:18-alpine
+    container_name: totara_pgsql18
+    restart: ${RESTART_POLICY:-no}
+    ports:
+      - "5447:5432"
+    environment:
+      TZ: ${TIME_ZONE}
+      PGDATA: /var/lib/postgresql/docker/pgdata
+      POSTGRES_HOST_AUTH_METHOD: trust
+    command:
+      postgres -c 'config_file=/etc/postgresql/postgresql.conf'
+    volumes:
+      - ./pgsql/my-postgres.conf:/etc/postgresql/postgresql.conf
+      - pgsql18-data:/var/lib/postgresql/docker
+    depends_on:
+      - nginx
+    networks:
+      - totara
+
 volumes:
   pgsql93-data:
   pgsql96-data:
@@ -210,3 +230,4 @@ volumes:
   pgsql15-data:
   pgsql16-data:
   pgsql17-data:
+  pgsql18-data:
