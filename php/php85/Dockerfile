@@ -1,4 +1,4 @@
-FROM php:8.2-fpm-bookworm
+FROM php:8.5-fpm-bookworm
 
 ARG TIME_ZONE=Pacific/Auckland
 
@@ -6,6 +6,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         apt-transport-https \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
+        libwebp-dev \
         libmcrypt-dev \
         libpng-dev \
         libxml2-dev \
@@ -30,23 +31,25 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         aspell \
         libldap2-dev \
         libltdl-dev \
+        libc-client-dev \
+        libkrb5-dev \
+        libssl-dev \
         libpspell-dev \
         xmlstarlet \
     && docker-php-ext-install -j$(nproc) \
         zip \
         intl \
         soap \
-        opcache \
         pdo_pgsql \
         pdo_mysql \
         pgsql \
         mysqli \
         exif \
         ldap \
-        pspell \
     && docker-php-ext-configure gd \
             --with-freetype \
             --with-jpeg \
+            --with-webp \
     && docker-php-ext-install -j$(nproc) gd
 
 RUN git clone https://github.com/longxinH/xhprof.git ./xhprof \
@@ -60,27 +63,43 @@ RUN git clone https://github.com/longxinH/xhprof.git ./xhprof \
 RUN echo "extension=xhprof.so" >> /usr/local/etc/php/conf.d/xhprof.ini \
     && echo "xhprof.output_dir = /tmp/xhprof" >> /usr/local/etc/php/conf.d/xhprof.ini
 
-RUN pecl install -o -f redis \
+RUN pecl channel-update pecl.php.net && \
+    pecl install -o -f redis \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable redis
 
-RUN pecl install -o -f igbinary \
+RUN pecl channel-update pecl.php.net && \
+    pecl install -o -f igbinary \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable igbinary
 
-RUN pecl install -o -f memcached \
+RUN pecl channel-update pecl.php.net && \
+    pecl install -o -f memcached \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable memcached
 
-RUN pecl install -o -f excimer \
+RUN pecl channel-update pecl.php.net && \
+    pecl install -o -f imap \
+    &&  rm -rf /tmp/pear \
+    &&  docker-php-ext-enable imap
+
+RUN pecl channel-update pecl.php.net && \
+    pecl install -o -f excimer \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable excimer
 
-RUN pecl install -o -f xdebug-3.4.0 \
+RUN pecl channel-update pecl.php.net && \
+    pecl install -o -f pspell \
+    &&  rm -rf /tmp/pear \
+    &&  docker-php-ext-enable pspell
+
+RUN pecl channel-update pecl.php.net && \
+    pecl install -o -f xdebug-3.5.0 \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable xdebug.so
 
-RUN pecl install -o -f pcov \
+RUN pecl channel-update pecl.php.net && \
+    pecl install -o -f pcov \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable pcov
 
@@ -110,13 +129,14 @@ RUN curl -fsSL https://packages.microsoft.com/config/debian/12/packages-microsof
 RUN echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile \
     && echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc
 
+# TODO: pdo_sqlsrv installation below is broken on PHP 8.5
 # Workaround applied: https://github.com/microsoft/msphpsql/issues/1438#issuecomment-1444773949
-RUN pear config-set php_ini `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"` system \
-    && pecl install sqlsrv-5.12.0 pdo_sqlsrv-5.12.0 || \
-    apt-get install -y --allow-downgrades odbcinst=2.3.7 odbcinst1debian2=2.3.7 unixodbc=2.3.7 unixodbc-dev=2.3.7 && \
-    pecl install sqlsrv-5.12.0 pdo_sqlsrv-5.12.0
+# RUN pear config-set php_ini `php --ini | grep "Loaded Configuration" | sed -e "s|.*:\s*||"` system \
+#     && pecl install sqlsrv-5.12.0 pdo_sqlsrv-5.12.0 || \
+#     apt-get install -y --allow-downgrades odbcinst=2.3.7 odbcinst1debian2=2.3.7 unixodbc=2.3.7 unixodbc-dev=2.3.7 && \
+#     pecl install sqlsrv-5.12.0 pdo_sqlsrv-5.12.0
 
-RUN docker-php-ext-enable sqlsrv.so && docker-php-ext-enable pdo_sqlsrv.so
+# RUN docker-php-ext-enable sqlsrv.so && docker-php-ext-enable pdo_sqlsrv.so
 
 RUN ln -fs /usr/share/zoneinfo/${TIME_ZONE} /etc/localtime \
     && dpkg-reconfigure --frontend noninteractive tzdata
