@@ -1,0 +1,16 @@
+#!/bin/bash
+
+script_path="$( cd "$(dirname "$0")" ; pwd -P )"
+
+# If the container isn't specified, then we just default to the default php container.
+container="$1"
+if [[ -z "$container" ]]; then
+    container="php"
+fi
+
+if [[ ! "$container" =~ "php" ]]; then
+    echo "tzsh only supports php containers"
+    exit 1
+fi
+
+$script_path/texec "$container" php server/admin/cli/purge_caches.php
