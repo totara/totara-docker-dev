@@ -47,6 +47,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         mysqli \
         exif \
         ldap \
+        pcntl \
     && docker-php-ext-configure gd \
             --with-freetype \
             --with-jpeg \

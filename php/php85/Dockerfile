@@ -51,6 +51,7 @@ RUN docker-php-ext-install -j$(nproc) \
         mysqli \
         exif \
         ldap \
+        pcntl \
     && docker-php-ext-configure gd \
             --with-freetype \
             --with-jpeg \
