@@ -245,8 +245,8 @@ if ($DOCKER_DEV->major_version > 18) {
 
 // wwwroot setup
 
-// Matches URL with ngrok.app, ngrok-free.app or ngrok.pizza
-$ngrok_hostname_regex = '/\b(?:ngrok-free\.app|ngrok\.app|ngrok\.pizza)\b/';
+// Matches URL with ngrok.app, ngrok-free.app, ngrok.dev, ngrok-free.dev or ngrok.pizza
+$ngrok_hostname_regex = '/\b(?:ngrok-free\.app|ngrok\.app|ngrok-free\.dev|ngrok\.dev|ngrok\.pizza)\b/';
 if (!empty($_SERVER['HTTP_X_FORWARDED_HOST']) && preg_match($ngrok_hostname_regex, $_SERVER['HTTP_X_FORWARDED_HOST'])) {
     // Request came via ngrok
     $_SERVER['HTTP_HOST'] = $_SERVER['HTTP_X_FORWARDED_HOST'];
