@@ -16,6 +16,35 @@ ignore_dataroot=0
 force_backup=0
 for_totara_box=0
 
+help_text="Helper for interacting with your totara database.
+It detects your database engine via your config.php, so if you have multiple sites
+running you'll need to run this from the folder you wish to interact with.
+
+Usage: $script_name [OPTIONS] <action> [database name] [backup alias]
+
+Actions:
+  create       Create database
+  recreate     Drop database and then recreate it
+  drop         Drop database
+  backup       Dump database to a backup file
+  restore      Restore database from a backup file
+  shell        Start a tty session for a database
+  list         List available backups for this database family
+
+Options:
+  -i, --ignore-dataroot    Ignore the dataroot directory when backing up and restoring.
+  -f, --force              Overwrite any existing database and dataroot backups if they already exist.
+  -b, --totara-box         Backup and restore the database in a format compatible with Totara box (Postgres only)
+
+Examples:
+  $script_name create                                // Will create a database with the name defined in your config.php if it doesn't already exist
+  $script_name drop unt_totara13                     // Will drop the database with the name 'unt_totara13'
+  $script_name backup --ignore-dataroot              // Will backup the database but not the dataroot to backup directory specified in the .env file
+  $script_name backup mydatabasename myalias         // Will backup the database 'mydatabasename' and use 'myalias' as a name for the backup files
+  $script_name restore totara13 myalias              // Will restore the database dumped with the alias 'myalias' into the 'totara13' database
+  $script_name list                                  // Will list all the database backups compatible with the database family
+"
+
 # Parse arguments
 positional=()
 while [[ $# -gt 0 ]]; do
@@ -31,6 +60,10 @@ while [[ $# -gt 0 ]]; do
     -b|--totara-box)
       for_totara_box=1
       shift
+      ;;
+    -h|--help)
+      echo "$help_text";
+      exit;
       ;;
     -*)
       echo "Unknown option: $1"
@@ -66,34 +99,7 @@ action_options=(
 
 # Print help info
 if [[ -z $action || ! " ${action_options[@]} " =~ " ${action} " ]]; then
-    echo "Helper for interacting with your totara database.
-It detects your database engine via your config.php, so if you have multiple sites
-running you'll need to run this from the folder you wish to interact with.
-
-Usage: $script_name [OPTIONS] <action> [database name] [backup alias]
-
-Actions:
-  create       Create database
-  recreate     Drop database and then recreate it
-  drop         Drop database
-  backup       Dump database to a backup file
-  restore      Restore database from a backup file
-  shell        Start a tty session for a database
-  list         List available backups for this database family
-
-Options:
-  -i, --ignore-dataroot    Ignore the dataroot directory when backing up and restoring.
-  -f, --force              Overwrite any existing database and dataroot backups if they already exist.
-  -b, --totara-box         Backup and restore the database in a format compatible with Totara box (Postgres only)
-
-Examples:
-  $script_name create                                // Will create a database with the name defined in your config.php if it doesn't already exist
-  $script_name drop unt_totara13                     // Will drop the database with the name 'unt_totara13'
-  $script_name backup --ignore-dataroot              // Will backup the database but not the dataroot to backup directory specified in the .env file
-  $script_name backup mydatabasename myalias         // Will backup the database 'mydatabasename' and use 'myalias' as a name for the backup files
-  $script_name restore totara13 myalias              // Will restore the database dumped with the alias 'myalias' into the 'totara13' database
-  $script_name list                                  // Will list all the database backups compatible with the database family
-"
+    echo "$help_text";
     exit;
 fi
 
