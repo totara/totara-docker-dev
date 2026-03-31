@@ -1,6 +1,15 @@
+x-healthcheck-template: &postgres-healthcheck
+  healthcheck:
+    test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER:-postgres}"]
+    interval: 5s
+    timeout: 5s
+    retries: 5
+    start_period: 10s
+
 services:
 
   pgsql93:
+    <<: *postgres-healthcheck
     image: postgres:9.3-alpine
     container_name: totara_pgsql93
     restart: ${RESTART_POLICY:-no}
@@ -20,6 +29,7 @@ services:
       - totara
 
   pgsql96:
+    <<: *postgres-healthcheck
     image: postgres:9.6-alpine
     container_name: totara_pgsql96
     restart: ${RESTART_POLICY:-no}
@@ -40,6 +50,7 @@ services:
       - totara
 
   pgsql10:
+    <<: *postgres-healthcheck
     image: postgres:10-alpine
     container_name: totara_pgsql10
     restart: ${RESTART_POLICY:-no}
@@ -60,6 +71,7 @@ services:
       - totara
 
   pgsql11:
+    <<: *postgres-healthcheck
     image: postgres:11-alpine
     container_name: totara_pgsql11
     restart: ${RESTART_POLICY:-no}
@@ -80,6 +92,7 @@ services:
       - totara
 
   pgsql12:
+    <<: *postgres-healthcheck
     image: postgres:12-alpine
     container_name: totara_pgsql12
     restart: ${RESTART_POLICY:-no}
@@ -100,6 +113,7 @@ services:
       - totara
 
   pgsql13:
+    <<: *postgres-healthcheck
     image: postgres:13-alpine
     container_name: totara_pgsql13
     restart: ${RESTART_POLICY:-no}
@@ -120,6 +134,7 @@ services:
       - totara
 
   pgsql14:
+    <<: *postgres-healthcheck
     image: postgres:14-alpine
     container_name: totara_pgsql14
     restart: ${RESTART_POLICY:-no}
@@ -140,6 +155,7 @@ services:
       - totara
 
   pgsql15:
+    <<: *postgres-healthcheck
     image: postgres:15-alpine
     container_name: totara_pgsql15
     restart: ${RESTART_POLICY:-no}
@@ -160,6 +176,7 @@ services:
       - totara
 
   pgsql16:
+    <<: *postgres-healthcheck
     image: postgres:16-alpine
     container_name: totara_pgsql16
     restart: ${RESTART_POLICY:-no}
@@ -180,6 +197,7 @@ services:
       - totara
     
   pgsql17:
+    <<: *postgres-healthcheck
     image: postgres:17-alpine
     container_name: totara_pgsql17
     restart: ${RESTART_POLICY:-no}
@@ -200,6 +218,7 @@ services:
       - totara
 
   pgsql18:
+    <<: *postgres-healthcheck
     image: postgres:18-alpine
     container_name: totara_pgsql18
     restart: ${RESTART_POLICY:-no}
