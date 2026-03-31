@@ -1,6 +1,23 @@
+x-healthcheck-template: &mssql-healthcheck
+  healthcheck:
+    test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S 127.0.0.1 -U sa -P $$MSSQL_SA_PASSWORD -Q 'SELECT 1' -C 2>/dev/null"]
+    interval: 5s
+    timeout: 5s
+    retries: 5
+    start_period: 30s
+
+x-healthcheck-template-legacy: &mssql-healthcheck-legacy
+  healthcheck:
+    test: ["CMD-SHELL", "/opt/mssql-tools/bin/sqlcmd -S 127.0.0.1 -U sa -P $$SA_PASSWORD -Q 'SELECT 1' 2>/dev/null"]
+    interval: 5s
+    timeout: 5s
+    retries: 5
+    start_period: 30s
+
 services:
 
   mssql2017:
+    <<: *mssql-healthcheck-legacy
     image: ghcr.io/totara/docker-dev-mssql2017
     # Mssql does not support multiple architectures
     platform: linux/amd64
@@ -21,6 +38,7 @@ services:
       - totara
 
   mssql2019:
+    <<: *mssql-healthcheck-legacy
     image: ghcr.io/totara/docker-dev-mssql2019
     # Mssql does not support multiple architectures
     platform: linux/amd64
@@ -41,6 +59,7 @@ services:
       - totara
 
   mssql2022:
+    <<: *mssql-healthcheck
     image: ghcr.io/totara/docker-dev-mssql2022
     # Mssql does not support multiple architectures
     platform: linux/amd64

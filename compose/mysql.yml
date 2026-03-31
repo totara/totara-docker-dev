@@ -1,6 +1,15 @@
+x-healthcheck-template: &mysql-healthcheck
+  healthcheck:
+    test: ["CMD-SHELL", "mysqladmin -u root -p$$MYSQL_ROOT_PASSWORD ping -h 127.0.0.1 2>/dev/null"]
+    interval: 5s
+    timeout: 5s
+    retries: 5
+    start_period: 10s
+
 services:
 
   mysql8:
+    <<: *mysql-healthcheck
     image: mysql:8.0
     container_name: totara_mysql8
     restart: ${RESTART_POLICY:-no}
@@ -18,6 +27,7 @@ services:
       - totara
 
   mysql84:
+    <<: *mysql-healthcheck
     image: mysql:8.4
     container_name: totara_mysql84
     restart: ${RESTART_POLICY:-no}
@@ -37,6 +47,7 @@ services:
   mysql57:
     # MySQL 5.7 does not support multiple architectures. (MySQL 8.0 works fine)
     platform: linux/amd64
+    <<: *mysql-healthcheck
     image: mysql:5.7
     container_name: totara_mysql57
     restart: ${RESTART_POLICY:-no}

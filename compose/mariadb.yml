@@ -1,6 +1,23 @@
+x-healthcheck-template: &mariadb-healthcheck
+  healthcheck:
+    test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+    interval: 5s
+    timeout: 5s
+    retries: 5
+    start_period: 10s
+
+x-healthcheck-template-legacy: &mariadb-healthcheck-legacy
+  healthcheck:
+    test: ["CMD-SHELL", "mysqladmin -u root -p$$MYSQL_ROOT_PASSWORD ping -h 127.0.0.1 2>/dev/null"]
+    interval: 5s
+    timeout: 5s
+    retries: 5
+    start_period: 10s
+
 services:
 
   mariadb1108:
+    <<: *mariadb-healthcheck
     image: mariadb:11.8
     container_name: totara_mariadb1108
     restart: ${RESTART_POLICY:-no}
@@ -18,6 +35,7 @@ services:
       - totara
 
   mariadb1104:
+    <<: *mariadb-healthcheck
     image: mariadb:11.4
     container_name: totara_mariadb1104
     restart: ${RESTART_POLICY:-no}
@@ -35,6 +53,7 @@ services:
       - totara
 
   mariadb1011:
+    <<: *mariadb-healthcheck
     image: mariadb:10.11
     container_name: totara_mariadb1011
     restart: ${RESTART_POLICY:-no}
@@ -52,6 +71,7 @@ services:
       - totara
 
   mariadb108:
+    <<: *mariadb-healthcheck
     image: mariadb:10.8
     container_name: totara_mariadb108
     restart: ${RESTART_POLICY:-no}
@@ -69,6 +89,7 @@ services:
       - totara
 
   mariadb107:
+    <<: *mariadb-healthcheck
     image: mariadb:10.7
     container_name: totara_mariadb107
     restart: ${RESTART_POLICY:-no}
@@ -86,6 +107,7 @@ services:
       - totara
 
   mariadb106:
+    <<: *mariadb-healthcheck
     image: mariadb:10.6
     container_name: totara_mariadb106
     restart: ${RESTART_POLICY:-no}
@@ -103,6 +125,7 @@ services:
       - totara
 
   mariadb105:
+    <<: *mariadb-healthcheck
     image: mariadb:10.5
     container_name: totara_mariadb105
     restart: ${RESTART_POLICY:-no}
@@ -120,6 +143,7 @@ services:
       - totara
 
   mariadb104:
+    <<: *mariadb-healthcheck
     image: mariadb:10.4
     container_name: totara_mariadb104
     restart: ${RESTART_POLICY:-no}
@@ -137,6 +161,7 @@ services:
       - totara
 
   mariadb103:
+    <<: *mariadb-healthcheck-legacy
     image: mariadb:10.3
     container_name: totara_mariadb103
     restart: ${RESTART_POLICY:-no}
@@ -154,6 +179,7 @@ services:
       - totara
 
   mariadb102:
+    <<: *mariadb-healthcheck-legacy
     image: mariadb:10.2
     container_name: totara_mariadb102
     restart: ${RESTART_POLICY:-no}
