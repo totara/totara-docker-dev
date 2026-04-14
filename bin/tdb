@@ -475,11 +475,13 @@ elif [ "$db_type" == 'mssql' ]; then
 
     # Drop and create mssql database
     elif [ "$action" == 'recreate' ]; then
+        db_sql_cmd "ALTER DATABASE $db_name SET SINGLE_USER WITH ROLLBACK IMMEDIATE;"
         db_sql_cmd "DROP DATABASE IF EXISTS $db_name"
         db_sql_cmd "CREATE DATABASE $db_name COLLATE Latin1_General_CS_AS ALTER DATABASE $db_name SET ANSI_NULLS ON ALTER DATABASE $db_name SET QUOTED_IDENTIFIER ON ALTER DATABASE $db_name SET READ_COMMITTED_SNAPSHOT ON" || exit
 
     # Drop mssql database
     elif [ "$action" == 'drop' ]; then
+        db_sql_cmd "ALTER DATABASE $db_name SET SINGLE_USER WITH ROLLBACK IMMEDIATE;"
         db_sql_cmd "DROP DATABASE $db_name" || exit
 
     # Backup mssql database
@@ -491,7 +493,9 @@ elif [ "$db_type" == 'mssql' ]; then
     # Restore mssql database
     elif [ "$action" == 'restore' ]; then
         docker cp --quiet "$backup_file_local" "$db_container":"$backup_file_remote"
+        db_sql_cmd "ALTER DATABASE $db_name SET SINGLE_USER WITH ROLLBACK IMMEDIATE;"
         db_sql_cmd "RESTORE DATABASE $db_name FROM DISK='$backup_file_remote' WITH REPLACE" "$db_command sh -c \"rm $backup_file_remote\"" || exit
+        db_sql_cmd "ALTER DATABASE $db_name SET MULTI_USER WITH ROLLBACK IMMEDIATE;"
 
     # Start mssql shell
     elif [ "$action" == 'shell' ]; then
