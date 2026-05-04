@@ -1,0 +1,10 @@
+#!/bin/bash
+
+script_path="$( cd "$(dirname "$0")" ; pwd -P )"
+
+if [[ "$1" == "debug" ]]; then
+    shift
+    $script_path/tphp debug composer "$@"
+else
+    $script_path/tphp composer "$@"
+fi
