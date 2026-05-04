@@ -145,6 +145,10 @@ RUN echo 'setopt +o nomatch' > ~/.zshrc
 RUN echo 'source ~/custom_shell/.zshrc' >> ~/.zshrc
 RUN cat ~/.bashrc >> ~/.zshrc
 
+COPY smoke-test.sh /usr/local/bin/totara-php-smoke-test
+RUN chmod +x /usr/local/bin/totara-php-smoke-test \
+    && /usr/local/bin/totara-php-smoke-test
+
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT [ "/entrypoint.sh" ]
