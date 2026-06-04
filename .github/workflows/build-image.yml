@@ -19,6 +19,10 @@ on:
         required: false
         type: boolean
         default: false
+      debug:
+        required: false
+        type: boolean
+        default: false
 
 jobs:
   build-image:
@@ -55,6 +59,16 @@ jobs:
         with:
           context: ${{ inputs.context }}
           file: ${{ inputs.context }}/${{ inputs.dockerfile }}
+          platforms: ${{ inputs.multiarch == true && 'linux/amd64,linux/arm64' || 'linux/amd64' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          push: ${{ inputs.push }}
+      - name: Build and push debug image
+        if: ${{ inputs.debug == true }}
+        uses: docker/build-push-action@4f58ea79222b3b9dc2c8bbdd6debcef730109a75 # v6.9.0
+        with:
+          context: ${{ inputs.context }}
+          file: ${{ inputs.context }}/${{ inputs.dockerfile }}-debug
           platforms: ${{ inputs.multiarch == true && 'linux/amd64,linux/arm64' || 'linux/amd64' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

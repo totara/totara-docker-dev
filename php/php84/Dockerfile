@@ -96,11 +96,6 @@ RUN pecl channel-update pecl.php.net && \
     &&  docker-php-ext-enable pspell
 
 RUN pecl channel-update pecl.php.net && \
-    pecl install -o -f xdebug-3.4.0 \
-    &&  rm -rf /tmp/pear \
-    &&  docker-php-ext-enable xdebug.so
-
-RUN pecl channel-update pecl.php.net && \
     pecl install -o -f pcov \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable pcov

@@ -338,13 +338,11 @@ services:
       - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
-    depends_on:
-      - php-8.4-debug
     networks:
       - totara
 
   php-8.4-debug:
-    image: ghcr.io/totara/docker-dev-php84
+    image: ghcr.io/totara/docker-dev-php84-debug
     container_name: totara_php84_debug
     working_dir: ${REMOTE_SRC}
     environment:
@@ -369,6 +367,8 @@ services:
       - ./shell:/root/custom_shell
     networks:
       - totara
+    depends_on:
+      - php-8.4
 
   php-8.5:
     image: ghcr.io/totara/docker-dev-php85
@@ -389,13 +389,11 @@ services:
       - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
-    depends_on:
-      - php-8.5-debug
     networks:
-      - totara     
+      - totara
 
   php-8.5-debug:
-    image: ghcr.io/totara/docker-dev-php85
+    image: ghcr.io/totara/docker-dev-php85-debug
     container_name: totara_php85_debug
     working_dir: ${REMOTE_SRC}
     environment:
@@ -420,6 +418,8 @@ services:
       - ./shell:/root/custom_shell
     networks:
       - totara
+    depends_on:
+      - php-8.5
 
   # php-X.X: ...
   # php-X.X-debug: ...
