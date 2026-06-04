@@ -1,0 +1,6 @@
+FROM ghcr.io/totara/docker-dev-php84
+
+RUN pecl channel-update pecl.php.net && \
+    pecl install -o -f xdebug-3.4.7 \
+    &&  rm -rf /tmp/pear \
+    &&  docker-php-ext-enable xdebug.so
