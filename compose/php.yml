@@ -329,6 +329,7 @@ services:
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
       USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT:-0}
+      XDEBUG_MODE: off
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -380,6 +381,7 @@ services:
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
       USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT:-0}
+      XDEBUG_MODE: off
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -392,7 +394,7 @@ services:
     depends_on:
       - php-8.5-debug
     networks:
-      - totara     
+      - totara
 
   php-8.5-debug:
     image: ghcr.io/totara/docker-dev-php85
