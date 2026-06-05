@@ -37,7 +37,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         libpspell-dev \
         xmlstarlet \
         libtool \
-        bison 
+        bison
 
 COPY --from=ghcr.io/php/pie:bin /pie /usr/bin/pie
 
@@ -100,7 +100,7 @@ RUN pecl channel-update pecl.php.net && \
     &&  docker-php-ext-enable pspell
 
 RUN pecl channel-update pecl.php.net && \
-    pecl install -o -f xdebug-3.5.0 \
+    pecl install -o -f xdebug-3.5.1 \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable xdebug.so
 
