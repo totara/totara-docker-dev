@@ -5,6 +5,7 @@
 
 // Docker-dev specific variable setup
 $DOCKER_DEV->has_server_dir = file_exists($DOCKER_DEV->dir . '/server/config.php');
+$DOCKER_DEV->has_front_controller = file_exists($DOCKER_DEV->dir . '/public/index.php');
 $DOCKER_DEV->is_multi_site = $DOCKER_DEV->dir !== '/var/www/totara/src';
 $DOCKER_DEV->site_name = $DOCKER_DEV->is_multi_site ? basename($DOCKER_DEV->dir) : 'totara';
 

@@ -64,7 +64,7 @@ if ($DOCKER_DEV->xdebug_enabled) {
 if ($DOCKER_DEV->is_multi_site) {
     $CFG->behat_wwwroot .= '/' . $DOCKER_DEV->site_name;
 }
-if ($DOCKER_DEV->has_server_dir) {
+if ($DOCKER_DEV->has_server_dir && !$DOCKER_DEV->has_front_controller) {
     $CFG->behat_wwwroot .= '/server';
 }
 
@@ -269,7 +269,10 @@ if (!empty($_SERVER['HTTP_X_FORWARDED_HOST']) && preg_match($ngrok_hostname_rege
 
     if ($DOCKER_DEV->is_multi_site && strpos($hostname, $DOCKER_DEV->site_name) === false) {
         $CFG->wwwroot .= '/' . $DOCKER_DEV->site_name;
-        if ($DOCKER_DEV->has_server_dir) {
+        // Front-controller sites (v21+) serve from public/ and strip the /<site> base
+        // path themselves, so /server must not be part of the wwwroot. Only legacy sites
+        // (server/ webroot, no front controller) are served under /<site>/server.
+        if ($DOCKER_DEV->has_server_dir && !$DOCKER_DEV->has_front_controller) {
             $CFG->wwwroot .= '/server';
         }
     }
