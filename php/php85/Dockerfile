@@ -109,6 +109,11 @@ RUN pecl channel-update pecl.php.net && \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable pcov
 
+RUN pecl channel-update pecl.php.net && \
+    pecl install -o -f opentelemetry && \
+    rm -rf /tmp/pear && \
+    docker-php-ext-enable opentelemetry.so
+
 # Install composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
