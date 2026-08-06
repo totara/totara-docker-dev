@@ -1,0 +1,48 @@
+services:
+  
+  pgsql-primary:
+    image: postgres:16-alpine
+    container_name: totara_pgsql-primary
+    ports:
+      - "54320:5432"
+    environment:
+      TZ: ${TIME_ZONE}
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_HOST_AUTH_METHOD: trust
+    command:
+      - postgres
+      - -c
+      - config_file=/etc/postgresql/postgresql.conf
+    volumes:
+      - ./pgsql/my-postgres-master.conf:/etc/postgresql/postgresql.conf
+      - ./pgsql/my-postgres-hba.conf:/etc/postgresql/pg_hba.conf
+      - ./pgsql/init:/docker-entrypoint-initdb.d
+      - pgsql16-master-data:/var/lib/postgresql/data
+    depends_on:
+      - nginx
+    networks:
+      - totara
+
+  pgsql-replica-1:
+    image: postgres:16-alpine
+    container_name: totara_pgsql-replica-1
+    ports:
+      - "54321:5432"
+    environment:
+      TZ: ${TIME_ZONE}
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_HOST_AUTH_METHOD: trust
+    entrypoint:
+      - /usr/local/bin/replica-entrypoint.sh
+    volumes:
+      - ./pgsql/my-postgres.conf:/etc/postgresql/postgresql.conf
+      - ./pgsql/replica-entrypoint.sh:/usr/local/bin/replica-entrypoint.sh
+      - pgsql16-replica-data-1:/var/lib/postgresql/data
+    depends_on:
+      - pgsql-primary
+    networks:
+      - totara
+
+volumes:
+  pgsql16-master-data:
+  pgsql16-replica-data-1:
