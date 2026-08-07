@@ -1,0 +1,299 @@
+#!/bin/bash
+
+# Standard boilerplate code for getting the paths and environment variables we need.
+script_path="$( cd "$(dirname "$0")" ; pwd -P )"
+project_path="$( cd $script_path && cd ..; pwd -P )"
+set -a; source "$project_path/.env"; set +a
+
+source "$project_path/tools/check_for_update.sh"
+
+script_name="$(basename "$0")"
+
+help_text="Helper for managing a PostgreSQL streaming read replica of one of your totara database containers.
+Intended for testing Totara's read/write splitting feature (\$CFG->dboptions['readonly']).
+
+PostgreSQL only. The replica is a hot standby of the whole cluster (all databases on that server),
+created with pg_basebackup and kept in sync via streaming replication.
+
+Usage: $script_name <action> [service] [OPTIONS]
+
+Actions:
+  up           Create (or start) the replica container for the given service
+  status       Show replication status (primary and replica)
+  logs         Follow the replica container logs (Ctrl+C to stop)
+  down         Remove the replica container and its data volume
+
+Service:
+  The pgsql compose service to replicate, e.g. pgsql14, pgsql16, pgsql17. Defaults to pgsql16.
+
+Options:
+  -p, --port <port>     Publish the replica on this host port (only used on first 'up')
+  -s, --slot            Use a physical replication slot (protects against WAL loss during bulk loads)
+  -q, --quiet-logs      Do not enable statement logging on the replica
+
+Examples:
+  $script_name up                       // Create a streaming replica of totara_pgsql16
+  $script_name up pgsql17 --port 5450   // Replica of totara_pgsql17, reachable on host port 5450
+  $script_name status                   // Is the replica streaming, and how far behind is it?
+  $script_name down                     // Remove the pgsql16 replica container and volume
+"
+
+# Parse arguments
+positional=()
+host_port=""
+use_slot=0
+quiet_logs=0
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -p|--port)
+      host_port="$2"
+      shift 2
+      ;;
+    -s|--slot)
+      use_slot=1
+      shift
+      ;;
+    -q|--quiet-logs)
+      quiet_logs=1
+      shift
+      ;;
+    -h|--help|help)
+      echo "$help_text"
+      exit 0
+      ;;
+    *)
+      positional+=("$1")
+      shift
+      ;;
+  esac
+done
+
+action="${positional[0]}"
+service="${positional[1]:-pgsql16}"
+
+if [[ -z "$action" ]]; then
+    echo "$help_text"
+    exit 0
+fi
+
+if [[ ! "$service" =~ ^pgsql[0-9]+$ ]]; then
+    echo "Error: only pgsql services are supported (got '$service'). Read replicas for mysql/mariadb are not implemented, and Totara does not support them for mssql."
+    exit 1
+fi
+
+primary_container="totara_${service}"
+replica_container="${service}replica"
+replica_volume="${service}-replica-data"
+slot_name="treplica_${service}"
+network="totara"
+
+primary_running() {
+    [[ -n "$(docker ps -q -f "name=^${primary_container}$")" ]]
+}
+
+replica_exists() {
+    [[ -n "$(docker ps -aq -f "name=^${replica_container}$")" ]]
+}
+
+replica_running() {
+    [[ -n "$(docker ps -q -f "name=^${replica_container}$")" ]]
+}
+
+volume_exists() {
+    docker volume inspect "$replica_volume" > /dev/null 2>&1
+}
+
+psql_primary() {
+    docker exec -u postgres "$primary_container" psql -tAc "$1"
+}
+
+psql_replica() {
+    docker exec -u postgres "$replica_container" psql -tAc "$1"
+}
+
+require_primary() {
+    if ! primary_running; then
+        echo "Error: primary container '$primary_container' is not running. Start it first (e.g. tup $service)."
+        exit 1
+    fi
+}
+
+print_config_snippet() {
+    echo ""
+    echo "Add this to your config.php - AFTER the \"require '/var/www/totara/includes/config-after.php';\" line"
+    echo "(config-after.php reassigns \$CFG->dboptions, anything set earlier is silently wiped):"
+    echo ""
+    echo "  \$CFG->dboptions['readonly'] = ["
+    echo "      'instance' => ['$replica_container'],"
+    echo "      'connecttimeout' => 2,"
+    echo "      'latency' => 0.5, // optional, defaults to 1 second"
+    echo "  ];"
+    echo ""
+    echo "With \$CFG->perfdebug = 15; the page footer will show 'DB reads from replica'."
+}
+
+do_status() {
+    require_primary
+    if ! replica_exists; then
+        echo "No replica container '$replica_container' exists. Run '$script_name up $service' to create one."
+        exit 1
+    fi
+    if ! replica_running; then
+        echo "Replica container '$replica_container' exists but is not running. Start it with: docker start $replica_container"
+        exit 1
+    fi
+
+    in_recovery=$(psql_replica "select pg_is_in_recovery();")
+    if [[ "$in_recovery" != "t" ]]; then
+        echo "WARNING: '$replica_container' is running but NOT in recovery mode - it is not acting as a standby!"
+        exit 1
+    fi
+
+    echo "Replica '$replica_container' is running and in recovery (hot standby)."
+    echo ""
+    echo "Primary view (pg_stat_replication):"
+    docker exec -u postgres "$primary_container" psql -xc "select application_name, state, sync_state, replay_lag from pg_stat_replication;"
+    echo "Replica lag: $(psql_replica "select case when pg_last_wal_receive_lsn() = pg_last_wal_replay_lsn() then 'in sync' else coalesce(round(extract(epoch from now() - pg_last_xact_replay_timestamp())::numeric, 1)::text || 's behind', 'unknown') end;")"
+}
+
+do_logs() {
+    if ! replica_exists; then
+        echo "No replica container '$replica_container' exists."
+        exit 1
+    fi
+    exec docker logs -f --tail 50 "$replica_container"
+}
+
+do_down() {
+    if ! replica_exists && ! volume_exists; then
+        echo "Nothing to remove: no '$replica_container' container or '$replica_volume' volume found."
+        exit 0
+    fi
+    echo "This will REMOVE the replica container '$replica_container' and DELETE its data volume '$replica_volume'."
+    echo "(The primary '$primary_container' is not touched.)"
+    read -r -p "Continue? [y/N] " answer
+    if [[ ! "$answer" =~ ^[Yy]$ ]]; then
+        echo "Aborted."
+        exit 0
+    fi
+    replica_exists && docker rm -f "$replica_container" > /dev/null && echo "Removed container $replica_container."
+    volume_exists && docker volume rm "$replica_volume" > /dev/null && echo "Removed volume $replica_volume."
+    # Drop the replication slot on the primary if we created one, so it does not retain WAL forever.
+    if primary_running; then
+        slot_exists=$(psql_primary "select count(*) from pg_replication_slots where slot_name = '$slot_name';")
+        if [[ "$slot_exists" == "1" ]]; then
+            psql_primary "select pg_drop_replication_slot('$slot_name');" > /dev/null
+            echo "Dropped replication slot $slot_name on the primary."
+        fi
+    fi
+}
+
+do_up() {
+    require_primary
+
+    if replica_running; then
+        echo "Replica '$replica_container' is already running."
+        do_status
+        print_config_snippet
+        exit 0
+    fi
+
+    if replica_exists; then
+        echo "Replica container '$replica_container' exists but is stopped - starting it."
+        docker start "$replica_container" > /dev/null
+        sleep 2
+        do_status
+        exit 0
+    fi
+
+    if volume_exists; then
+        echo "Error: volume '$replica_volume' exists but there is no replica container."
+        echo "It is probably stale. Run '$script_name down $service' first to clean up."
+        exit 1
+    fi
+
+    # Everything is derived from the running primary so this works for any pgsql version/config.
+    image=$(docker inspect "$primary_container" --format '{{.Config.Image}}')
+    pgdata=$(docker inspect "$primary_container" --format '{{range .Config.Env}}{{println .}}{{end}}' | grep '^PGDATA=' | cut -d= -f2)
+    pgdata="${pgdata:-/var/lib/postgresql/data}"
+
+    echo "Primary:  $primary_container ($image, PGDATA=$pgdata)"
+    echo "Replica:  $replica_container (volume $replica_volume)"
+
+    # 1. Allow replication connections on the primary (idempotent).
+    docker exec -u postgres "$primary_container" bash -c \
+        "grep -q '^host replication' '$pgdata/pg_hba.conf' || echo 'host replication all all trust' >> '$pgdata/pg_hba.conf'"
+    psql_primary "select pg_reload_conf();" > /dev/null
+
+    # 2. Optionally create a physical replication slot.
+    basebackup_slot_args=""
+    if [[ $use_slot -eq 1 ]]; then
+        slot_exists=$(psql_primary "select count(*) from pg_replication_slots where slot_name = '$slot_name';")
+        if [[ "$slot_exists" != "1" ]]; then
+            psql_primary "select pg_create_physical_replication_slot('$slot_name');" > /dev/null
+            echo "Created replication slot $slot_name."
+        fi
+        basebackup_slot_args="-S $slot_name"
+    fi
+
+    # 3. Clone the live cluster into the new volume.
+    echo "Cloning the cluster with pg_basebackup (this can take a while on large sites)..."
+    if ! docker run --rm --network "$network" -e PGDATA="$pgdata" \
+        -v "$replica_volume:/var/lib/postgresql/data" "$image" \
+        bash -c "mkdir -p '$pgdata' && chown -R postgres:postgres /var/lib/postgresql/data && \
+                 su postgres -c 'pg_basebackup -h $service -p 5432 -U postgres -D $pgdata -R -X stream $basebackup_slot_args'"; then
+        echo "Error: pg_basebackup failed. Cleaning up the volume."
+        docker volume rm "$replica_volume" > /dev/null 2>&1
+        exit 1
+    fi
+
+    # 4. A hot standby refuses to start if these are lower than on the primary,
+    #    and the primary's tuned config file is not part of the clone - so mirror them explicitly.
+    standby_args=()
+    for setting in max_connections max_locks_per_transaction max_worker_processes max_prepared_transactions; do
+        value=$(psql_primary "show $setting;")
+        standby_args+=("-c" "$setting=$value")
+    done
+    if [[ $quiet_logs -eq 0 ]]; then
+        standby_args+=("-c" "log_statement=all")
+    fi
+
+    port_args=()
+    if [[ -n "$host_port" ]]; then
+        port_args+=("-p" "$host_port:5432")
+    fi
+
+    # 5. Run the standby.
+    docker run -d --name "$replica_container" --network "$network" \
+        ${port_args[@]+"${port_args[@]}"} \
+        -e PGDATA="$pgdata" -e TZ="${TIME_ZONE:-Pacific/Auckland}" \
+        --restart "${RESTART_POLICY:-no}" \
+        -v "$replica_volume:/var/lib/postgresql/data" \
+        "$image" "${standby_args[@]}" > /dev/null
+
+    echo "Waiting for the standby to come up..."
+    for i in $(seq 1 15); do
+        sleep 1
+        if replica_running && [[ "$(psql_replica 'select pg_is_in_recovery();' 2>/dev/null)" == "t" ]]; then
+            do_status
+            print_config_snippet
+            exit 0
+        fi
+    done
+
+    echo "Error: the standby did not reach recovery mode. Recent logs:"
+    docker logs --tail 20 "$replica_container"
+    exit 1
+}
+
+case "$action" in
+    up)     do_up ;;
+    status) do_status ;;
+    logs)   do_logs ;;
+    down)   do_down ;;
+    *)
+        echo "Unknown action '$action'."
+        echo "$help_text"
+        exit 1
+        ;;
+esac
