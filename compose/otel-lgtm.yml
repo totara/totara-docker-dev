@@ -1,0 +1,20 @@
+services:
+
+  # Grafana OTel-LGTM all-in-one: OTel Collector + Loki (logs) + Tempo (traces) + Mimir (metrics),
+  # for OpenTelemetry development. Start it with 'tup otel-lgtm'.
+  # Point Totara at it via the telemetry collector endpoint setting: http://otel-lgtm:4318
+  # The Grafana UI is available on the host at http://localhost:3000 (view logs via Explore > Loki).
+  otel-lgtm:
+    image: grafana/otel-lgtm:0.30.0
+    container_name: totara_otel_lgtm
+    restart: ${RESTART_POLICY:-no}
+    environment:
+      TZ: ${TIME_ZONE}
+    ports:
+      # Grafana UI.
+      - "3000:3000"
+      # OTLP/HTTP ingest, published to the host for scripts running outside docker.
+      # Containers on the totara network should use http://otel-lgtm:4318 instead.
+      - "4318:4318"
+    networks:
+      - totara
