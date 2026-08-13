@@ -15,6 +15,7 @@ files=(
     "compose/mssql.yml"
     "compose/mysql.yml"
     "compose/nginx.yml"
+    "compose/otel-lgtm.yml"
     "compose/pgsql.yml"
     "compose/php.yml"
     "compose/php-legacy.yml"
