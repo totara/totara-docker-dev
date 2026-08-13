@@ -330,6 +330,13 @@ services:
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
       USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT:-0}
       XDEBUG_MODE: off
+      # OpenTelemetry export (opt-in): set the OTEL_* values in your .env file, see .env.dist.
+      OTEL_PHP_AUTOLOAD_ENABLED: ${OTEL_PHP_AUTOLOAD_ENABLED:-}
+      OTEL_SERVICE_NAME: ${OTEL_SERVICE_NAME:-}
+      OTEL_EXPORTER_OTLP_ENDPOINT: ${OTEL_EXPORTER_OTLP_ENDPOINT:-}
+      OTEL_TRACES_EXPORTER: ${OTEL_TRACES_EXPORTER:-}
+      OTEL_LOGS_EXPORTER: ${OTEL_LOGS_EXPORTER:-}
+      OTEL_METRICS_EXPORTER: ${OTEL_METRICS_EXPORTER:-}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -359,6 +366,13 @@ services:
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
       USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT:-0}
+      # OpenTelemetry export (opt-in): set the OTEL_* values in your .env file, see .env.dist.
+      OTEL_PHP_AUTOLOAD_ENABLED: ${OTEL_PHP_AUTOLOAD_ENABLED:-}
+      OTEL_SERVICE_NAME: ${OTEL_SERVICE_NAME:-}
+      OTEL_EXPORTER_OTLP_ENDPOINT: ${OTEL_EXPORTER_OTLP_ENDPOINT:-}
+      OTEL_TRACES_EXPORTER: ${OTEL_TRACES_EXPORTER:-}
+      OTEL_LOGS_EXPORTER: ${OTEL_LOGS_EXPORTER:-}
+      OTEL_METRICS_EXPORTER: ${OTEL_METRICS_EXPORTER:-}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -382,6 +396,13 @@ services:
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
       USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT:-0}
       XDEBUG_MODE: off
+      # OpenTelemetry export (opt-in): set the OTEL_* values in your .env file, see .env.dist.
+      OTEL_PHP_AUTOLOAD_ENABLED: ${OTEL_PHP_AUTOLOAD_ENABLED:-}
+      OTEL_SERVICE_NAME: ${OTEL_SERVICE_NAME:-}
+      OTEL_EXPORTER_OTLP_ENDPOINT: ${OTEL_EXPORTER_OTLP_ENDPOINT:-}
+      OTEL_TRACES_EXPORTER: ${OTEL_TRACES_EXPORTER:-}
+      OTEL_LOGS_EXPORTER: ${OTEL_LOGS_EXPORTER:-}
+      OTEL_METRICS_EXPORTER: ${OTEL_METRICS_EXPORTER:-}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
@@ -411,6 +432,13 @@ services:
       HIST_FILE: /root/.bash_history
       DISABLE_AUTO_UPDATE: "true" # disables oh-my-zsh update message
       USE_ZSH_NERDFONT: ${USE_ZSH_NERDFONT:-0}
+      # OpenTelemetry export (opt-in): set the OTEL_* values in your .env file, see .env.dist.
+      OTEL_PHP_AUTOLOAD_ENABLED: ${OTEL_PHP_AUTOLOAD_ENABLED:-}
+      OTEL_SERVICE_NAME: ${OTEL_SERVICE_NAME:-}
+      OTEL_EXPORTER_OTLP_ENDPOINT: ${OTEL_EXPORTER_OTLP_ENDPOINT:-}
+      OTEL_TRACES_EXPORTER: ${OTEL_TRACES_EXPORTER:-}
+      OTEL_LOGS_EXPORTER: ${OTEL_LOGS_EXPORTER:-}
+      OTEL_METRICS_EXPORTER: ${OTEL_METRICS_EXPORTER:-}
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
