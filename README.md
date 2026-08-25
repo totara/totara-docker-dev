@@ -23,6 +23,10 @@ Although this project started as a development environment for Totara Learn it c
  * A [PHPUnit](https://phpunit.de/) and [Behat](http://behat.org/en/latest/) setup to run tests (including [Selenium](https://www.seleniumhq.org/))
  * A [MailDev](https://github.com/maildev/maildev?tab=readme-ov-file#maildev) instance to view sent emails
  * [Redis](https://redis.io/) for caching and/or session handling
+ * [ClamAV](https://www.clamav.net/) for antivirus scanning, wired up automatically on PHP 8.4 and 8.5. The
+   `clamav` container starts with the stack; scanning turns itself on in those PHP containers once clamd is
+   reachable. On first start clamd downloads its signatures via freshclam, which can take a few minutes before
+   the container is healthy and scanning is active (dev uploads are not blocked meanwhile).
  * [XHProf](https://github.com/tideways/php-xhprof-extension) for profiling
  * [XDebug](https://xdebug.org/) installed, ready for debugging with your favorite IDE
  * [Excimer](https://www.mediawiki.org/wiki/Excimer) installed, for discovering performance problems
