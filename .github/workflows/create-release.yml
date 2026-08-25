@@ -1,4 +1,4 @@
-name: Create Semantic Release
+name: Create Release
 
 on:
   push:
@@ -9,27 +9,18 @@ permissions:
   contents: read
 
 jobs:
-  release:
+  release-please:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      issues: write
       pull-requests: write
-      id-token: write
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Create or update the release pull request
+        uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
         with:
-          fetch-depth: 0
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - name: Install dependencies
-        run: npm install --no-save semantic-release@^24.2.9
-      - name: Release
-        env:
-          # The RELEASE_TOKEN repository secret must be a personal access token with the permissions described here:
-          # https://github.com/semantic-release/github/blob/master/README.md#github-authentication
-          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
-        run: npx semantic-release
+          # The RELEASE_TOKEN repository secret must be a personal access token with contents
+          # and pull-requests write access. The default GITHUB_TOKEN is not sufficient: events
+          # it creates do not start new workflow runs, so the release pull request would skip
+          # the required checks and the release tag would not trigger the image builds.
+          token: ${{ secrets.RELEASE_TOKEN }}
+          target-branch: master
