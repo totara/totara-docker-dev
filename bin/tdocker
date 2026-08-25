@@ -11,6 +11,7 @@ source "$project_path/tools/check_for_update.sh"
 files=(
     "docker-compose.yml"
     "compose/apache.yml"
+    "compose/clamav.yml"
     "compose/mariadb.yml"
     "compose/mssql.yml"
     "compose/mysql.yml"

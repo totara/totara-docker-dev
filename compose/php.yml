@@ -346,6 +346,8 @@ services:
       - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
+      # Lets clamdscan reach clamd in the clamav container (see compose/clamav.yml).
+      - clamav-socket:/run/clamav
     depends_on:
       - php-8.4-debug
     networks:
@@ -382,6 +384,8 @@ services:
       - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
+      # Lets clamdscan reach clamd in the clamav container (see compose/clamav.yml).
+      - clamav-socket:/run/clamav
     networks:
       - totara
 
@@ -412,6 +416,8 @@ services:
       - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
+      # Lets clamdscan reach clamd in the clamav container (see compose/clamav.yml).
+      - clamav-socket:/run/clamav
     depends_on:
       - php-8.5-debug
     networks:
@@ -448,6 +454,8 @@ services:
       - bash-history:/root/.bash_history
       - zsh-history:/root/.zsh_history
       - ./shell:/root/custom_shell
+      # Lets clamdscan reach clamd in the clamav container (see compose/clamav.yml).
+      - clamav-socket:/run/clamav
     networks:
       - totara
 
@@ -458,6 +466,7 @@ services:
   # - Add a build entry in compose/build.yml
   # - Add a mutagen sync entry in compose/sync.yml
   # - Add relevant network aliases in compose/nginx.yml and compose/apache.yml
+  # - Add the clamav-socket volume mount, if the version is 8.4 or newer
   # - Add a CI build entry in .github/workflows/build-php.yml
   # - Add a image matrix entry in .github/workflows/scan-images.yml
   # - Update the max PHP version in .github/workflows/validate-config.yml
@@ -468,3 +477,4 @@ volumes:
   coverage-report:
   bash-history:
   zsh-history:
+  clamav-socket:
