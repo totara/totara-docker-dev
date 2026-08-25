@@ -1,0 +1,24 @@
+services:
+
+  clamav:
+    # The default (Alpine) tags are amd64 only - the -debian variants are multiarch.
+    image: clamav/clamav:stable-debian13-slim
+    container_name: totara_clamav
+    restart: ${RESTART_POLICY:-no}
+    environment:
+      TZ: ${TIME_ZONE}
+    volumes:
+      # Only the socket settings differ from the image default.
+      - ./clamav/clamd.conf:/etc/clamav/clamd.conf
+      # Shared with the PHP 8.4/8.5 containers so clamdscan can reach clamd.
+      - clamav-socket:/run/clamav
+      # Persists signature updates between runs.
+      - clamav-data:/var/lib/clamav
+    networks:
+      - totara
+    # No healthcheck here: the image ships HEALTHCHECK --start-period=6m CMD clamdcheck.sh, which
+    # reads clamd.conf and so already tests the unix socket the PHP containers use.
+
+volumes:
+  clamav-socket:
+  clamav-data:

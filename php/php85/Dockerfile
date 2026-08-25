@@ -33,6 +33,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         ghostscript \
         graphviz \
         aspell \
+        clamdscan \
         libldap2-dev \
         libltdl-dev \
         libc-client-dev \
@@ -152,6 +153,7 @@ RUN ln -fs /usr/share/zoneinfo/${TIME_ZONE} /etc/localtime \
 
 COPY config/php.ini /usr/local/etc/php/
 COPY config/fpm.conf /usr/local/etc/php-fpm.d/zz-totara.conf
+COPY config/clamd.conf /etc/clamav/clamd.conf
 
 # Source each .sh file found in the /shell/ folder, always source the default_aliases.sh file first
 RUN echo 'if [[ -e "/root/custom_shell/default-aliases.sh" ]]; then source "/root/custom_shell/default-aliases.sh"; fi' >> ~/.bashrc && \

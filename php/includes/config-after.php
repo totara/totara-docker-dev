@@ -295,6 +295,36 @@ if (!empty($_SERVER['HTTP_X_FORWARDED_HOST']) && preg_match($ngrok_hostname_rege
 $CFG->smtphosts = 'maildev:1025';
 
 
+// ClamAV antivirus, only active while the clamav container is running.
+// clamdscan is invoked with --fdpass (Totara adds that automatically whenever the binary is named
+// clamdscan), which hands the open file descriptor to clamd, so the clamav container does not need
+// to see the scanned file itself. Note the tcpsocket running method cannot be used here - the
+// plugin's is_configured() returns false for it, so it would silently never scan anything.
+// Note the stock clamav image does not forward SIGTERM to clamd, so a stopped container leaves its
+// socket file behind. Check that something is actually listening rather than just that the file
+// exists - connecting to a stale unix socket fails immediately, so this stays cheap.
+$DOCKER_DEV->clamav_socket = '/run/clamav/clamd.sock';
+$DOCKER_DEV->clamav_running = false;
+if (file_exists($DOCKER_DEV->clamav_socket)) {
+    $clamav_probe = @stream_socket_client('unix://' . $DOCKER_DEV->clamav_socket, $errno, $errstr, 1);
+    if ($clamav_probe !== false) {
+        fclose($clamav_probe);
+        $DOCKER_DEV->clamav_running = true;
+    }
+    unset($clamav_probe, $errno, $errstr);
+}
+if ($DOCKER_DEV->clamav_running) {
+    $CFG->antiviruses = 'clamav';
+    $CFG->forced_plugin_settings['antivirus_clamav'] = [
+        'runningmethod' => 'commandline',
+        'pathtoclam' => '/usr/bin/clamdscan',
+        // Never fail a dev upload just because clamd is still loading its signatures.
+        'clamfailureonupload' => 'donothing',
+        'tries' => 1,
+    ];
+}
+
+
 // Paths to binaries
 $CFG->py3path = '/usr/bin/python3';
 $CFG->pathtogs = '/usr/bin/gs';
