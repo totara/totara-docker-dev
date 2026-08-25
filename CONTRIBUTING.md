@@ -17,8 +17,16 @@ If you want to add a new feature or fix a bug:
 5. Push your commits into your own repository
 6. Create a new Pull Request for your branch pointing to **master**.
 
-When the pull request has been approved and merged, then a release will automatically be made,
-using [semantic versioning](https://semver.org/) based upon the conventional commit messages in the merged pull request.
-This will rebuild and push new versions of the containers.
+Releases are made in two steps:
+
+1. When your pull request has been approved and merged into **master**, a release pull request
+   titled "chore(master): release X.Y.Z" is automatically opened or updated. It collects the
+   changelog for everything merged since the last release and calculates the next version using
+   [semantic versioning](https://semver.org/) based upon the conventional commit messages.
+2. When a maintainer merges that release pull request, the release is tagged and published, and
+   the containers are rebuilt and pushed.
+
+This means your change is not released - and the containers are not rebuilt - until the release
+pull request is merged.
 
 If you have any questions don't hesitate to ask.
