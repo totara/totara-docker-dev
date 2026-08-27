@@ -22,6 +22,7 @@ Although this project started as a development environment for Totara Learn it c
  * [NodeJS](https://nodejs.org/) for building, developing and testing frontend code
  * A [PHPUnit](https://phpunit.de/) and [Behat](http://behat.org/en/latest/) setup to run tests (including [Selenium](https://www.seleniumhq.org/))
  * A [MailDev](https://github.com/maildev/maildev?tab=readme-ov-file#maildev) instance to view sent emails
+ * A [Grafana OTel-LGTM](../../wiki/OpenTelemetry) instance to view OpenTelemetry logs, traces and metrics
  * [Redis](https://redis.io/) for caching and/or session handling
  * [XHProf](https://github.com/tideways/php-xhprof-extension) for profiling
  * [XDebug](https://xdebug.org/) installed, ready for debugging with your favorite IDE
