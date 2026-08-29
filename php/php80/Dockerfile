@@ -87,8 +87,18 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 # we need en_US locales for MSSQL connection to work
 # we need en_AU locales for behat to work
-RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
-    sed -i -e 's/# en_AU.UTF-8 UTF-8/en_AU.UTF-8 UTF-8/' /etc/locale.gen && \
+# Extra locales allow testing non-English and RTL formatting
+RUN for locale in \
+        en_US.UTF-8 \
+        en_AU.UTF-8 \
+        de_DE.UTF-8 \
+        fr_FR.UTF-8 \
+        es_ES.UTF-8 \
+        ar_AE.UTF-8 \
+        he_IL.UTF-8; \
+    do \
+        sed -i -e "s/# ${locale} UTF-8/${locale} UTF-8/" /etc/locale.gen; \
+    done && \
     dpkg-reconfigure --frontend=noninteractive locales && \
     update-locale LANG=en_US.UTF-8
 
