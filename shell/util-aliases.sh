@@ -29,16 +29,39 @@ run_totara_cmd() {
   fi
 }
 
+# Resolve the config file for the current site root.
+# Totara 21+ supports loading the config from a custom location via the TOTARA_CONFIG_PATH environment variable.
+site_config_file() {
+  if [[ -n "$TOTARA_CONFIG_PATH" && -f "$TOTARA_CONFIG_PATH" ]]; then
+    echo "$TOTARA_CONFIG_PATH"
+  else
+    echo './config.php'
+  fi
+}
+
+# Does the current directory have a site config, either as ./config.php or via TOTARA_CONFIG_PATH?
+has_site_config() {
+  if [[ -f './config.php' ]]; then
+    return 0
+  fi
+  # When the config file lives outside the code directory, identify the site root by the
+  # version.php + server directory combination instead (TOTARA_CONFIG_PATH requires Totara 13+ layout).
+  if [[ -n "$TOTARA_CONFIG_PATH" && -f "$TOTARA_CONFIG_PATH" && -f './version.php' && -d './server' ]]; then
+    return 0
+  fi
+  return 1
+}
+
 # Is this directory the root of a Totara/Moodle site?
 is_site_root() {
-  [[ -f './config.php' && -f './version.php' ]] && return 0 || return 1
+  [[ -f './version.php' ]] && has_site_config && return 0 || return 1
 }
 
 # cd into the root directory of the Totara site, or print an error message if it couldn't be found.
 site_root() {
   local original_path=$(pwd)
   local current_path="$original_path"
-  while [[ ! -f './config.php' || -f './config.php' && -f '../config.php' ]] &&
+  while { ! has_site_config || [[ -f './config.php' && -f '../config.php' ]]; } &&
         [[ "$current_path" =~ "/var/www/totara/src" && "$current_path" != "/var/www/totara/src" ]]
   do
     cd ..
@@ -50,7 +73,7 @@ site_root() {
     fi
     return 0
   else
-    print_error "Couldn't locate a Totara site (or config.php) - are you running this from the correct directory?"
+    print_error "Couldn't locate a Totara site (config.php or TOTARA_CONFIG_PATH) - are you running this from the correct directory?"
     return 1
   fi
 }
@@ -58,10 +81,11 @@ site_root() {
 # Output config.php variables
 config_var() {
   site_root || return 1
+  local config_file="$(site_config_file)"
   local php_code="
     define(\"CLI_SCRIPT\", true);
     define(\"ABORT_AFTER_CONFIG\", true);
-    require(\"config.php\");
+    require(\"$config_file\");
     array_shift(\$argv);
     \$output = array();
     foreach (\$argv as \$arg) {
