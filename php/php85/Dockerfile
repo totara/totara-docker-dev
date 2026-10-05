@@ -39,6 +39,9 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         libkrb5-dev \
         libssl-dev \
         libpspell-dev \
+        libenchant-2-dev \
+        hunspell-en-us \
+        hunspell-en-gb \
         xmlstarlet \
         libtool \
         bison
@@ -56,6 +59,7 @@ RUN docker-php-ext-install -j$(nproc) \
         exif \
         ldap \
         pcntl \
+        enchant \
     && docker-php-ext-configure gd \
             --with-freetype \
             --with-jpeg \
