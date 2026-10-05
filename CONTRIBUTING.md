@@ -26,7 +26,7 @@ Releases are made in two steps:
 2. When a maintainer merges that release pull request, the release is tagged and published, and
    the containers are rebuilt and pushed.
 
-This means your change is not released - and the containers are not rebuilt - until the release
+This means your change is not released, and the containers are not rebuilt, until the release
 pull request is merged.
 
 If you have any questions don't hesitate to ask.
