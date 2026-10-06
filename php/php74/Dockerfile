@@ -6,6 +6,9 @@ ARG TIME_ZONE=Pacific/Auckland
 # the whole build. Older suites go cold in the CDN more often, but any suite can time out.
 RUN echo 'Acquire::Retries "5";' > /etc/apt/apt.conf.d/80-retries
 
+# Debian 11 LTS ended on 2026-08-31 and bullseye-security now only lives on archive.debian.org
+RUN sed -i -E 's#http://(deb|security)\.debian\.org/debian-security#http://archive.debian.org/debian-security#' /etc/apt/sources.list
+
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         apt-transport-https \
         libfreetype6-dev \
