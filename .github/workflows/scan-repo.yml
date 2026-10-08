@@ -33,6 +33,7 @@ jobs:
           output: 'trivy-results-repo.sarif'
           exit-code: '1'
           severity: 'CRITICAL,HIGH'
+          limit-severities-for-sarif: true
       - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@b96794f015dfd88f77b49b1c93e0fa7110f94c63 # v4.38.0
         if: always()
