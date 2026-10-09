@@ -1,6 +1,6 @@
 services:
 
-  # Grafana OTel-LGTM all-in-one: OTel Collector + Loki (logs) + Tempo (traces) + Mimir (metrics),
+  # Grafana OTel-LGTM all-in-one: OTel Collector + Loki (logs) + Tempo (traces) + Prometheus (metrics),
   # for OpenTelemetry development. Start it with 'tup otel-lgtm'.
   # Point Totara at it via the telemetry collector endpoint setting: http://otel-lgtm:4318
   # The Grafana UI is available on the host at http://localhost:3000 (view logs via Explore > Loki).
