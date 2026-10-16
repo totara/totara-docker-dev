@@ -15,17 +15,16 @@ print_error() {
 # Echo a command and then execute it
 run_cmd() {
   echo -e "\x1B[2mRunning Command: \x1B[4m$*\x1B[0m"
-  $*
+  "$@"
 }
 
 # Run a Totara command
 run_totara_cmd() {
   site_root || return 1
   if [[ $1 == 'php' && -f "./server/$2" ]]; then
-    shift
-    run_cmd php server/$@
+    run_cmd php "server/$2" "${@:3}"
   else
-    run_cmd $@
+    run_cmd "$@"
   fi
 }
 

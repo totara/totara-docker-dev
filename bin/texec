@@ -31,15 +31,12 @@ if [[ "$container" == "php" || "$container" == "php-debug" ]]; then
 fi
 
 # If we are bashing into php/apache/nginx, then lets make the shell begin in the remote directory
-extra_args=""
+extra_args=()
 if [[ "$container" =~ "php" || "$container" =~ "nginx" || "$container" =~ "apache" ]]; then
     if [[ -f "$local_path/version.php" ]]; then
-        extra_args="-w $remote_path"
+        extra_args=(-w "$remote_path")
     fi
 fi
 
-# Quote command to be reused as shell input
-command_str=$(printf " %q" "$@")
-
-$script_path/tdocker exec $extra_args "$container" "$command_str"
+$script_path/tdocker exec "${extra_args[@]}" "$container" "$@"
 

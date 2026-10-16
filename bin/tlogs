@@ -19,4 +19,4 @@ for arg in "$@"; do
 done
 args+=("$tail")
 
-$script_path/tdocker logs "${args[@]}" "$container"
+$script_path/tdocker logs "${args[@]}" ${container:+"$container"}
