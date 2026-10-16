@@ -12,9 +12,11 @@ services:
     restart: ${RESTART_POLICY:-no}
     environment:
       TZ: ${TIME_ZONE}
+      NPM_CONFIG_USERCONFIG: /root/.npm-config/.npmrc
     volumes:
       - ${LOCAL_SRC}:${REMOTE_SRC}
       - totara-data:${REMOTE_DATA}
+      - npm-config:/root/.npm-config
     working_dir: ${REMOTE_SRC}
 
   maildev:
@@ -51,6 +53,7 @@ services:
 volumes:
   totara-data:
   redis-data:
+  npm-config:
 
 networks:
   totara:
