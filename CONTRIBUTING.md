@@ -11,7 +11,8 @@ We try to collect all improvements and bug reports as Issues. Also we avoid push
 If you want to add a new feature or fix a bug:
 
 1. Fork the repository
-2. Check out the latest **master** branch - `git checkout master && git pull` 
+2. Check out the latest **master** branch - `git checkout master && git pull`. Set `AUTO_UPDATE_TARGET=master` in your `.env`
+   so auto-updating doesn't move you back to the latest release.
 3. Create a new feature or bugfix branch, for example: `git checkout -b feat-add-postgres18` (prefix with **feat**- or **fix**- and name it with something meaningful)
 4. Create commits with a [conventional commit message](https://www.conventionalcommits.org), for example: "feat: Add Postgres 18 container" or "fix: Remove usage of deprecated PHP constant"
 5. Push your commits into your own repository

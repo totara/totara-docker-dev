@@ -36,6 +36,19 @@ Although this project started as a development environment for Totara Learn it c
 
 ## Installation & Usage
 
+Install from the latest release, so the code matches the published container images:
+
+<!-- x-release-please-start-version -->
+```bash
+git clone --branch v1.26.1 https://github.com/totara/totara-docker-dev.git
+cd totara-docker-dev
+git switch -C master
+```
+<!-- x-release-please-end -->
+
+docker-dev then updates itself to each new release. If you cloned the master branch instead, the first command you
+run offers to switch you to the latest release.
+
 **[See the wiki](../../wiki) for detailed documentation on installation and usage.**
 
 ## Contribute
