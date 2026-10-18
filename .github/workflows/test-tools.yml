@@ -1,0 +1,42 @@
+name: Test update scripts
+
+on:
+  pull_request:
+    paths:
+      - 'tools/**'
+      - '.github/workflows/test-tools.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  shellcheck:
+    name: Shellcheck update scripts
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 1
+      - name: Run shellcheck
+        run: shellcheck -S warning tools/release_helpers.sh tools/check_for_update.sh tools/update.sh tools/post_update.sh tools/tests/*.sh
+
+  test-tools:
+    name: Test update scripts (${{ matrix.os }})
+    # macOS runs the scripts with its own /bin/bash (3.2) and BSD tools, which is what macOS users have
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 1
+      - name: Show bash version
+        run: /bin/bash --version | head -n 1
+      - name: Test release helpers
+        run: tools/tests/test_release_helpers.sh
+      - name: Test update flow
+        run: tools/tests/test_update_flow.sh

@@ -1,0 +1,3 @@
+# The update scripts share variables by sourcing each other, and the tests read variables inside eval'd checks,
+# so shellcheck can't see where they are assigned or used.
+disable=SC2034,SC2154
