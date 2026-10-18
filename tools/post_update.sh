@@ -5,7 +5,7 @@ if [[ -z $release_date ]]; then
     exit 1
 fi
 
-new_tag=$(git describe --tags)
+new_tag=$(git -C "$project_path" describe --tags)
 
 if [[ "$release_date" -lt "20211112" ]]; then
     # Don't do anything for now.
