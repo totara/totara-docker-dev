@@ -4,7 +4,9 @@
   "include-component-in-tag": false,
   "include-v-in-tag": true,
   "packages": {
-    ".": {}
+    ".": {
+      "extra-files": ["README.md"]
+    }
   },
   "changelog-sections": [
     { "type": "feat", "section": "Features" },
