@@ -15,6 +15,7 @@ If you want to add a new feature or fix a bug:
    so auto-updating doesn't move you back to the latest release.
 3. Create a new feature or bugfix branch, for example: `git checkout -b feat-add-postgres18` (prefix with **feat**- or **fix**- and name it with something meaningful)
 4. Create commits with a [conventional commit message](https://www.conventionalcommits.org), for example: "feat: Add Postgres 18 container" or "fix: Remove usage of deprecated PHP constant"
+   If you change anything in `tools/`, run `tools/tests/test_release_helpers.sh` and `tools/tests/test_update_flow.sh`
 5. Push your commits into your own repository
 6. Create a new Pull Request for your branch pointing to **master**.
 
