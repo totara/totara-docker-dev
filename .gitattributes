@@ -1,0 +1,7 @@
+# Scripts, and files they source, must keep LF line endings, even in a checkout made by Windows git and used from WSL
+*.sh text eol=lf
+bin/* text eol=lf
+.env.dist text eol=lf
+tools/.version text eol=lf
+cron.d/*.cron.dist text eol=lf
+*.py text eol=lf
