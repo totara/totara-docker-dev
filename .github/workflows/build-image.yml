@@ -15,42 +15,118 @@ on:
         required: false
         type: boolean
         default: true
-      push:
-        required: false
-        type: boolean
-        default: false
+
+# The build mode comes from the calling workflow's event:
+# * pull_request - build only, nothing is pushed
+# * workflow_dispatch on a branch - push :X.Y.Z from version.txt ahead of the release, but not :latest,
+#   so users on the current release don't pick up the new image early. Fails if vX.Y.Z is already tagged.
+# * push of tag vX.Y.Z, or workflow_dispatch on that tag - push :X.Y.Z, and :latest if vX.Y.Z is the
+#   newest tag. Rebuilding an older tag never moves :latest.
+# When publishing, the build is skipped if :X.Y.Z already exists and was built from the same context
+# and workflows, so building ahead of the release means the release only has to move :latest.
 
 jobs:
   build-image:
     name: Build ${{ inputs.image }} image
     runs-on: ubuntu-latest
+    env:
+      IMAGE: ghcr.io/totara/docker-dev-${{ inputs.image }}
+      KEY_LABEL: com.totara.docker-dev.build-key
     steps:
       - name: Checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           fetch-depth: 1
-      - name: Log in to Docker Hub
-        if: ${{ inputs.push == true }}
+      - name: Work out the build mode and version
+        id: mode
+        run: |
+          version=$(tr -d '[:space:]' < version.txt)
+          tag_exists=false
+          if git ls-remote --exit-code --tags origin "refs/tags/v$version" > /dev/null; then
+            tag_exists=true
+          fi
+          case "$GITHUB_EVENT_NAME" in
+            pull_request)
+              mode='pr'
+              ;;
+            push|workflow_dispatch)
+              if [[ "$GITHUB_REF" == "refs/tags/v$version" ]]; then
+                mode='release'
+              elif [[ "$GITHUB_EVENT_NAME" == "push" ]]; then
+                echo "::error::Tag $GITHUB_REF_NAME does not match version.txt ($version)"
+                exit 1
+              elif [[ "$tag_exists" == "true" ]]; then
+                echo "::error::v$version is already released, run this on the release pull request branch instead"
+                exit 1
+              else
+                mode='prebuild'
+              fi
+              ;;
+            *)
+              echo "::error::Unsupported event $GITHUB_EVENT_NAME"
+              exit 1
+              ;;
+          esac
+          latest=false
+          if [[ "$mode" == "release" ]]; then
+            newest=$(git ls-remote --tags --refs origin 'v*' | sed 's|.*refs/tags/||' | sort -V | tail -n 1)
+            if [[ "$newest" == "v$version" ]]; then
+              latest=true
+            else
+              echo "::notice::v$version is not the newest tag ($newest), so :latest will not be moved"
+            fi
+          fi
+          echo "Mode: $mode, version: $version, move latest: $latest"
+          echo "mode=$mode" >> "$GITHUB_OUTPUT"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "latest=$latest" >> "$GITHUB_OUTPUT"
+      - name: Log in to GitHub Container Registry
+        if: ${{ steps.mode.outputs.mode != 'pr' }}
         uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Check for an up to date image
+        id: check
+        if: ${{ steps.mode.outputs.mode != 'pr' }}
+        env:
+          CONTEXT: ${{ inputs.context }}
+          VERSION: ${{ steps.mode.outputs.version }}
+        run: |
+          # The workflows are part of the key, so changes to the build options or the callers' inputs rebuild too
+          key=$(git rev-parse "HEAD:$CONTEXT" "HEAD:.github/workflows" | sha1sum | cut -d' ' -f1)
+          echo "key=$key" >> "$GITHUB_OUTPUT"
+          existing=$(docker buildx imagetools inspect "$IMAGE:$VERSION" --format '{{json .Image}}' 2> /dev/null \
+            | jq -r --arg label "$KEY_LABEL" '[.. | objects | .Labels? // empty | .[$label] // empty] | first // empty' || true)
+          if [[ "$existing" == "$key" ]]; then
+            echo "$IMAGE:$VERSION is already built with key $key, skipping the build"
+            echo "up-to-date=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "$IMAGE:$VERSION build key is '${existing:-missing}', building with $key"
+            echo "up-to-date=false" >> "$GITHUB_OUTPUT"
+          fi
       - name: Extract metadata (tags, labels) for Docker
-        if: ${{ inputs.push == true }}
+        if: ${{ steps.mode.outputs.mode != 'pr' && steps.check.outputs.up-to-date != 'true' }}
         id: meta
         uses: docker/metadata-action@369eb591f429131d6889c46b94e711f089e6ca96 # v5.6.1
         with:
-          images: ghcr.io/totara/docker-dev-${{ inputs.image }}
-          tags: type=raw,latest
+          images: ${{ env.IMAGE }}
+          tags: |
+            type=raw,value=${{ steps.mode.outputs.version }}
+            type=raw,value=latest,enable=${{ steps.mode.outputs.latest == 'true' }}
+          labels: |
+            ${{ env.KEY_LABEL }}=${{ steps.check.outputs.key }}
       - name: Set up QEMU (to support building for both amd64 and arm64)
-        if: ${{ inputs.multiarch == true }}
+        if: ${{ inputs.multiarch == true && steps.check.outputs.up-to-date != 'true' }}
         uses: docker/setup-qemu-action@49b3bc8e6bdd4a60e6116a5414239cba5943d3cf # v3.2.0
       - name: Set up Docker Buildx
+        if: ${{ steps.check.outputs.up-to-date != 'true' }}
         uses: docker/setup-buildx-action@c47758b77c9736f4b2ef4073d4d51994fabfe349 # v3.7.1
         with:
           platforms: ${{ inputs.multiarch == true && 'linux/amd64,linux/arm64' || 'linux/amd64' }}
       - name: Build and push image
+        if: ${{ steps.check.outputs.up-to-date != 'true' }}
         uses: docker/build-push-action@4f58ea79222b3b9dc2c8bbdd6debcef730109a75 # v6.9.0
         with:
           context: ${{ inputs.context }}
@@ -58,4 +134,9 @@ jobs:
           platforms: ${{ inputs.multiarch == true && 'linux/amd64,linux/arm64' || 'linux/amd64' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          push: ${{ inputs.push }}
+          push: ${{ steps.mode.outputs.mode != 'pr' }}
+      - name: Point latest at the existing image
+        if: ${{ steps.mode.outputs.latest == 'true' && steps.check.outputs.up-to-date == 'true' }}
+        env:
+          VERSION: ${{ steps.mode.outputs.version }}
+        run: docker buildx imagetools create --tag "$IMAGE:latest" "$IMAGE:$VERSION"

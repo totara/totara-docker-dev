@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
   pull_request:
     branches:
       - master
@@ -12,6 +13,12 @@ on:
       - '!php/includes/**'
       - .github/workflows/build-image.yml
       - .github/workflows/build-php.yml
+
+# Publishing runs are queued rather than run side by side, so a build ahead of the release and the
+# release itself can't push the same image at once. A new push to a pull request cancels its stale build.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.ref || 'publish' }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   build-php-images:
@@ -25,5 +32,4 @@ jobs:
       image: php${{ matrix.version }}
       context: ./php
       dockerfile: php${{ matrix.version }}/Dockerfile
-      push: ${{ startsWith(github.ref, 'refs/tags/v') }}
     secrets: inherit
