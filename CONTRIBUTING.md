@@ -26,7 +26,13 @@ Releases are made in two steps:
    changelog for everything merged since the last release and calculates the next version using
    [semantic versioning](https://semver.org/) based upon the conventional commit messages.
 2. When a maintainer merges that release pull request, the release is tagged and published, and
-   the containers are rebuilt and pushed.
+   the containers are rebuilt and pushed as both `latest` and the release version.
+
+Users update to a new release as soon as it is tagged, so maintainers should build the containers before
+merging the release pull request. Run the "Build PHP images" and "Build MSSQL images" workflows by hand
+on the `release-please--branches--master` branch. This pushes the images tagged with the new version only.
+When the release is tagged, images that were already built from the same files are not rebuilt, and
+`latest` is moved to them.
 
 This means your change is not released, and the containers are not rebuilt, until the release
 pull request is merged.
