@@ -70,23 +70,26 @@ RUN git clone https://github.com/longxinH/xhprof.git ./xhprof \
 RUN echo "extension=xhprof.so" >> /usr/local/etc/php/conf.d/xhprof.ini \
     && echo "xhprof.output_dir = /tmp/xhprof" >> /usr/local/etc/php/conf.d/xhprof.ini
 
-RUN pecl install -o -f redis \
+COPY pecl-install.sh /usr/local/bin/totara-pecl-install
+RUN chmod +x /usr/local/bin/totara-pecl-install
+
+RUN totara-pecl-install redis-6.0.2 \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable redis
 
-RUN pecl install -o -f igbinary \
+RUN totara-pecl-install igbinary-3.2.16 \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable igbinary
 
-RUN pecl install -o -f memcached \
+RUN totara-pecl-install memcached-3.4.0 \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable memcached
 
-RUN pecl install -o -f xdebug-3.1.6 \
+RUN totara-pecl-install xdebug-3.1.6 \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable xdebug.so
 
-RUN pecl install -o -f pcov \
+RUN totara-pecl-install pcov-1.0.12 \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable pcov
 

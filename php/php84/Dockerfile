@@ -74,43 +74,38 @@ RUN git clone https://github.com/longxinH/xhprof.git ./xhprof \
 RUN echo "extension=xhprof.so" >> /usr/local/etc/php/conf.d/xhprof.ini \
     && echo "xhprof.output_dir = /tmp/xhprof" >> /usr/local/etc/php/conf.d/xhprof.ini
 
-RUN pecl channel-update pecl.php.net && \
-    pecl install -o -f redis \
+COPY pecl-install.sh /usr/local/bin/totara-pecl-install
+RUN chmod +x /usr/local/bin/totara-pecl-install
+
+RUN totara-pecl-install redis-6.3.0 \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable redis
 
-RUN pecl channel-update pecl.php.net && \
-    pecl install -o -f igbinary \
+RUN totara-pecl-install igbinary-3.2.16 \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable igbinary
 
-RUN pecl channel-update pecl.php.net && \
-    pecl install -o -f memcached \
+RUN totara-pecl-install memcached-3.4.0 \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable memcached
 
-RUN pecl channel-update pecl.php.net && \
-    pecl install -o -f imap \
+RUN totara-pecl-install imap-1.0.3 \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable imap
 
-RUN pecl channel-update pecl.php.net && \
-    pecl install -o -f excimer \
+RUN totara-pecl-install excimer-1.2.6 \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable excimer
 
-RUN pecl channel-update pecl.php.net && \
-    pecl install -o -f pspell \
+RUN totara-pecl-install pspell-1.0.1 \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable pspell
 
-RUN pecl channel-update pecl.php.net && \
-    pecl install -o -f xdebug-3.4.7 \
+RUN totara-pecl-install xdebug-3.4.7 \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable xdebug.so
 
-RUN pecl channel-update pecl.php.net && \
-    pecl install -o -f pcov \
+RUN totara-pecl-install pcov-1.0.12 \
     &&  rm -rf /tmp/pear \
     &&  docker-php-ext-enable pcov
 
