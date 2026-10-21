@@ -22,5 +22,16 @@ chown www-data:www-data $REMOTE_DATA -R
 # the one defined in the environment variables
 sed "s|\$REMOTE_SRC|$REMOTE_SRC|g" /tmp/server.conf > /etc/nginx/totara/server.conf
 
+# Build a regex of the PHP versions (e.g. 82 for PHP 8.2) that can be accessed via ngrok
+ngrok_min_php="${NGROK_MIN_PHP_VERSION//./}"
+ngrok_php_versions=()
+for version in {10..99}; do
+    if (( version >= ngrok_min_php )); then
+        ngrok_php_versions+=("$version")
+    fi
+done
+ngrok_php_regex="^($(IFS='|'; echo "${ngrok_php_versions[*]}"))\$"
+sed "s/\$NGROK_PHP_REGEX/$ngrok_php_regex/g" /tmp/remote-server.conf > /etc/nginx/totara/remote-server.conf
+
 # fire up nginx
 nginx -g 'daemon off;'

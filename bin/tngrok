@@ -5,7 +5,7 @@ project_path="$( cd $script_path && cd ..; pwd -P )"
 
 source "$project_path/tools/check_for_update.sh"
 
-set -a; source "$project_path/.env"; set +a
+set -a; source "$project_path/.env"; source "$project_path/compose/ngrok.env"; set +a
 
 if [[ -z "$*" ]]; then
     echo "Helper for using ngrok with your totara site.
@@ -13,16 +13,29 @@ if [[ -z "$*" ]]; then
 Your ngrok directory will need to be added to the PATH variable for it to work.
 
 Usage Examples:
-  tngrok totara71                                             // Creates a tunnel to your totara site for the specified host (if you don't use mutliple sites)
-  tngrok sitename.totara72                                    // Creates a tunnel to your totara site called 'sitename' for the specified host (for mutliple sites)
-  tngrok sitename.totara73.debug                              // Same as above, but also enables XDebug
-  tngrok sitename.totara74.debug --url=mysubdomain.ngrok.app  // Same as above, but the ngrok domain is static and can be accessed at https://mysubdomain.ngrok.app
+  tngrok totara82                                             // Creates a tunnel to your totara site for the specified host (if you don't use mutliple sites)
+  tngrok sitename.totara83                                    // Creates a tunnel to your totara site called 'sitename' for the specified host (for mutliple sites)
+  tngrok sitename.totara84.debug                              // Same as above, but also enables XDebug
+  tngrok sitename.totara85.debug --url=mysubdomain.ngrok.app  // Same as above, but the ngrok domain is static and can be accessed at https://mysubdomain.ngrok.app
+
+Only PHP $NGROK_MIN_PHP_VERSION and above can be used with ngrok, as older versions are no longer supported.
 "
     exit;
 fi
 
 site="$1"
 shift
+
+# Only allow supported PHP versions to be exposed to the internet
+if [[ ! $site =~ totara([0-9])([0-9]) ]]; then
+  echo "Could not determine the PHP version from '$site'. Use the format [sitename.]totaraXX, e.g. totara83" >&2
+  exit 1
+fi
+php_version="${BASH_REMATCH[1]}.${BASH_REMATCH[2]}"
+if (( ${php_version//./} < ${NGROK_MIN_PHP_VERSION//./} )); then
+  echo "PHP $php_version can't be used with ngrok as it is no longer supported. Use PHP $NGROK_MIN_PHP_VERSION or above." >&2
+  exit 1
+fi
 
 # Append .localhost domain suffix if it's not specified
 if [[ ! $site == *.localhost ]]; then
