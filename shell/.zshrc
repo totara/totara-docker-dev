@@ -33,12 +33,12 @@ POWERLEVEL9K_CUSTOM_CONTAINER="zsh_php_container_name"
 POWERLEVEL9K_CUSTOM_CONTAINER_BACKGROUND="103"
 POWERLEVEL9K_CUSTOM_CONTAINER_FOREGROUND="black"
 
-# Shows the DB host if there is a config.php in the directory.
+# Shows the DB host if there is a config.php (or TOTARA_CONFIG_PATH) for the site.
 zsh_db_host(){
     is_site_root || exit
     local dbhost=$(config_var dbhost)
     if [[ "$dbhost" =~ "error" || "$dbhost" =~ "Warning" || "$dbhost" =~ "Notice" ]]; then
-        print_error 'Incompatible PHP version or invalid config.php!'
+        print_error 'Incompatible PHP version or invalid config file!'
         exit
     fi
     if [ "${USE_ZSH_NERDFONT}" = "1" ]; then
@@ -52,7 +52,7 @@ POWERLEVEL9K_CUSTOM_DB="zsh_db_host"
 POWERLEVEL9K_CUSTOM_DB_BACKGROUND="043"
 POWERLEVEL9K_CUSTOM_DB_FOREGROUND="black"
 
-# Shows the totara site version if there is a config.php/version.php in the directory.
+# Shows the totara site version if there is a site config/version.php in the directory.
 zsh_totara_version(){
     is_site_root || exit
     if [ "${USE_ZSH_NERDFONT}" = "1" ]; then
