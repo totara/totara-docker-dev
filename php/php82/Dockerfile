@@ -1,4 +1,4 @@
-FROM php:8.2-fpm-bookworm
+FROM php:8.2.35-fpm-bookworm
 
 ARG TIME_ZONE=Pacific/Auckland
 

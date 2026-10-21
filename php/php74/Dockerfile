@@ -1,4 +1,8 @@
 FROM php:7.4-fpm-bullseye
+# SECURITY: this PHP branch is end-of-life and received no upstream release for
+# CVE-2026-109618 / CVE-2026-109619 (unauthenticated RCE, October 2026). The official
+# Docker image is not patched. Keep this container off any shared or internet-facing
+# network and prefer the php-8.2+ containers wherever the Totara version allows.
 
 ARG TIME_ZONE=Pacific/Auckland
 
