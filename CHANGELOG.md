@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.27.1](https://github.com/totara/totara-docker-dev/compare/v1.27.0...v1.27.1) (2026-10-22)
+
+
+### Bug Fixes
+
+* bump php 8.5 dockerfile to the latest version ([4c9a923](https://github.com/totara/totara-docker-dev/commit/4c9a9235a31c535f7c64e2f91d8e1e1e08f440fc))
+
 ## [1.27.0](https://github.com/totara/totara-docker-dev/compare/v1.26.1...v1.27.0) (2026-10-21)
 
 
