@@ -24,14 +24,24 @@ on:
 #   newest tag. Rebuilding an older tag never moves :latest.
 # When publishing, the build is skipped if :X.Y.Z already exists and was built from the same context
 # and workflows, so building ahead of the release means the release only has to move :latest.
+#
+# Each platform builds on its own native runner, as arm64 under QEMU is slow and segfaults at random.
+# When publishing, each platform is pushed by digest, and the merge job tags the multi-arch image.
+
+env:
+  IMAGE: ghcr.io/totara/docker-dev-${{ inputs.image }}
+  KEY_LABEL: com.totara.docker-dev.build-key
 
 jobs:
-  build-image:
-    name: Build ${{ inputs.image }} image
+  prepare:
+    name: Prepare ${{ inputs.image }} build
     runs-on: ubuntu-latest
-    env:
-      IMAGE: ghcr.io/totara/docker-dev-${{ inputs.image }}
-      KEY_LABEL: com.totara.docker-dev.build-key
+    outputs:
+      mode: ${{ steps.mode.outputs.mode }}
+      version: ${{ steps.mode.outputs.version }}
+      latest: ${{ steps.mode.outputs.latest }}
+      key: ${{ steps.check.outputs.key }}
+      up-to-date: ${{ steps.check.outputs.up-to-date }}
     steps:
       - name: Checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
@@ -106,37 +116,136 @@ jobs:
             echo "$IMAGE:$VERSION build key is '${existing:-missing}', building with $key"
             echo "up-to-date=false" >> "$GITHUB_OUTPUT"
           fi
-      - name: Extract metadata (tags, labels) for Docker
-        if: ${{ steps.mode.outputs.mode != 'pr' && steps.check.outputs.up-to-date != 'true' }}
+
+  # Skipped jobs show their name expressions unexpanded, so this job always runs and skips its steps
+  # when the image is up to date, and the merge job has no expressions in its name.
+  build:
+    name: Build ${{ inputs.image }} image (${{ matrix.platform }})
+    needs: prepare
+    runs-on: ${{ matrix.platform == 'linux/arm64' && 'ubuntu-24.04-arm' || 'ubuntu-24.04' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: ${{ fromJSON(inputs.multiarch && '["linux/amd64", "linux/arm64"]' || '["linux/amd64"]') }}
+    env:
+      MODE: ${{ needs.prepare.outputs.mode }}
+      UP_TO_DATE: ${{ needs.prepare.outputs.up-to-date }}
+    steps:
+      - name: Skip the build
+        if: ${{ env.UP_TO_DATE == 'true' }}
+        env:
+          VERSION: ${{ needs.prepare.outputs.version }}
+          KEY: ${{ needs.prepare.outputs.key }}
+        run: echo "$IMAGE:$VERSION is already built with key $KEY, skipping the build"
+      - name: Work out the platform name
+        if: ${{ env.UP_TO_DATE != 'true' }}
+        id: platform
+        env:
+          PLATFORM: ${{ matrix.platform }}
+        run: echo "pair=${PLATFORM//\//-}" >> "$GITHUB_OUTPUT"
+      - name: Checkout
+        if: ${{ env.UP_TO_DATE != 'true' }}
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 1
+      - name: Log in to GitHub Container Registry
+        if: ${{ env.UP_TO_DATE != 'true' && env.MODE != 'pr' }}
+        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Extract labels for Docker
+        if: ${{ env.UP_TO_DATE != 'true' && env.MODE != 'pr' }}
+        id: meta
+        uses: docker/metadata-action@369eb591f429131d6889c46b94e711f089e6ca96 # v5.6.1
+        with:
+          images: ${{ env.IMAGE }}
+          # Only used for the version label, the tags are set by the merge job
+          tags: |
+            type=raw,value=${{ needs.prepare.outputs.version }}
+          labels: |
+            ${{ env.KEY_LABEL }}=${{ needs.prepare.outputs.key }}
+      - name: Set up Docker Buildx
+        if: ${{ env.UP_TO_DATE != 'true' }}
+        uses: docker/setup-buildx-action@c47758b77c9736f4b2ef4073d4d51994fabfe349 # v3.7.1
+      - name: Build and push image by digest
+        if: ${{ env.UP_TO_DATE != 'true' }}
+        id: build
+        uses: docker/build-push-action@4f58ea79222b3b9dc2c8bbdd6debcef730109a75 # v6.9.0
+        with:
+          context: ${{ inputs.context }}
+          file: ${{ inputs.context }}/${{ inputs.dockerfile }}
+          platforms: ${{ matrix.platform }}
+          labels: ${{ steps.meta.outputs.labels }}
+          outputs: ${{ env.MODE != 'pr' && format('type=image,name={0},push-by-digest=true,name-canonical=true,push=true', env.IMAGE) || '' }}
+      - name: Export the digest
+        if: ${{ env.UP_TO_DATE != 'true' && env.MODE != 'pr' }}
+        env:
+          DIGEST: ${{ steps.build.outputs.digest }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/digests"
+          touch "$RUNNER_TEMP/digests/${DIGEST#sha256:}"
+      - name: Upload the digest
+        if: ${{ env.UP_TO_DATE != 'true' && env.MODE != 'pr' }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: digests-${{ inputs.image }}-${{ steps.platform.outputs.pair }}
+          path: ${{ runner.temp }}/digests/*
+          if-no-files-found: error
+          retention-days: 1
+          # A rerun of the workflow uploads the same artifact name again
+          overwrite: true
+
+  merge:
+    name: Tag image
+    needs: [prepare, build]
+    # Tags a new build, or moves :latest to an up to date image
+    if: >-
+      ${{ needs.prepare.outputs.mode != 'pr'
+        && (needs.prepare.outputs.up-to-date != 'true' || needs.prepare.outputs.latest == 'true') }}
+    runs-on: ubuntu-latest
+    env:
+      VERSION: ${{ needs.prepare.outputs.version }}
+      UP_TO_DATE: ${{ needs.prepare.outputs.up-to-date }}
+    steps:
+      - name: Download the digests
+        if: ${{ env.UP_TO_DATE != 'true' }}
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          path: ${{ runner.temp }}/digests
+          pattern: digests-${{ inputs.image }}-*
+          merge-multiple: true
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@c47758b77c9736f4b2ef4073d4d51994fabfe349 # v3.7.1
+      - name: Extract tags for Docker
+        if: ${{ env.UP_TO_DATE != 'true' }}
         id: meta
         uses: docker/metadata-action@369eb591f429131d6889c46b94e711f089e6ca96 # v5.6.1
         with:
           images: ${{ env.IMAGE }}
           tags: |
-            type=raw,value=${{ steps.mode.outputs.version }}
-            type=raw,value=latest,enable=${{ steps.mode.outputs.latest == 'true' }}
-          labels: |
-            ${{ env.KEY_LABEL }}=${{ steps.check.outputs.key }}
-      - name: Set up QEMU (to support building for both amd64 and arm64)
-        if: ${{ inputs.multiarch == true && steps.check.outputs.up-to-date != 'true' }}
-        uses: docker/setup-qemu-action@49b3bc8e6bdd4a60e6116a5414239cba5943d3cf # v3.2.0
-      - name: Set up Docker Buildx
-        if: ${{ steps.check.outputs.up-to-date != 'true' }}
-        uses: docker/setup-buildx-action@c47758b77c9736f4b2ef4073d4d51994fabfe349 # v3.7.1
-        with:
-          platforms: ${{ inputs.multiarch == true && 'linux/amd64,linux/arm64' || 'linux/amd64' }}
-      - name: Build and push image
-        if: ${{ steps.check.outputs.up-to-date != 'true' }}
-        uses: docker/build-push-action@4f58ea79222b3b9dc2c8bbdd6debcef730109a75 # v6.9.0
-        with:
-          context: ${{ inputs.context }}
-          file: ${{ inputs.context }}/${{ inputs.dockerfile }}
-          platforms: ${{ inputs.multiarch == true && 'linux/amd64,linux/arm64' || 'linux/amd64' }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          push: ${{ steps.mode.outputs.mode != 'pr' }}
-      - name: Point latest at the existing image
-        if: ${{ steps.mode.outputs.latest == 'true' && steps.check.outputs.up-to-date == 'true' }}
+            type=raw,value=${{ env.VERSION }}
+            type=raw,value=latest,enable=${{ needs.prepare.outputs.latest == 'true' }}
+      - name: Create the image from the platform digests
+        if: ${{ env.UP_TO_DATE != 'true' }}
+        working-directory: ${{ runner.temp }}/digests
         env:
-          VERSION: ${{ steps.mode.outputs.version }}
+          META_JSON: ${{ steps.meta.outputs.json }}
+        run: |
+          mapfile -t tags < <(jq -r '.tags[] | "--tag", .' <<< "$META_JSON")
+          sources=()
+          for digest in *; do
+            sources+=("$IMAGE@sha256:$digest")
+          done
+          docker buildx imagetools create "${tags[@]}" "${sources[@]}"
+          docker buildx imagetools inspect "$IMAGE:$VERSION"
+      - name: Point latest at the existing image
+        if: ${{ env.UP_TO_DATE == 'true' }}
         run: docker buildx imagetools create --tag "$IMAGE:latest" "$IMAGE:$VERSION"
