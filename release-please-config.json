@@ -14,7 +14,7 @@
     { "type": "perf", "section": "Performance Improvements" },
     { "type": "revert", "section": "Reverts" },
     { "type": "docs", "section": "Documentation", "hidden": true },
-    { "type": "ci", "section": "Build & CI", "hidden": true },
+    { "type": "ci", "section": "Build & CI" },
     { "type": "refactor", "section": "Code Refactoring", "hidden": true },
     { "type": "test", "section": "Tests", "hidden": true },
     { "type": "chore", "section": "Miscellaneous", "hidden": true }
