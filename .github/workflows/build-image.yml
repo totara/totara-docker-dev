@@ -183,6 +183,10 @@ jobs:
           platforms: ${{ matrix.platform }}
           labels: ${{ steps.meta.outputs.labels }}
           outputs: ${{ env.MODE != 'pr' && format('type=image,name={0},push-by-digest=true,name-canonical=true,push=true', env.IMAGE) || '' }}
+          # Only pull requests use the layer cache. Publishing builds clean, so a cached apt layer can't
+          # hold back package updates in a released image.
+          cache-from: ${{ env.MODE == 'pr' && format('type=gha,scope={0}-{1}', inputs.image, matrix.arch) || '' }}
+          cache-to: ${{ env.MODE == 'pr' && format('type=gha,mode=max,scope={0}-{1}', inputs.image, matrix.arch) || '' }}
       - name: Export the digest
         if: ${{ env.MODE != 'pr' }}
         env:
