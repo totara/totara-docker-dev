@@ -29,6 +29,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         locales \
         tzdata \
         git \
+        zsh \
         libzip-dev \
         libmemcached-dev \
         zip \
@@ -59,13 +60,11 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     && docker-php-ext-install -j$(nproc) gd \
     && rm -rf /var/lib/apt/lists/*
 
-RUN git clone https://github.com/longxinH/xhprof.git ./xhprof \
-    && cd xhprof \
-    && git checkout v2.3.10 \
-    && cd extension/ \
+RUN git clone --depth 1 --branch v2.3.10 https://github.com/longxinH/xhprof.git ./xhprof \
+    && cd xhprof/extension/ \
     && phpize \
     && ./configure \
-    && make && make install
+    && make -j$(nproc) && make install
 
 RUN echo "extension=xhprof.so" >> /usr/local/etc/php/conf.d/xhprof.ini \
     && echo "xhprof.output_dir = /tmp/xhprof" >> /usr/local/etc/php/conf.d/xhprof.ini
@@ -154,12 +153,11 @@ RUN echo 'if [[ -e "/root/custom_shell/default-aliases.sh" ]]; then source "/roo
   echo 'for f in /root/custom_shell/*.sh; do [[ "$f" != "/root/custom_shell/default-aliases.sh" && -e "$f" ]] && source "$f"; done;' >> ~/.bashrc
 
 # Have the option of using the oh my zsh shell.
-RUN apt-get update && apt-get install -y zsh
 RUN sh -c "$(curl https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" --unattended
-RUN git clone https://github.com/romkatv/powerlevel10k ~/.oh-my-zsh/custom/themes/powerlevel10k
-RUN git clone https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
-RUN git clone https://github.com/zsh-users/zsh-completions ~/.oh-my-zsh/custom/plugins/zsh-completions
-RUN git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+RUN git clone --depth 1 https://github.com/romkatv/powerlevel10k ~/.oh-my-zsh/custom/themes/powerlevel10k \
+    && git clone --depth 1 https://github.com/zsh-users/zsh-autosuggestions ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions \
+    && git clone --depth 1 https://github.com/zsh-users/zsh-completions ~/.oh-my-zsh/custom/plugins/zsh-completions \
+    && git clone --depth 1 https://github.com/zsh-users/zsh-syntax-highlighting ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
 RUN echo 'setopt +o nomatch' > ~/.zshrc
 RUN echo 'source ~/custom_shell/.zshrc' >> ~/.zshrc
 RUN cat ~/.bashrc >> ~/.zshrc
