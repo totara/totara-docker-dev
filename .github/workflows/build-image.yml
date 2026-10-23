@@ -124,10 +124,10 @@ jobs:
           existing=$(docker buildx imagetools inspect "$IMAGE:$VERSION" --format '{{json .Image}}' 2> /dev/null) || existing='{}'
           # A single platform image comes back as the image itself, a multi-arch one as a map of platform to image.
           # Every platform has to carry the key, so an image missing a platform is rebuilt.
-          # An arm64 image can be listed with its v8 variant, which is dropped to match the platform list.
           if jq -e --arg label "$KEY_LABEL" --arg key "$key" --argjson platforms "$PLATFORMS" '
-              (if has("config") then {(.os + "/" + .architecture): .} else . end)
-              | with_entries(.key |= sub("^linux/arm64/v8$"; "linux/arm64")) as $images
+              (if has("config") then [.] else [.[]] end)
+              | map({key: (.os + "/" + .architecture), value: .})
+              | from_entries as $images
               | all($platforms[].platform; $images[.].config.Labels[$label] == $key)' <<< "$existing" > /dev/null; then
             echo "$IMAGE:$VERSION is already built with key $key, skipping the build"
             echo "up-to-date=true" >> "$GITHUB_OUTPUT"
