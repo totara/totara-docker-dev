@@ -105,7 +105,7 @@ jobs:
           echo "platforms=$platforms" >> "$GITHUB_OUTPUT"
       - name: Log in to GitHub Container Registry
         if: ${{ steps.mode.outputs.mode != 'pr' }}
-        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -156,7 +156,7 @@ jobs:
           fetch-depth: 1
       - name: Log in to GitHub Container Registry
         if: ${{ env.MODE != 'pr' }}
-        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -164,7 +164,7 @@ jobs:
       - name: Extract labels for Docker
         if: ${{ env.MODE != 'pr' }}
         id: meta
-        uses: docker/metadata-action@369eb591f429131d6889c46b94e711f089e6ca96 # v5.6.1
+        uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
         with:
           images: ${{ env.IMAGE }}
           # Only used for the version label, the tags are set by the merge job
@@ -173,10 +173,10 @@ jobs:
           labels: |
             ${{ env.KEY_LABEL }}=${{ needs.prepare.outputs.key }}
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@c47758b77c9736f4b2ef4073d4d51994fabfe349 # v3.7.1
+        uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
       - name: Build and push image by digest
         id: build
-        uses: docker/build-push-action@4f58ea79222b3b9dc2c8bbdd6debcef730109a75 # v6.9.0
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
         with:
           context: ${{ inputs.context }}
           file: ${{ inputs.context }}/${{ inputs.dockerfile }}
@@ -232,7 +232,7 @@ jobs:
           pattern: digests-${{ inputs.image }}-*
           merge-multiple: true
       - name: Log in to GitHub Container Registry
-        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
+        uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
