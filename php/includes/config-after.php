@@ -325,7 +325,6 @@ if ($DOCKER_DEV->clamav_running) {
 
 
 // Paths to binaries
-$CFG->py3path = '/usr/bin/python3';
 $CFG->pathtogs = '/usr/bin/gs';
 $CFG->pathtodu = '/usr/bin/du';
 $CFG->aspellpath = '/usr/bin/aspell';

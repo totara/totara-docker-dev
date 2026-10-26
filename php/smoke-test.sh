@@ -18,6 +18,13 @@ check_locale() {
 }
 
 php -v >/dev/null
+
+# A missing shared library only shows as a startup warning, php -v still exits 0
+if php -v 2>&1 | grep -qi 'unable to load'; then
+    php -v >&2
+    exit 1
+fi
+
 composer --version >/dev/null
 php-fpm -t
 
@@ -48,3 +55,7 @@ fi
 
 check_locale en_US
 check_locale en_AU
+
+echo 'digraph { a -> b }' | dot -Tpng >/dev/null
+echo '/Helvetica findfont 12 scalefont setfont 72 72 moveto (test) show showpage' \
+    | gs -q -dSAFER -dBATCH -dNOPAUSE -sDEVICE=png16m -sOutputFile=/dev/null -
