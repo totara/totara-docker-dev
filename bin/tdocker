@@ -23,12 +23,6 @@ files=(
     "compose/selenium.yml"
 )
 
-if [[ ! -z "${ML_TOTARA_PROJECT}" ]]; then
-    files+=(
-        "compose/machine-learning.yml"
-    )
-fi
-
 if [ "$1" ==  "build" ]; then
     files+=(
         "compose/build.yml"

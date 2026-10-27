@@ -27,7 +27,7 @@ with_tag() {
 }
 
 # One "service image" line for every compose service that is pulled from a registry. Services that are
-# built locally (ml-service, for instance) have no remote image, so they are left out.
+# built locally have no remote image, so they are left out.
 service_images=$("$script_path/tdocker" config 2>/dev/null | awk '
     function flush() { if (service != "" && !build && image != "") print service, image }
     /^services:/ { in_services = 1; next }
