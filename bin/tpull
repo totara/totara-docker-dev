@@ -1,12 +1,101 @@
 #!/bin/bash
 
-script_path="$( cd "$(dirname "$0")" ; pwd -P )"
-project_path="$( cd $script_path && cd ..; pwd -P )"
+# Standard boilerplate code for getting the paths and environment variables we need.
+script_path="$( cd "$(dirname "$0")" || exit; pwd -P )"
+project_path="$( cd "$script_path" && cd ..; pwd -P )"
 
-if [ $# -eq 0 ] || [ $1 == 'all' ]; then
-    source "$project_path/tools/check_for_update.sh"
-    # pulling all images already present from docker hub
-    docker images --filter=reference='ghcr.io/totara/docker-dev-*' --format "{{.Repository}}" | xargs -I % sh -c 'docker pull %'
-else
-    $script_path/tdocker pull "$@"
+# tpull <service...> pulls the images for the given compose services, like before.
+if [ $# -ne 0 ] && [ "$1" != 'all' ]; then
+    exec "$script_path/tdocker" pull "$@"
+fi
+
+source "$project_path/tools/check_for_update.sh"
+if [[ -f "$project_path/.env" ]]; then
+    set -a; source "$project_path/.env"; set +a
+fi
+
+# Compose leaves the tag off images like ghcr.io/totara/docker-dev-php84, which docker stores as :latest.
+with_tag() {
+    local image="$1"
+    local name="${image##*/}"
+    if [[ "$name" == *:* || "$image" == *@* ]]; then
+        echo "$image"
+    else
+        echo "$image:latest"
+    fi
+}
+
+# Every image referenced by the compose files (including custom/ overrides).
+compose_images=$("$script_path/tdocker" config --images 2>/dev/null | sort -u)
+if [[ -z "$compose_images" ]]; then
+    echo "Could not read the compose configuration, so there is nothing to pull."
+    exit 1
+fi
+
+# The images for DEFAULT_CONTAINERS are always pulled, so a fresh machine gets its usual containers in one go.
+# "php" is resolved from the Totara site by tup, so it is left out here; the PHP images in use are picked up below.
+default_images=""
+if [[ -n "$DEFAULT_CONTAINERS" ]]; then
+    default_services=()
+    for service in ${DEFAULT_CONTAINERS//,/ }; do
+        [[ "$service" == "php" ]] || default_services+=("$service")
+    done
+    if [[ ${#default_services[@]} -gt 0 ]]; then
+        default_images=$("$script_path/tdocker" config --images "${default_services[@]}" 2>/dev/null)
+    fi
+fi
+
+local_images=$(docker images --format '{{.Repository}}:{{.Tag}}' | sort -u)
+
+# Pull the images that are already on this machine, plus the DEFAULT_CONTAINERS ones. Images that have
+# never been pulled (the other database versions, for instance) are skipped rather than downloaded.
+images=()
+while read -r image; do
+    [[ -z "$image" ]] && continue
+    tagged=$(with_tag "$image")
+    if echo "$local_images" | grep -qxF "$tagged" || echo "$default_images" | grep -qxF "$image"; then
+        images+=("$tagged")
+    fi
+done <<< "$compose_images"
+
+total=${#images[@]}
+if [[ "$total" -eq 0 ]]; then
+    echo "No images to pull. Run tup first, or set DEFAULT_CONTAINERS in .env."
+    exit 0
+fi
+
+echo "Pulling $total images used by docker-dev"
+
+updated=()
+unchanged=()
+failed=()
+count=0
+for image in "${images[@]}"; do
+    count=$((count + 1))
+    echo
+    echo "[$count/$total] $image"
+    before=$(docker image inspect -f '{{.Id}}' "$image" 2>/dev/null)
+    if docker pull "$image"; then
+        after=$(docker image inspect -f '{{.Id}}' "$image" 2>/dev/null)
+        if [[ "$before" == "$after" ]]; then
+            unchanged+=("$image")
+        else
+            updated+=("$image")
+        fi
+    else
+        failed+=("$image")
+    fi
+done
+
+echo
+echo "Done: ${#updated[@]} updated, ${#unchanged[@]} already up to date, ${#failed[@]} failed"
+for image in "${updated[@]}"; do
+    echo "  updated:  $image"
+done
+for image in "${failed[@]}"; do
+    echo "  FAILED:   $image"
+done
+
+if [[ ${#failed[@]} -gt 0 ]]; then
+    exit 1
 fi
