@@ -4,7 +4,8 @@
 script_path="$( cd "$(dirname "$0")" || exit; pwd -P )"
 project_path="$( cd "$script_path" && cd ..; pwd -P )"
 
-# tpull <service...> pulls the images for the given compose services, like before.
+# tpull <service...> pulls the images for the given compose services.
+# tpull, or tpull all, refreshes every image that docker-dev is using on this machine.
 if [ $# -ne 0 ] && [ "$1" != 'all' ]; then
     exec "$script_path/tdocker" pull "$@"
 fi
@@ -25,9 +26,18 @@ with_tag() {
     fi
 }
 
-# Every image referenced by the compose files (including custom/ overrides).
-compose_images=$("$script_path/tdocker" config --images 2>/dev/null | sort -u)
-if [[ -z "$compose_images" ]]; then
+# One "service image" line for every compose service that is pulled from a registry. Services that are
+# built locally (ml-service, for instance) have no remote image, so they are left out.
+service_images=$("$script_path/tdocker" config 2>/dev/null | awk '
+    function flush() { if (service != "" && !build && image != "") print service, image }
+    /^services:/ { in_services = 1; next }
+    in_services && /^[^ ]/ { in_services = 0 }
+    in_services && /^  [^ ]/ { flush(); service = $1; sub(":$", "", service); image = ""; build = 0 }
+    in_services && /^    build:/ { build = 1 }
+    in_services && /^    image:/ { image = $2; gsub(/["'"'"']/, "", image) }
+    END { flush() }
+')
+if [[ -z "$service_images" ]]; then
     echo "Could not read the compose configuration, so there is nothing to pull."
     exit 1
 fi
@@ -35,16 +45,12 @@ fi
 # The images for DEFAULT_CONTAINERS are always pulled, so a fresh machine gets its usual containers in one go.
 # "php" is resolved from the Totara site by tup, so it is left out here; the PHP images in use are picked up below.
 default_images=""
-if [[ -n "$DEFAULT_CONTAINERS" ]]; then
-    default_services=()
-    for service in ${DEFAULT_CONTAINERS//,/ }; do
-        [[ "$service" == "php" ]] || default_services+=("$service")
-    done
-    if [[ ${#default_services[@]} -gt 0 ]]; then
-        default_images=$("$script_path/tdocker" config --images "${default_services[@]}" 2>/dev/null)
-    fi
-fi
+for service in ${DEFAULT_CONTAINERS//,/ }; do
+    [[ "$service" == "php" ]] && continue
+    default_images+="$(echo "$service_images" | awk -v s="$service" '$1 == s { print $2 }')"$'\n'
+done
 
+compose_images=$(echo "$service_images" | awk '{ print $2 }' | sort -u)
 local_images=$(docker images --format '{{.Repository}}:{{.Tag}}' | sort -u)
 
 # Pull the images that are already on this machine, plus the DEFAULT_CONTAINERS ones. Images that have
