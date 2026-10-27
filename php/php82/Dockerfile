@@ -6,7 +6,9 @@ ARG TIME_ZONE=Pacific/Auckland
 # the whole build. Older suites go cold in the CDN more often, but any suite can time out.
 RUN echo 'Acquire::Retries "5";' > /etc/apt/apt.conf.d/80-retries
 
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get upgrade -y \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y \
         apt-transport-https \
         libfreetype6-dev \
         libjpeg62-turbo-dev \
