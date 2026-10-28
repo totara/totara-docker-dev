@@ -1,5 +1,27 @@
 # Changelog
 
+## [1.28.0](https://github.com/totara/totara-docker-dev/compare/v1.27.1...v1.28.0) (2026-10-28)
+
+
+### Features
+
+* Pull every image in use and show progress in tpull ([b5407ba](https://github.com/totara/totara-docker-dev/commit/b5407bad9362ded229b9d39626a5ab27c6d4cff6))
+* Remove the machine learning service ([e2ac9c4](https://github.com/totara/totara-docker-dev/commit/e2ac9c4663576300a13a8fb14c1f66e411676191))
+
+
+### Bug Fixes
+
+* Apply Debian security updates when building the PHP images ([fa420d6](https://github.com/totara/totara-docker-dev/commit/fa420d62067c65fb347669dd8f1a04e9691aa0ae))
+* Skip locally built services when tpull refreshes images ([60666b8](https://github.com/totara/totara-docker-dev/commit/60666b8d814f55eb7a735992d4578c689fc67e6e))
+
+
+### Build & CI
+
+* Build each image platform on a native runner instead of QEMU ([c5d6dd3](https://github.com/totara/totara-docker-dev/commit/c5d6dd3f2ba3bc8245e3b3f71a25c211c34da43c))
+* Check every platform digest before tagging the image ([812c573](https://github.com/totara/totara-docker-dev/commit/812c573d9470b1d387d1033d301b19b6cb930f3a))
+* Match image platforms by os and architecture in the up-to-date check ([4d3a44d](https://github.com/totara/totara-docker-dev/commit/4d3a44dde8f47fda19c2bf97f2515474af5b91df))
+* Show ci commits in the changelog ([66f3c4e](https://github.com/totara/totara-docker-dev/commit/66f3c4ef397f375edc7ae23bac3f3ea47f6de1b5))
+
 ## [1.27.1](https://github.com/totara/totara-docker-dev/compare/v1.27.0...v1.27.1) (2026-10-22)
 
 
