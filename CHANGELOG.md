@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.28.1](https://github.com/totara/totara-docker-dev/compare/v1.28.0...v1.28.1) (2026-11-02)
+
+
+### Bug Fixes
+
+* Distrust the eMudhra and Sectigo AAA root CAs in the PHP images ([912c971](https://github.com/totara/totara-docker-dev/commit/912c971578919a45ed61a324822b7fa22e6bccea))
+
 ## [1.28.0](https://github.com/totara/totara-docker-dev/compare/v1.27.1...v1.28.0) (2026-10-28)
 
 
