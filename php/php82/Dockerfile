@@ -157,6 +157,21 @@ RUN echo 'setopt +o nomatch' > ~/.zshrc
 RUN echo 'source ~/custom_shell/.zshrc' >> ~/.zshrc
 RUN cat ~/.bashrc >> ~/.zshrc
 
+# Distrust the eMudhra (emSign) root CAs and Sectigo's AAA Certificate Services root. In October 2026
+# the private keys of six eMudhra TLS intermediate CAs were found to be trivially recoverable. They were
+# issued by emSign Root TLS CA - G3, which chains to emSign ECC Root CA - G3, and were cross-signed by
+# AAA Certificate Services. Older Debian CA bundles still trust both roots, and PHP and curl do not check
+# revocation. The other emSign roots are distrusted as a precaution. Where an entry is absent this
+# changes nothing. The build fails if any of these roots is still in the trusted bundle afterwards, or if
+# the bundle cannot be read.
+RUN sed -i -E 's#^(mozilla/emSign_.*|mozilla/Comodo_AAA_Services_root\.crt)$#!\1#' /etc/ca-certificates.conf \
+    && update-ca-certificates --fresh \
+    && openssl crl2pkcs7 -nocrl -certfile /etc/ssl/certs/ca-certificates.crt \
+        | openssl pkcs7 -print_certs -noout > /tmp/ca-subjects \
+    && grep -q '^subject=' /tmp/ca-subjects \
+    && ! grep -qE '^subject=.*(emSign|AAA Certificate Services)' /tmp/ca-subjects \
+    && rm /tmp/ca-subjects
+
 COPY smoke-test.sh /usr/local/bin/totara-php-smoke-test
 RUN chmod +x /usr/local/bin/totara-php-smoke-test \
     && /usr/local/bin/totara-php-smoke-test
