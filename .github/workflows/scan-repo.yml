@@ -7,6 +7,8 @@ on:
   pull_request:
     branches:
       - master
+  schedule:
+    - cron: '0 18 * * 0' # Run every Monday at 6am NZST / 7am NZDT
 
 permissions:
   contents: read
