@@ -3,7 +3,14 @@ name: Trivy Image Vulnerability Scan
 on:
   workflow_dispatch:
   schedule:
-    - cron: '0 18 * * 0' # Run every Monday at 6am NZST
+    - cron: '0 18 * * 0' # Run every Monday at 6am NZST / 7am NZDT
+  # Scan straight after a release publishes new images, rather than waiting for the weekly run
+  workflow_run:
+    workflows:
+      - Build PHP images
+      - Build MSSQL images
+    types:
+      - completed
 
 permissions:
   contents: read
@@ -15,6 +22,10 @@ env:
 jobs:
   prepare-db:
     name: Download Trivy vulnerability database
+    # Pull request builds don't publish anything, so only scan after a successful publishing build
+    if: >-
+      github.event_name != 'workflow_run' ||
+      (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event != 'pull_request')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
