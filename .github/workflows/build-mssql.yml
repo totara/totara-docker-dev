@@ -33,3 +33,15 @@ jobs:
       dockerfile: ${{ matrix.version }}/Dockerfile
       multiarch: false # Mssql does not support multiple architectures
     secrets: inherit
+
+  scan-mssql-images:
+    name: Scan MSSQL images
+    needs: build-mssql-images
+    # Pull request builds publish nothing, so there is nothing new to scan
+    if: github.event_name != 'pull_request'
+    permissions:
+      contents: read
+      security-events: write
+    uses: ./.github/workflows/scan-images.yml
+    with:
+      images: '["mssql2017", "mssql2019", "mssql2022"]'
