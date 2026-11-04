@@ -1,13 +1,16 @@
 name: 'Set up Trivy'
 description: 'Install a pinned, checksum-verified Trivy binary and restore the cached vulnerability database'
 
+# The pin lives here. To bump Trivy, update both defaults from the release's checksums file.
 inputs:
   version:
     description: 'Trivy version without the leading v. Example: 0.76.1'
-    required: true
+    required: false
+    default: '0.76.1'
   sha256:
     description: 'SHA-256 of trivy_<version>_Linux-64bit.tar.gz'
-    required: true
+    required: false
+    default: 'c7cbe3137fb8a48a17574bede3dd6beb16742d1e9772929940fc90082c39d9c0'
 
 runs:
   using: composite
@@ -28,7 +31,7 @@ runs:
       run: |
         set -euo pipefail
         tarball="trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz"
-        curl -fsSL -o "$RUNNER_TEMP/$tarball" \
+        curl -fsSL --retry 3 --retry-all-errors --retry-delay 2 -o "$RUNNER_TEMP/$tarball" \
           "https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/${tarball}"
         echo "${TRIVY_SHA256}  $RUNNER_TEMP/$tarball" | sha256sum -c -
         mkdir -p ~/.local/trivy
@@ -36,15 +39,22 @@ runs:
         rm "$RUNNER_TEMP/$tarball"
 
     - name: Add Trivy to PATH
+      shell: bash
+      run: echo "$HOME/.local/trivy" >> "$GITHUB_PATH"
+
+    - name: Work out the cache date
       id: date
       shell: bash
-      run: |
-        echo "$HOME/.local/trivy" >> "$GITHUB_PATH"
-        echo "date=$(date -u +%Y-%m-%d)" >> "$GITHUB_OUTPUT"
+      run: echo "date=$(date -u +%Y-%m-%d)" >> "$GITHUB_OUTPUT"
 
+    # The key is the date, so the first run of the day saves a fresh database and later runs restore it.
+    # A run that hits the exact key never saves again, even after Trivy refreshes the database, so the
+    # restored database can be up to a day old. The policy directory holds the misconfiguration checks.
     - name: Restore Trivy vulnerability database
       uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
-        path: ~/.cache/trivy/db
+        path: |
+          ~/.cache/trivy/db
+          ~/.cache/trivy/policy
         key: trivy-db-${{ steps.date.outputs.date }}
         restore-keys: trivy-db-
