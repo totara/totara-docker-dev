@@ -1,52 +1,66 @@
 name: Trivy Image Vulnerability Scan
 
+# Runs on its own every week, and as the last job of the build workflows once they have published
+# their images. A caller passes the images it published, a standalone run scans all of them.
 on:
   workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Image tag to scan. Defaults to the version in version.txt'
+        type: string
+        required: false
+        default: ''
   schedule:
     - cron: '0 18 * * 0' # Run every Monday at 6am NZST / 7am NZDT
-  # Scan straight after a release publishes new images, rather than waiting for the weekly run
-  workflow_run:
-    workflows:
-      - Build PHP images
-      - Build MSSQL images
-    types:
-      - completed
-
-# Every scan covers all images, so a newer run replaces one in progress. Build runs that won't scan get
-# their own group, so a pull request build can't cancel a real scan.
-concurrency:
-  group: >-
-    ${{ github.event_name == 'workflow_run'
-    && (github.event.workflow_run.conclusion != 'success' || github.event.workflow_run.event == 'pull_request')
-    && format('{0}-skip-{1}', github.workflow, github.run_id)
-    || github.workflow }}
-  cancel-in-progress: true
+  workflow_call:
+    inputs:
+      images:
+        description: 'JSON list of image names to scan, without the ghcr.io/totara/docker-dev- prefix'
+        type: string
+        required: true
+      tag:
+        description: 'Image tag to scan. Defaults to the version in version.txt'
+        type: string
+        required: false
+        default: ''
 
 permissions:
   contents: read
 
 env:
-  TRIVY_VERSION: 0.76.1
-  TRIVY_SHA256: c7cbe3137fb8a48a17574bede3dd6beb16742d1e9772929940fc90082c39d9c0
+  ALL_IMAGES: '["mssql2017", "mssql2019", "mssql2022", "php73", "php74", "php80", "php81", "php82", "php83", "php84", "php85"]'
 
 jobs:
   prepare-db:
     name: Download Trivy vulnerability database
-    # Pull request builds don't publish anything, so only scan after a successful publishing build
-    if: >-
-      github.event_name != 'workflow_run' ||
-      (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event != 'pull_request')
     runs-on: ubuntu-latest
+    outputs:
+      images: ${{ steps.targets.outputs.images }}
+      tag: ${{ steps.targets.outputs.tag }}
     steps:
       - name: Checkout code
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           fetch-depth: 1
+      - name: Work out the images and tag
+        id: targets
+        env:
+          IMAGES: ${{ inputs.images }}
+          TAG: ${{ inputs.tag }}
+        run: |
+          # On master version.txt is the newest release, which is what :latest points at. On a build run
+          # it is the version that build just published, so a prebuild is scanned before the release.
+          if [[ -z "$IMAGES" ]]; then
+            IMAGES="$ALL_IMAGES"
+          fi
+          if [[ -z "$TAG" ]]; then
+            TAG=$(tr -d '[:space:]' < version.txt)
+          fi
+          echo "Images: $IMAGES, tag: $TAG"
+          echo "images=$IMAGES" >> "$GITHUB_OUTPUT"
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
       - name: Set up Trivy
         uses: ./.github/actions/setup-trivy
-        with:
-          version: ${{ env.TRIVY_VERSION }}
-          sha256: ${{ env.TRIVY_SHA256 }}
       - name: Download vulnerability database
         run: trivy image --download-db-only
 
@@ -55,20 +69,10 @@ jobs:
     needs: prepare-db
     runs-on: ubuntu-latest
     strategy:
-      fail-fast: true
+      # One image failing to pull should not drop the results for the others
+      fail-fast: false
       matrix:
-        include:
-          - image: mssql2017
-          - image: mssql2019
-          - image: mssql2022
-          - image: php73
-          - image: php74
-          - image: php80
-          - image: php81
-          - image: php82
-          - image: php83
-          - image: php84
-          - image: php85
+        image: ${{ fromJSON(needs.prepare-db.outputs.images) }}
     permissions:
       contents: read
       security-events: write
@@ -79,9 +83,6 @@ jobs:
           fetch-depth: 1
       - name: Set up Trivy
         uses: ./.github/actions/setup-trivy
-        with:
-          version: ${{ env.TRIVY_VERSION }}
-          sha256: ${{ env.TRIVY_SHA256 }}
       - name: Run Trivy vulnerability scanner
         run: >-
           trivy image
@@ -89,7 +90,7 @@ jobs:
           --severity CRITICAL,HIGH
           --format sarif
           --output trivy-results-${{ matrix.image }}-image.sarif
-          ghcr.io/totara/docker-dev-${{ matrix.image }}
+          ghcr.io/totara/docker-dev-${{ matrix.image }}:${{ needs.prepare-db.outputs.tag }}
       - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@b96794f015dfd88f77b49b1c93e0fa7110f94c63 # v4.38.0
         with:

@@ -33,3 +33,15 @@ jobs:
       context: ./php
       dockerfile: php${{ matrix.version }}/Dockerfile
     secrets: inherit
+
+  scan-php-images:
+    name: Scan PHP images
+    needs: build-php-images
+    # Pull request builds publish nothing, so there is nothing new to scan
+    if: github.event_name != 'pull_request'
+    permissions:
+      contents: read
+      security-events: write
+    uses: ./.github/workflows/scan-images.yml
+    with:
+      images: '["php73", "php74", "php80", "php81", "php82", "php83", "php84", "php85"]'
