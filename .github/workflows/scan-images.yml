@@ -56,6 +56,15 @@ jobs:
           if [[ -z "$TAG" ]]; then
             TAG=$(tr -d '[:space:]' < version.txt)
           fi
+          # Both values end up in a shell command, so only accept the characters an image name or tag can have
+          if ! jq -e 'type == "array" and length > 0 and all(.[]; type == "string" and test("^[a-z0-9]+$"))' <<< "$IMAGES" > /dev/null; then
+            echo "::error::images must be a JSON list of lowercase alphanumeric names, got: $IMAGES"
+            exit 1
+          fi
+          if [[ ! "$TAG" =~ ^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$ ]]; then
+            echo "::error::tag is not a valid image tag: $TAG"
+            exit 1
+          fi
           echo "Images: $IMAGES, tag: $TAG"
           echo "images=$IMAGES" >> "$GITHUB_OUTPUT"
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
@@ -84,14 +93,19 @@ jobs:
       - name: Set up Trivy
         uses: ./.github/actions/setup-trivy
       - name: Run Trivy vulnerability scanner
+        env:
+          IMAGE: ${{ matrix.image }}
+          TAG: ${{ needs.prepare-db.outputs.tag }}
         run: >-
           trivy image
           --skip-db-update
           --severity CRITICAL,HIGH
           --format sarif
-          --output trivy-results-${{ matrix.image }}-image.sarif
-          ghcr.io/totara/docker-dev-${{ matrix.image }}:${{ needs.prepare-db.outputs.tag }}
+          --output "trivy-results-$IMAGE-image.sarif"
+          "ghcr.io/totara/docker-dev-$IMAGE:$TAG"
       - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@b96794f015dfd88f77b49b1c93e0fa7110f94c63 # v4.38.0
         with:
           sarif_file: trivy-results-${{ matrix.image }}-image.sarif
+          # One category per image whichever workflow ran the scan, so alerts are tracked in one place
+          category: trivy-image-${{ matrix.image }}
