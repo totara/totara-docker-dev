@@ -1,0 +1,6 @@
+# Misconfiguration checks that do not apply to development images. Used by the repo scan workflow.
+misconfigurations:
+  - id: AVD-DS-0002
+    statement: Development images run as root on purpose
+  - id: AVD-DS-0029
+    statement: Recommended packages are wanted and image size is not a goal for development images

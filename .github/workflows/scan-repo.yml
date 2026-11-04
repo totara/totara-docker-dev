@@ -7,15 +7,13 @@ on:
   pull_request:
     branches:
       - master
+  # The misconfiguration checks are fetched at run time, so a weekly run can find checks that did
+  # not exist when master was last pushed
   schedule:
     - cron: '0 18 * * 0' # Run every Monday at 6am NZST / 7am NZDT
 
 permissions:
   contents: read
-
-env:
-  TRIVY_VERSION: 0.76.1
-  TRIVY_SHA256: c7cbe3137fb8a48a17574bede3dd6beb16742d1e9772929940fc90082c39d9c0
 
 jobs:
   scan-repo:
@@ -31,12 +29,11 @@ jobs:
           fetch-depth: 1
       - name: Set up Trivy
         uses: ./.github/actions/setup-trivy
-        with:
-          version: ${{ env.TRIVY_VERSION }}
-          sha256: ${{ env.TRIVY_SHA256 }}
       - name: Run Trivy vulnerability scanner
         run: >-
           trivy fs .
+          --scanners vuln,secret,misconfig
+          --ignorefile .trivyignore.yaml
           --ignore-unfixed
           --severity CRITICAL,HIGH
           --format sarif
