@@ -1,0 +1,50 @@
+name: 'Set up Trivy'
+description: 'Install a pinned, checksum-verified Trivy binary and restore the cached vulnerability database'
+
+inputs:
+  version:
+    description: 'Trivy version without the leading v. Example: 0.76.1'
+    required: true
+  sha256:
+    description: 'SHA-256 of trivy_<version>_Linux-64bit.tar.gz'
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Restore Trivy binary
+      id: bin-cache
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: ~/.local/trivy
+        key: trivy-bin-${{ inputs.version }}-${{ inputs.sha256 }}
+
+    - name: Download and verify Trivy
+      if: steps.bin-cache.outputs.cache-hit != 'true'
+      shell: bash
+      env:
+        TRIVY_VERSION: ${{ inputs.version }}
+        TRIVY_SHA256: ${{ inputs.sha256 }}
+      run: |
+        set -euo pipefail
+        tarball="trivy_${TRIVY_VERSION}_Linux-64bit.tar.gz"
+        curl -fsSL -o "$RUNNER_TEMP/$tarball" \
+          "https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}/${tarball}"
+        echo "${TRIVY_SHA256}  $RUNNER_TEMP/$tarball" | sha256sum -c -
+        mkdir -p ~/.local/trivy
+        tar -xzf "$RUNNER_TEMP/$tarball" -C ~/.local/trivy trivy
+        rm "$RUNNER_TEMP/$tarball"
+
+    - name: Add Trivy to PATH
+      id: date
+      shell: bash
+      run: |
+        echo "$HOME/.local/trivy" >> "$GITHUB_PATH"
+        echo "date=$(date -u +%Y-%m-%d)" >> "$GITHUB_OUTPUT"
+
+    - name: Restore Trivy vulnerability database
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      with:
+        path: ~/.cache/trivy/db
+        key: trivy-db-${{ steps.date.outputs.date }}
+        restore-keys: trivy-db-

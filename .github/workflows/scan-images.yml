@@ -8,9 +8,30 @@ on:
 permissions:
   contents: read
 
+env:
+  TRIVY_VERSION: 0.76.1
+  TRIVY_SHA256: c7cbe3137fb8a48a17574bede3dd6beb16742d1e9772929940fc90082c39d9c0
+
 jobs:
+  prepare-db:
+    name: Download Trivy vulnerability database
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 1
+      - name: Set up Trivy
+        uses: ./.github/actions/setup-trivy
+        with:
+          version: ${{ env.TRIVY_VERSION }}
+          sha256: ${{ env.TRIVY_SHA256 }}
+      - name: Download vulnerability database
+        run: trivy image --download-db-only
+
   scan-image:
     name: Scan ${{ matrix.image }} image for vulnerabilities
+    needs: prepare-db
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
@@ -31,16 +52,23 @@ jobs:
       contents: read
       security-events: write
     steps:
-      - name: Pull image to scan
-        run: docker pull ghcr.io/totara/docker-dev-${{ matrix.image }}
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
+      - name: Checkout code
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
-          image-ref: ghcr.io/totara/docker-dev-${{ matrix.image }}
-          format: 'sarif'
-          output: trivy-results-${{ matrix.image }}-image.sarif
-          severity: 'CRITICAL,HIGH'
-          limit-severities-for-sarif: true
+          fetch-depth: 1
+      - name: Set up Trivy
+        uses: ./.github/actions/setup-trivy
+        with:
+          version: ${{ env.TRIVY_VERSION }}
+          sha256: ${{ env.TRIVY_SHA256 }}
+      - name: Run Trivy vulnerability scanner
+        run: >-
+          trivy image
+          --skip-db-update
+          --severity CRITICAL,HIGH
+          --format sarif
+          --output trivy-results-${{ matrix.image }}-image.sarif
+          ghcr.io/totara/docker-dev-${{ matrix.image }}
       - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@b96794f015dfd88f77b49b1c93e0fa7110f94c63 # v4.38.0
         with:
