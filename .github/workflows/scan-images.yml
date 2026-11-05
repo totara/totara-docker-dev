@@ -96,9 +96,13 @@ jobs:
         env:
           IMAGE: ${{ matrix.image }}
           TAG: ${{ needs.prepare-db.outputs.tag }}
+        # Findings with no Debian fix are not actionable here, matching the repo scan. The policy drops
+        # the kernel headers package, see the comment in the policy.
         run: >-
           trivy image
           --skip-db-update
+          --ignore-unfixed
+          --ignore-policy .github/trivy/ignore.rego
           --severity CRITICAL,HIGH
           --format sarif
           --output "trivy-results-$IMAGE-image.sarif"
