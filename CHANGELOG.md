@@ -1,5 +1,24 @@
 # Changelog
 
+## [1.28.2](https://github.com/totara/totara-docker-dev/compare/v1.28.1...v1.28.2) (2026-11-05)
+
+
+### Bug Fixes
+
+* Upgrade Debian packages in the php73, php74 and php80 images ([bff4b4f](https://github.com/totara/totara-docker-dev/commit/bff4b4f7404b46439ed639fff46239081905e02f))
+
+
+### Build & CI
+
+* Add misconfiguration scanning to the repo scan ([55c6c76](https://github.com/totara/totara-docker-dev/commit/55c6c7694f9d14b75024ee3024ce12dabb9bda18))
+* Default the Trivy pin in the setup action and retry the download ([fd30209](https://github.com/totara/totara-docker-dev/commit/fd30209c31154cb1d8aaf29de58cb8724a088857))
+* Ignore kernel header and unfixable findings in the image scans ([0907498](https://github.com/totara/totara-docker-dev/commit/0907498ee06ca28584eb16fb3bc065bfc958b626))
+* Replace trivy-action with a pinned Trivy install and cache ([e0a392b](https://github.com/totara/totara-docker-dev/commit/e0a392bb081faad49939ba4b17b6b22366724a18))
+* Scan images after each release and the repo weekly ([fc2c863](https://github.com/totara/totara-docker-dev/commit/fc2c8635c6ed29f418f2a83ebd147712453ec61d))
+* Scan images from the build workflows instead of workflow_run ([6173e0d](https://github.com/totara/totara-docker-dev/commit/6173e0d83cc57530afeb6f8257256a1c3c1a7ea5))
+* Stop image scans from running side by side ([0396535](https://github.com/totara/totara-docker-dev/commit/0396535c7efd8b80a506aa30bea2b9da28e0c112))
+* Validate scan inputs and pin the SARIF category per image ([89e7c03](https://github.com/totara/totara-docker-dev/commit/89e7c034e214069a6537034ec878976a54e2f670))
+
 ## [1.28.1](https://github.com/totara/totara-docker-dev/compare/v1.28.0...v1.28.1) (2026-11-02)
 
 
