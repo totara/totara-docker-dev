@@ -11,38 +11,6 @@ services:
     volumes:
       - totara-www-sync:${REMOTE_SRC}:nocopy
 
-  php-5.5:
-    volumes:
-      - totara-www-sync:${REMOTE_SRC}:nocopy
-
-  php-5.5-debug:
-    volumes:
-      - totara-www-sync:${REMOTE_SRC}:nocopy
-
-  php-5.6:
-    volumes:
-      - totara-www-sync:${REMOTE_SRC}:nocopy
-
-  php-5.6-debug:
-    volumes:
-      - totara-www-sync:${REMOTE_SRC}:nocopy
-
-  php-7.0:
-    volumes:
-      - totara-www-sync:${REMOTE_SRC}:nocopy
-
-  php-7.0-debug:
-    volumes:
-      - totara-www-sync:${REMOTE_SRC}:nocopy
-
-  php-7.1:
-    volumes:
-      - totara-www-sync:${REMOTE_SRC}:nocopy
-
-  php-7.1-debug:
-    volumes:
-      - totara-www-sync:${REMOTE_SRC}:nocopy
-
   php-7.2:
     volumes:
       - totara-www-sync:${REMOTE_SRC}:nocopy

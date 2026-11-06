@@ -13,7 +13,7 @@ if [[ -z "$*" ]]; then
 Your ngrok directory will need to be added to the PATH variable for it to work.
 
 Usage Examples:
-  tngrok totara71                                             // Creates a tunnel to your totara site for the specified host (if you don't use mutliple sites)
+  tngrok totara84                                             // Creates a tunnel to your totara site for the specified host (if you don't use mutliple sites)
   tngrok sitename.totara72                                    // Creates a tunnel to your totara site called 'sitename' for the specified host (for mutliple sites)
   tngrok sitename.totara73.debug                              // Same as above, but also enables XDebug
   tngrok sitename.totara74.debug --url=mysubdomain.ngrok.app  // Same as above, but the ngrok domain is static and can be accessed at https://mysubdomain.ngrok.app
