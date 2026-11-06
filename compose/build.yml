@@ -14,59 +14,73 @@ services:
       context: ./mssql
       dockerfile: 2022/Dockerfile
 
+  php-7.2:
+    build:
+      context: ./php
+      dockerfile: php-legacy/Dockerfile
+      args:
+        TIME_ZONE: ${TIME_ZONE}
+
+  php-7.2-debug:
+    build:
+      context: ./php
+      dockerfile: php-legacy/Dockerfile
+      args:
+        TIME_ZONE: ${TIME_ZONE}
+
   php-7.3:
     build:
       context: ./php
-      dockerfile: php73/Dockerfile
+      dockerfile: php-legacy/Dockerfile
       args:
         TIME_ZONE: ${TIME_ZONE}
 
   php-7.3-debug:
     build:
       context: ./php
-      dockerfile: php73/Dockerfile
+      dockerfile: php-legacy/Dockerfile
       args:
         TIME_ZONE: ${TIME_ZONE}
 
   php-7.4:
     build:
       context: ./php
-      dockerfile: php74/Dockerfile
+      dockerfile: php-legacy/Dockerfile
       args:
         TIME_ZONE: ${TIME_ZONE}
 
   php-7.4-debug:
     build:
       context: ./php
-      dockerfile: php74/Dockerfile
+      dockerfile: php-legacy/Dockerfile
       args:
         TIME_ZONE: ${TIME_ZONE}
 
   php-8.0:
     build:
       context: ./php
-      dockerfile: php80/Dockerfile
+      dockerfile: php-legacy/Dockerfile
       args:
         TIME_ZONE: ${TIME_ZONE}
 
   php-8.0-debug:
     build:
       context: ./php
-      dockerfile: php80/Dockerfile
+      dockerfile: php-legacy/Dockerfile
       args:
         TIME_ZONE: ${TIME_ZONE}
 
   php-8.1:
     build:
       context: ./php
-      dockerfile: php81/Dockerfile
+      dockerfile: php-legacy/Dockerfile
       args:
         TIME_ZONE: ${TIME_ZONE}
 
   php-8.1-debug:
     build:
       context: ./php
-      dockerfile: php81/Dockerfile
+      dockerfile: php-legacy/Dockerfile
       args:
         TIME_ZONE: ${TIME_ZONE}
 

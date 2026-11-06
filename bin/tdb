@@ -447,12 +447,7 @@ elif [ "$db_type" == 'mariadb' ]; then
 #          Microsoft SQL Server          #
 ##########################################
 elif [ "$db_type" == 'mssql' ]; then
-    # Newer PHP versions have a newer mssql-tools version
-    if [[ "$php_container_name" == 'php-7.2' ]]; then
-        sqlcmd="/opt/mssql-tools/bin/sqlcmd"
-    else
-        sqlcmd="/opt/mssql-tools18/bin/sqlcmd -No -C"
-    fi
+    sqlcmd="/opt/mssql-tools18/bin/sqlcmd -No -C"
 
     # Handles executing sql commands.
     function db_sql_cmd() {
