@@ -28,7 +28,7 @@ permissions:
   contents: read
 
 env:
-  ALL_IMAGES: '["mssql2017", "mssql2019", "mssql2022", "php73", "php74", "php80", "php81", "php82", "php83", "php84", "php85"]'
+  ALL_IMAGES: '["mssql2017", "mssql2019", "mssql2022", "php-legacy", "php82", "php83", "php84", "php85"]'
 
 jobs:
   prepare-db:
@@ -57,8 +57,8 @@ jobs:
             TAG=$(tr -d '[:space:]' < version.txt)
           fi
           # Both values end up in a shell command, so only accept the characters an image name or tag can have
-          if ! jq -e 'type == "array" and length > 0 and all(.[]; type == "string" and test("^[a-z0-9]+$"))' <<< "$IMAGES" > /dev/null; then
-            echo "::error::images must be a JSON list of lowercase alphanumeric names, got: $IMAGES"
+          if ! jq -e 'type == "array" and length > 0 and all(.[]; type == "string" and test("^[a-z0-9]+(-[a-z0-9]+)*$"))' <<< "$IMAGES" > /dev/null; then
+            echo "::error::images must be a JSON list of lowercase alphanumeric names with single hyphens, got: $IMAGES"
             exit 1
           fi
           if [[ ! "$TAG" =~ ^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$ ]]; then

@@ -44,6 +44,10 @@ done
 if ! php -r 'exit(PHP_MAJOR_VERSION === 8 && PHP_MINOR_VERSION === 5 ? 0 : 1);'; then
     check_php_extension sqlsrv
     check_php_extension pdo_sqlsrv
+    if ! odbcinst -q -d | grep -q 'ODBC Driver 18 for SQL Server'; then
+        echo "The SQL Server ODBC driver is not registered with unixODBC" >&2
+        exit 1
+    fi
 fi
 
 check_locale en_US
