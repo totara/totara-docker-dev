@@ -11,6 +11,7 @@ FROM ubuntu:16.04
 # Install full text search addons
 RUN export DEBIAN_FRONTEND=noninteractive && \
     apt-get update && \
+    apt-get upgrade -y && \
     apt-get install -y curl locales && \
     apt-get install apt-transport-https && \
     curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - && \

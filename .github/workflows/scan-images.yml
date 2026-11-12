@@ -107,6 +107,35 @@ jobs:
           --format sarif
           --output "trivy-results-$IMAGE-image.sarif"
           "ghcr.io/totara/docker-dev-$IMAGE:$TAG"
+      - name: Point the results at the image Dockerfile
+        env:
+          IMAGE: ${{ matrix.image }}
+        # Trivy sets the image name as the location, which is not a path in the repo, so GitHub can't
+        # show a code preview. Use the FROM line of the Dockerfile the image is built from instead.
+        run: |
+          case "$IMAGE" in
+            mssql[0-9]*) DOCKERFILE="mssql/${IMAGE#mssql}/Dockerfile" ;;
+            php[0-9]*) DOCKERFILE="php/$IMAGE/Dockerfile" ;;
+            *) echo "::error::No Dockerfile known for image $IMAGE"; exit 1 ;;
+          esac
+          if [[ ! -f "$DOCKERFILE" ]]; then
+            echo "::error::$DOCKERFILE does not exist"
+            exit 1
+          fi
+          LINE=$(grep -n -m1 '^FROM' "$DOCKERFILE" | cut -d: -f1)
+          if [[ -z "$LINE" ]]; then
+            echo "::error::No FROM line in $DOCKERFILE"
+            exit 1
+          fi
+          SARIF="trivy-results-$IMAGE-image.sarif"
+          jq --arg uri "$DOCKERFILE" --argjson line "$LINE" '
+            .runs[].results[]?.locations[]?.physicalLocation |= (
+              .artifactLocation.uri = $uri
+              | .region = {startLine: $line, startColumn: 1, endLine: $line, endColumn: 1}
+            )
+          ' "$SARIF" > "$SARIF.tmp"
+          mv "$SARIF.tmp" "$SARIF"
+          echo "Results now point at $DOCKERFILE line $LINE"
       - name: Upload Trivy scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@b96794f015dfd88f77b49b1c93e0fa7110f94c63 # v4.38.0
         with:
