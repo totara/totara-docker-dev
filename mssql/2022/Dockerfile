@@ -5,8 +5,9 @@
 FROM --platform=linux/amd64 ubuntu:22.04
 
 # Install Server FTS & HA
-RUN apt-get update && \
-    export DEBIAN_FRONTEND=noninteractive && \
+RUN export DEBIAN_FRONTEND=noninteractive && \
+    apt-get update && \
+    apt-get upgrade -y && \
     apt-get install -y \
         gnupg && \
     apt-get install -y \
