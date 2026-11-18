@@ -258,7 +258,15 @@ jobs:
             sources+=("$IMAGE@$(< "$file")")
           done
           docker buildx imagetools create "${tags[@]}" "${sources[@]}"
-          docker buildx imagetools inspect "$IMAGE:$VERSION"
+          # ghcr can take a moment to serve a tag it just accepted, so retry before failing
+          for attempt in 1 2 3 4 5; do
+            docker buildx imagetools inspect "$IMAGE:$VERSION" && break
+            if (( attempt == 5 )); then
+              echo "::error::$IMAGE:$VERSION was pushed but is still not found"
+              exit 1
+            fi
+            sleep $(( attempt * 2 ))
+          done
       - name: Point latest at the existing image
         if: ${{ env.UP_TO_DATE == 'true' }}
         run: docker buildx imagetools create --tag "$IMAGE:latest" "$IMAGE:$VERSION"
