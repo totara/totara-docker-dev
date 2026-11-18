@@ -2,7 +2,9 @@
 # Maintainers: Microsoft Corporation (twright-msft on GitHub)
 # GitRepo: https://github.com/Microsoft/mssql-docker
 
-FROM --platform=linux/amd64 ubuntu:22.04
+# Mssql server is only published for amd64
+ARG MSSQL_PLATFORM=linux/amd64
+FROM --platform=$MSSQL_PLATFORM ubuntu:22.04
 
 # Install Server FTS & HA
 RUN apt-get update && \
