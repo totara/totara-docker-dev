@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.28.3](https://github.com/totara/totara-docker-dev/compare/v1.28.2...v1.28.3) (2026-11-18)
+
+
+### Bug Fixes
+
+* Bump selenium-chrome node to Chromium 126 and hub to 4.23.0 ([de52b1d](https://github.com/totara/totara-docker-dev/commit/de52b1d8ca551f8065340ffd01034c3e3cd10a1d))
+* Pin the mssql2022 base image platform through a build arg ([c7d6917](https://github.com/totara/totara-docker-dev/commit/c7d691734dc6b1251e117653a490e2f8db6b2a09))
+* Upgrade nginx to 1.30 for the HTTP/2 security fixes ([5900df0](https://github.com/totara/totara-docker-dev/commit/5900df098d6eedc7b0b41d227f5c1f628eec747e))
+* Upgrade Ubuntu packages in the mssql2022 image ([368c47b](https://github.com/totara/totara-docker-dev/commit/368c47b0ea1b644117c28da572995681145447ef))
+
 ## [1.28.2](https://github.com/totara/totara-docker-dev/compare/v1.28.1...v1.28.2) (2026-11-05)
 
 
