@@ -1,7 +1,7 @@
 services:
 
   nginx:
-    image: nginx:1.29
+    image: nginx:1.30
     container_name: totara_nginx
     restart: ${RESTART_POLICY:-no}
     entrypoint: ["/totara-entrypoint.sh"]
