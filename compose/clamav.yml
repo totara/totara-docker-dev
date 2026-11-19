@@ -10,7 +10,7 @@ services:
     volumes:
       # Replaces the whole stock clamd.conf (see clamav/clamd.conf for what that drops).
       - ./clamav/clamd.conf:/etc/clamav/clamd.conf
-      # Shared with the PHP 8.4/8.5 containers so clamdscan can reach clamd.
+      # Shared with the PHP 8.4+ containers so clamdscan can reach clamd.
       - clamav-socket:/run/clamav
       # Persists signature updates between runs.
       - clamav-data:/var/lib/clamav
