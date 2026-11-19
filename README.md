@@ -14,7 +14,7 @@ Although this project started as a development environment for Totara Learn it c
 ### What You Get
  * [NGINX](https://nginx.org/) as a webserver
  * [Apache](https://httpd.apache.org/) as a webserver
- * [PHP](http://php.net/) 5.5, 5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0, 8.1, 8.2, 8.3, 8.4, 8.5 to test for different versions
+ * [PHP](http://php.net/) 5.5, 5.6, 7.0, 7.1, 7.2, 7.3, 7.4, 8.0, 8.1, 8.2, 8.3, 8.4, 8.5, 8.6 to test for different versions
  * [PostgreSQL](https://www.postgresql.org/) (9.3, 9.6, 10, 11, 12, 13, 14, 15, 16, 17, 18), 
  * [MariaDB](https://mariadb.org/) (10.2, 10.3, 10.4, 10.5, 10.6, 10.7, 10.8, 10.11, 11.4, 11.8), 
  * [MySQL](https://www.mysql.com/) (5.7, 8.0, 8.4), 
@@ -23,9 +23,9 @@ Although this project started as a development environment for Totara Learn it c
  * A [PHPUnit](https://phpunit.de/) and [Behat](http://behat.org/en/latest/) setup to run tests (including [Selenium](https://www.seleniumhq.org/))
  * A [MailDev](https://github.com/maildev/maildev?tab=readme-ov-file#maildev) instance to view sent emails
  * [Redis](https://redis.io/) for caching and/or session handling
- * [ClamAV](https://www.clamav.net/) for antivirus scanning, wired up automatically on PHP 8.4 and 8.5. The
+ * [ClamAV](https://www.clamav.net/) for antivirus scanning, wired up automatically on PHP 8.4 and newer. The
    `clamav` container is optional and not started by default - run it explicitly, e.g. `tup clamav` alongside
-   your usual containers. Scanning turns itself on in the PHP 8.4/8.5 containers once clamd's socket is
+   your usual containers. Scanning turns itself on in the PHP 8.4+ containers once clamd's socket is
    reachable. On first start clamd downloads its signatures via freshclam, which can take a few minutes before
    the container is healthy and scanning is active (dev uploads are not blocked meanwhile).
  * [XHProf](https://github.com/tideways/php-xhprof-extension) for profiling
