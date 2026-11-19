@@ -39,7 +39,7 @@ Install from the latest release, so the code matches the published container ima
 
 <!-- x-release-please-start-version -->
 ```bash
-git clone --branch v1.28.4 https://github.com/totara/totara-docker-dev.git
+git clone --branch v1.28.5 https://github.com/totara/totara-docker-dev.git
 cd totara-docker-dev
 git switch -C master
 ```
