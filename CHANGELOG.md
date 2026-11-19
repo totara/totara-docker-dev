@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.28.5](https://github.com/totara/totara-docker-dev/compare/v1.28.4...v1.28.5) (2026-11-19)
+
+
+### Bug Fixes
+
+* Rebuild the PHP images for the latest PHP security releases ([792882e](https://github.com/totara/totara-docker-dev/commit/792882e7d179a00a23dcece15ea72e7fd4caa14c))
+
 ## [1.28.4](https://github.com/totara/totara-docker-dev/compare/v1.28.3...v1.28.4) (2026-11-19)
 
 
