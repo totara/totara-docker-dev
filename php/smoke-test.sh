@@ -45,10 +45,8 @@ if ! php -r 'exit(PHP_MAJOR_VERSION === 8 && PHP_MINOR_VERSION === 6 ? 0 : 1);';
     check_php_extension redis
 fi
 
-if ! php -r 'exit(PHP_MAJOR_VERSION === 8 && PHP_MINOR_VERSION >= 5 ? 0 : 1);'; then
-    check_php_extension sqlsrv
-    check_php_extension pdo_sqlsrv
-fi
+check_php_extension sqlsrv
+check_php_extension pdo_sqlsrv
 
 check_locale en_US
 check_locale en_AU
