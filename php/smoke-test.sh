@@ -26,13 +26,10 @@ for extension in \
     igbinary \
     intl \
     ldap \
-    memcached \
     mysqli \
-    pcov \
     pdo_mysql \
     pdo_pgsql \
     pgsql \
-    redis \
     soap \
     xdebug \
     xhprof \
@@ -41,10 +38,15 @@ do
     check_php_extension "$extension"
 done
 
-if ! php -r 'exit(PHP_MAJOR_VERSION === 8 && PHP_MINOR_VERSION === 5 ? 0 : 1);'; then
-    check_php_extension sqlsrv
-    check_php_extension pdo_sqlsrv
+# TODO: PHP 8.6 has no release of memcached, pcov or redis that works on it yet
+if ! php -r 'exit(PHP_MAJOR_VERSION === 8 && PHP_MINOR_VERSION === 6 ? 0 : 1);'; then
+    check_php_extension memcached
+    check_php_extension pcov
+    check_php_extension redis
 fi
+
+check_php_extension sqlsrv
+check_php_extension pdo_sqlsrv
 
 check_locale en_US
 check_locale en_AU

@@ -126,5 +126,19 @@ services:
       args:
         TIME_ZONE: ${TIME_ZONE}
 
+  php-8.6:
+    build:
+      context: ./php
+      dockerfile: php86/Dockerfile
+      args:
+        TIME_ZONE: ${TIME_ZONE}
+
+  php-8.6-debug:
+    build:
+      context: ./php
+      dockerfile: php86/Dockerfile
+      args:
+        TIME_ZONE: ${TIME_ZONE}
+
   # php-X.X: ...
   # php-X.X-debug: ...

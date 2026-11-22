@@ -28,7 +28,7 @@ permissions:
   contents: read
 
 env:
-  ALL_IMAGES: '["mssql2017", "mssql2019", "mssql2022", "php73", "php74", "php80", "php81", "php82", "php83", "php84", "php85"]'
+  ALL_IMAGES: '["mssql2017", "mssql2019", "mssql2022", "php73", "php74", "php80", "php81", "php82", "php83", "php84", "php85", "php86"]'
 
 jobs:
   prepare-db:
