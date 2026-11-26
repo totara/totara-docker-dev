@@ -1,7 +1,7 @@
 services:
 
   selenium-hub:
-    image: selenium/hub:4.23.0
+    image: selenium/hub:4.5.3
     container_name: totara_seleniumhub
     restart: ${RESTART_POLICY:-no}
     ports:
@@ -17,7 +17,7 @@ services:
       - selenium-chrome
 
   selenium-chrome:
-    image: selenium/node-chromium:126.0
+    image: selenium/node-chromium:106.0
     restart: ${RESTART_POLICY:-no}
     environment:
       - TZ=${TIME_ZONE}
