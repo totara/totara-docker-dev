@@ -12,6 +12,11 @@ plugins=(
     zsh-syntax-highlighting
 )
 
+# Skip oh-my-zsh's insecure-directory (compaudit) check. These are throwaway
+# root dev containers where the completions cache is often world-writable, and
+# the warning prints to stdout, corrupting tools that parse shell output (e.g. tdb).
+ZSH_DISABLE_COMPFIX=true
+
 source $ZSH/oh-my-zsh.sh
 
 if [ "${USE_ZSH_NERDFONT}" = "1" ]; then
