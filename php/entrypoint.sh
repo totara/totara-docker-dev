@@ -14,6 +14,11 @@ else
     echo "Not the designated cron container (CRON_CONTAINER: ${CRON_CONTAINER:-none}), skipping crontab installation"
 fi
 
+# Images that carry several PHP versions pick one per container
+if [[ -n ${PHP_VERSION:-} && -x /usr/local/bin/totara-php-select ]]; then
+    totara-php-select "$PHP_VERSION"
+fi
+
 # Generate random seed file for openssl
 # This prevents openssl from complaining about not having enough entropy
 openssl rand -writerand /root/.rnd

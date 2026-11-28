@@ -27,16 +27,26 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: [73, 74, 80, 81, 82, 83, 84, 85]
+        version: [82, 83, 84, 85]
     with:
       image: php${{ matrix.version }}
       context: ./php
       dockerfile: php${{ matrix.version }}/Dockerfile
     secrets: inherit
 
+  # PHP 7.2 to 8.1 are end of life and share one image built on a current Debian with deb.sury.org packages
+  build-php-legacy-image:
+    name: Build PHP legacy image
+    uses: ./.github/workflows/build-image.yml
+    with:
+      image: php-legacy
+      context: ./php
+      dockerfile: php-legacy/Dockerfile
+    secrets: inherit
+
   scan-php-images:
     name: Scan PHP images
-    needs: build-php-images
+    needs: [build-php-images, build-php-legacy-image]
     # Pull request builds publish nothing, so there is nothing new to scan
     if: github.event_name != 'pull_request'
     permissions:
@@ -44,4 +54,4 @@ jobs:
       security-events: write
     uses: ./.github/workflows/scan-images.yml
     with:
-      images: '["php73", "php74", "php80", "php81", "php82", "php83", "php84", "php85"]'
+      images: '["php-legacy", "php82", "php83", "php84", "php85"]'
